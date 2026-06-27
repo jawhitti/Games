@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-5-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-0)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="150" cy="118" r="13" fill="#fff"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  ONE-SHOT</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x3</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Sabotage</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">On your Fish: send any ONE card you just</tspan><tspan x="48" y="363">peeked to the bottom of the Future. Bury</tspan><tspan x="48" y="404">a rival hero and his sidekick comes home</tspan><tspan x="48" y="445">alone.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Bury the thing before anyone else finds</tspan><tspan x="375" y="780">it.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a ONE-SHOT ability.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-5-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="150" cy="118" r="13" fill="#fff"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  ONE-SHOT</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x3</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Sabotage</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">On your Fish: send any ONE card you just</tspan><tspan x="48" y="363">peeked to the bottom of the Future. Bury</tspan><tspan x="48" y="404">a rival hero and his sidekick comes home</tspan><tspan x="48" y="445">alone.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Bury the thing before anyone else finds</tspan><tspan x="375" y="780">it.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a ONE-SHOT ability.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-5-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="150" cy="118" r="13" fill="#fff"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  ONE-SHOT</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Quartermaster's</tspan><tspan x="375" y="282">Favor</tspan></text>
+    <line x1="48" y1="346" x2="702" y2="346" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="374" fill="#2a2a2a" font-size="31"><tspan x="48" y="374">Discard one card from your hand to the</tspan><tspan x="48" y="415">bottom of the Future.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Someone owed you. Now you're owed</tspan><tspan x="375" y="780">nothing.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a ONE-SHOT ability.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-5-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-3)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="139" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/><circle cx="161" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  LASTING</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x2</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Sharp Eyes</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">For the rest of the game YOU peek one</tspan><tspan x="48" y="363">extra contiguous card on every Fish.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“You learned to read the static.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a LASTING ability (kept</tspan><tspan x="70" y="956">face-up).</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-5-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="139" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/><circle cx="161" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  LASTING</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x2</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Sharp Eyes</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">For the rest of the game YOU peek one</tspan><tspan x="48" y="363">extra contiguous card on every Fish.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“You learned to read the static.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a LASTING ability (kept</tspan><tspan x="70" y="956">face-up).</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-5-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-5-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="139" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/><circle cx="161" cy="118" r="12" fill="none" stroke="#fff" stroke-width="5"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  LASTING</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Veteran Chassis</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your planted Terminators cannot be</tspan><tspan x="48" y="363">buddied or taken by another Terminator.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“This one's been hunted before. It</tspan><tspan x="375" y="780">learned.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a LASTING ability (kept</tspan><tspan x="70" y="956">face-up).</tspan></text>
+  </g></g>
+</svg>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-19-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-0)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7b1fa2" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#7b1fa2"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7b1fa2"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  PURPLE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7b1fa21a" stroke="#7b1fa2" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7b1fa2" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-19-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7b1fa2" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#7b1fa2"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7b1fa2"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  PURPLE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7b1fa21a" stroke="#7b1fa2" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7b1fa2" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-19-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7b1fa2" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#7b1fa2"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7b1fa2"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  PURPLE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7b1fa21a" stroke="#7b1fa2" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7b1fa2" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-19-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-3)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7b1fa2" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#7b1fa2"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7b1fa2"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  PURPLE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7b1fa21a" stroke="#7b1fa2" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7b1fa2" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-19-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#c2185b" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#c2185b"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#c2185b"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  MAGENTA</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#c2185b1a" stroke="#c2185b" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#c2185b" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-19-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-19-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#c2185b" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 520.5,436.0 520.5,604.0 375.0,688.0 229.5,604.0 229.5,436.0" fill="#c2185b"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#c2185b"/>
+    <polygon points="86.0,33.0 122.4,54.0 122.4,96.0 86.0,117.0 49.6,96.0 49.6,54.0" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">TERMINATOR  ·  MAGENTA</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x5</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Terminator</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your machine — you start with five, and</tspan><tspan x="48" y="363">they’re REUSABLE: after hauling the card</tspan><tspan x="48" y="404">below home it returns to your hand to</tspan><tspan x="48" y="445">replant. It buddy-chains down through</tspan><tspan x="48" y="486">other machines and drags the first</tspan><tspan x="48" y="527">non-machine home — the whole convoy to</tspan><tspan x="48" y="568">the TOP machine’s owner; the buddies it</tspan><tspan x="48" y="609">sweeps up are out of commission.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“It can’t be bargained with. It can’t be</tspan><tspan x="375" y="780">reasoned with.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#c2185b1a" stroke="#c2185b" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#c2185b" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points. Plant it; on surface its convoy</tspan><tspan x="70" y="956">drags the card below home to the top</tspan><tspan x="70" y="990">machine.</tspan></text>
+  </g></g>
+</svg>

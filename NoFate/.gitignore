@@ -1,0 +1,8 @@
+# generated at runtime
+state.json
+transcript.txt
+.xlsx_extract/
+
+# generated card art (regenerate from catalog: node render-svg.js && pwsh svg-to-png.ps1)
+cards-svg/
+cards-png/

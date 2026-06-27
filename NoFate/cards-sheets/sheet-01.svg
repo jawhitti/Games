@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-0-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-0)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x4</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Scrap Fields</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per machine YOU have planted</tspan><tspan x="48" y="363">-- you scavenge what you deployed.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Acres of dead steel, and it all still</tspan><tspan x="375" y="780">counts.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per machine YOU have planted.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-0-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x4</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Scrap Fields</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per machine YOU have planted</tspan><tspan x="48" y="363">-- you scavenge what you deployed.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Acres of dead steel, and it all still</tspan><tspan x="375" y="780">counts.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per machine YOU have planted.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-0-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x4</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Scrap Fields</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per machine YOU have planted</tspan><tspan x="48" y="363">-- you scavenge what you deployed.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Acres of dead steel, and it all still</tspan><tspan x="375" y="780">counts.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per machine YOU have planted.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-0-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-3)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x4</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Scrap Fields</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per machine YOU have planted</tspan><tspan x="48" y="363">-- you scavenge what you deployed.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Acres of dead steel, and it all still</tspan><tspan x="375" y="780">counts.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per machine YOU have planted.</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-0-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x3</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">A Hidden Pantry</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per sidekick already gone --</tspan><tspan x="48" y="363">food gets dearer as the city empties.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Someone bricked this up before the end.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per sidekick already gone.</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-0-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-0-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#b8901f" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,520 375,688 207,520" fill="#b8901f"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#b8901f"/>
+    <polygon points="86,33 128,75 86,117 44,75" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">PRIZE</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x3</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">A Hidden Pantry</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 1 + 1 per sidekick already gone --</tspan><tspan x="48" y="363">food gets dearer as the city empties.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Someone bricked this up before the end.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#b8901f1a" stroke="#b8901f" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#b8901f" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 1 + 1 per sidekick already gone.</tspan></text>
+  </g></g>
+</svg>

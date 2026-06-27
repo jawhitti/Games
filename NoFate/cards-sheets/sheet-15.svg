@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-14-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-0)">
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <path d="M 86 94.0 C 126.0 68.0 106.0 40.0 86 64.0 C 66.0 40.0 46.0 68.0 86 94.0 Z" fill="#ffffff"/>
+    <text x="150" y="92" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">YOUR PAIR</text>
+    <text x="375" y="258" fill="#141414" font-size="46" font-weight="bold" text-anchor="middle">Trinity</text>
+    <text x="375" y="322" fill="#6a6258" font-size="34" font-style="italic" text-anchor="middle">&amp;</text>
+    <text x="375" y="388" fill="#141414" font-size="46" font-weight="bold" text-anchor="middle">Neo</text>
+    <path d="M 375 669.0 C 510.0 581.3 442.5 486.8 375 567.8 C 307.5 486.8 240.0 581.3 375 669.0 Z" fill="#f9a825"/>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#f9a8251a" stroke="#f9a825" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#f9a825" font-size="22" font-weight="bold" letter-spacing="2">HOW YOU WIN</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Neo starts in your hand; Trinity is lost in</tspan><tspan x="70" y="956">the deck. Bring them home together for an</tspan><tspan x="70" y="990">INSTANT WIN.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-14-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#268a4e" opacity="0.09"/>
+    <g opacity="0.20"><path d="M 207 377.20000000000005 L 543 377.20000000000005 L 543 553.6 Q 543 654.4 375 688 Q 207 654.4 207 553.6 Z" fill="#268a4e"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <path d="M 44 39.300000000000004 L 128 39.300000000000004 L 128 83.4 Q 128 108.6 86 117 Q 44 108.6 44 83.4 Z" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">HERO</text>
+    <path d="M 690 78.0 C 720.0 58.5 705.0 37.5 690 55.5 C 675.0 37.5 660.0 58.5 690 78.0 Z" fill="#f9a825"/>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Neo</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Yours from the start (in hand). Send</tspan><tspan x="48" y="363">them into the deck to reach Trinity for</tspan><tspan x="48" y="404">an INSTANT WIN. Beats a machine above</tspan><tspan x="48" y="445">them, dies to one below, whiffs on the</tspan><tspan x="48" y="486">wrong sidekick. Sending them costs a</tspan><tspan x="48" y="527">prize.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“There is no spoon.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#268a4e1a" stroke="#268a4e" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#268a4e" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points on its own -- send it onto your</tspan><tspan x="70" y="956">sidekick for an INSTANT WIN (sending costs a</tspan><tspan x="70" y="990">prize). Worth nothing if never used.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-14-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#268a4e" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 416.5,462.9 534.8,468.1 442.1,541.8 473.7,655.9 375.0,590.6 276.3,655.9 307.9,541.8 215.2,468.1 333.5,462.9" fill="#268a4e"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <polygon points="86.0,33.0 96.4,60.7 125.9,62.0 102.8,80.5 110.7,109.0 86.0,92.6 61.3,109.0 69.2,80.5 46.1,62.0 75.6,60.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">SIDEKICK</text>
+    <path d="M 690 78.0 C 720.0 58.5 705.0 37.5 690 55.5 C 675.0 37.5 660.0 58.5 690 78.0 Z" fill="#f9a825"/>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Trinity</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your other half, lost deep in the deck.</tspan><tspan x="48" y="363">They walk home alone for points, or your</tspan><tspan x="48" y="404">hero Neo reaches them for the reunion.</tspan><tspan x="48" y="445">Keep them in play until you can win.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“There is no spoon.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#268a4e1a" stroke="#268a4e" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#268a4e" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Leaves on the 1-2-4-8 ladder by order (x2 if</tspan><tspan x="70" y="956">captured); or your hero reaches her for an</tspan><tspan x="70" y="990">INSTANT WIN.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-14-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-3)">
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <path d="M 86 94.0 C 126.0 68.0 106.0 40.0 86 64.0 C 66.0 40.0 46.0 68.0 86 94.0 Z" fill="#ffffff"/>
+    <text x="150" y="92" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">YOUR PAIR</text>
+    <text x="375" y="258" fill="#141414" font-size="46" font-weight="bold" text-anchor="middle">Princess Leia</text>
+    <text x="375" y="322" fill="#6a6258" font-size="34" font-style="italic" text-anchor="middle">&amp;</text>
+    <text x="375" y="388" fill="#141414" font-size="46" font-weight="bold" text-anchor="middle">Han Solo</text>
+    <path d="M 375 669.0 C 510.0 581.3 442.5 486.8 375 567.8 C 307.5 486.8 240.0 581.3 375 669.0 Z" fill="#7b1fa2"/>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7b1fa21a" stroke="#7b1fa2" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7b1fa2" font-size="22" font-weight="bold" letter-spacing="2">HOW YOU WIN</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Han Solo starts in your hand; Princess Leia</tspan><tspan x="70" y="956">is lost in the deck. Bring them home</tspan><tspan x="70" y="990">together for an INSTANT WIN.</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-14-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#268a4e" opacity="0.09"/>
+    <g opacity="0.20"><path d="M 207 377.20000000000005 L 543 377.20000000000005 L 543 553.6 Q 543 654.4 375 688 Q 207 654.4 207 553.6 Z" fill="#268a4e"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <path d="M 44 39.300000000000004 L 128 39.300000000000004 L 128 83.4 Q 128 108.6 86 117 Q 44 108.6 44 83.4 Z" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">HERO</text>
+    <path d="M 690 78.0 C 720.0 58.5 705.0 37.5 690 55.5 C 675.0 37.5 660.0 58.5 690 78.0 Z" fill="#7b1fa2"/>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Han Solo</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Yours from the start (in hand). Send</tspan><tspan x="48" y="363">them into the deck to reach Princess</tspan><tspan x="48" y="404">Leia for an INSTANT WIN. Beats a machine</tspan><tspan x="48" y="445">above them, dies to one below, whiffs on</tspan><tspan x="48" y="486">the wrong sidekick. Sending them costs a</tspan><tspan x="48" y="527">prize.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Never tell me the odds.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#268a4e1a" stroke="#268a4e" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#268a4e" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points on its own -- send it onto your</tspan><tspan x="70" y="956">sidekick for an INSTANT WIN (sending costs a</tspan><tspan x="70" y="990">prize). Worth nothing if never used.</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-14-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-14-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#268a4e" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375.0,352.0 416.5,462.9 534.8,468.1 442.1,541.8 473.7,655.9 375.0,590.6 276.3,655.9 307.9,541.8 215.2,468.1 333.5,462.9" fill="#268a4e"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#268a4e"/>
+    <polygon points="86.0,33.0 96.4,60.7 125.9,62.0 102.8,80.5 110.7,109.0 86.0,92.6 61.3,109.0 69.2,80.5 46.1,62.0 75.6,60.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">SIDEKICK</text>
+    <path d="M 690 78.0 C 720.0 58.5 705.0 37.5 690 55.5 C 675.0 37.5 660.0 58.5 690 78.0 Z" fill="#7b1fa2"/>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Princess Leia</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Your other half, lost deep in the deck.</tspan><tspan x="48" y="363">They walk home alone for points, or your</tspan><tspan x="48" y="404">hero Han Solo reaches them for the</tspan><tspan x="48" y="445">reunion. Keep them in play until you can</tspan><tspan x="48" y="486">win.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Never tell me the odds.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#268a4e1a" stroke="#268a4e" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#268a4e" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Leaves on the 1-2-4-8 ladder by order (x2 if</tspan><tspan x="70" y="956">captured); or your hero reaches her for an</tspan><tspan x="70" y="990">INSTANT WIN.</tspan></text>
+  </g></g>
+</svg>

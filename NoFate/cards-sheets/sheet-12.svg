@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-11-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-0)">
+    <rect x="0" y="0" width="750" height="1050" fill="#1f9aa8" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="417,352 282.6,545.2 371.64,545.2 333,688 467.4,494.8 378.36,494.8" fill="#1f9aa8"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#1f9aa8"/>
+    <polygon points="96.5,33 62.9,81.3 85.16,81.3 75.5,117 109.1,68.7 86.84,68.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">GLOBAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Timequake</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Shuffle the entire Future deck. Every</tspan><tspan x="48" y="363">planted Terminator, protectee, and read</tspan><tspan x="48" y="404">scrambles -- including yours. The</tspan><tspan x="48" y="445">Present is untouched.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“The timeline convulses. Worst in the fat</tspan><tspan x="375" y="780">middle.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#1f9aa81a" stroke="#1f9aa8" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#1f9aa8" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- fires the instant it surfaces;</tspan><tspan x="70" y="956">cannot be taken, sent, looted, or yeeted.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-11-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#1f9aa8" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="417,352 282.6,545.2 371.64,545.2 333,688 467.4,494.8 378.36,494.8" fill="#1f9aa8"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#1f9aa8"/>
+    <polygon points="96.5,33 62.9,81.3 85.16,81.3 75.5,117 109.1,68.7 86.84,68.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">GLOBAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Portal Collapse</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">When it emerges, the portal is failing:</tspan><tspan x="48" y="363">EVERY player throws one card from their</tspan><tspan x="48" y="404">hand into the collapse (your choice; it</tspan><tspan x="48" y="445">is gone for good). Holding a Hot Potato?</tspan><tspan x="48" y="486">Lucky -- shed it. Empty hand? Lucky --</tspan><tspan x="48" y="527">you give nothing.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“The rift screams and starts to close.</tspan><tspan x="375" y="780">Feed it or lose it.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#1f9aa81a" stroke="#1f9aa8" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#1f9aa8" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- fires the instant it surfaces;</tspan><tspan x="70" y="956">cannot be taken, sent, looted, or yeeted.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-11-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#1f9aa8" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="417,352 282.6,545.2 371.64,545.2 333,688 467.4,494.8 378.36,494.8" fill="#1f9aa8"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#1f9aa8"/>
+    <polygon points="96.5,33 62.9,81.3 85.16,81.3 75.5,117 109.1,68.7 86.84,68.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">GLOBAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Flare</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Cut the deck and reveal that card</tspan><tspan x="48" y="363">FACE-UP to the whole table. It stays</tspan><tspan x="48" y="404">known to everyone until it surfaces.</tspan><tspan x="48" y="445">Light up the dark -- everyone sees what</tspan><tspan x="48" y="486">is coming.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“A flare arcs over no-man’s-land. For one</tspan><tspan x="375" y="780">moment, nothing is hidden.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#1f9aa81a" stroke="#1f9aa8" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#1f9aa8" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- fires the instant it surfaces;</tspan><tspan x="70" y="956">cannot be taken, sent, looted, or yeeted.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-11-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-3)">
+    <rect x="0" y="0" width="750" height="1050" fill="#1f9aa8" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="417,352 282.6,545.2 371.64,545.2 333,688 467.4,494.8 378.36,494.8" fill="#1f9aa8"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#1f9aa8"/>
+    <polygon points="96.5,33 62.9,81.3 85.16,81.3 75.5,117 109.1,68.7 86.84,68.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">GLOBAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Pass the Watch</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Every player cuts and lifts a card of</tspan><tspan x="48" y="363">their choice and shows it to the player</tspan><tspan x="48" y="404">on their left, then it goes back. So</tspan><tspan x="48" y="445">everyone ends up seeing TWO cards: the</tspan><tspan x="48" y="486">one they chose and the one handed to</tspan><tspan x="48" y="527">them from their right.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Word travels down the line in the dark.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#1f9aa81a" stroke="#1f9aa8" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#1f9aa8" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- fires the instant it surfaces;</tspan><tspan x="70" y="956">cannot be taken, sent, looted, or yeeted.</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-11-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#1f9aa8" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="417,352 282.6,545.2 371.64,545.2 333,688 467.4,494.8 378.36,494.8" fill="#1f9aa8"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#1f9aa8"/>
+    <polygon points="96.5,33 62.9,81.3 85.16,81.3 75.5,117 109.1,68.7 86.84,68.7" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">GLOBAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">A Word in Your Ear</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">The active player cuts, lifts one card,</tspan><tspan x="48" y="363">and shows it to ONE player of their</tspan><tspan x="48" y="404">choice (and no one else), then slips it</tspan><tspan x="48" y="445">back. Make a deal, plant a lie, bait a</tspan><tspan x="48" y="486">rival.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Loyalty is a thing you trade in the</tspan><tspan x="375" y="780">dark.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#1f9aa81a" stroke="#1f9aa8" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#1f9aa8" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- fires the instant it surfaces;</tspan><tspan x="70" y="956">cannot be taken, sent, looted, or yeeted.</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-11-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-11-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#2f6fb0" opacity="0.09"/>
+    <g opacity="0.20"><polygon points="375,352 543,657.76 207,657.76" fill="#2f6fb0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#2f6fb0"/>
+    <polygon points="86,33 128,109.44 44,109.44" fill="#ffffff"/>
+    <circle cx="150" cy="118" r="13" fill="#fff"/>
+    <text x="185" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">UPGRADE  ·  ONE-SHOT</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x3</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">Temporal Shift</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">On your Fish: move any ONE card you</tspan><tspan x="48" y="363">peeked exactly 3 spaces up or down in</tspan><tspan x="48" y="404">the deck. Slip a rival hero behind his</tspan><tspan x="48" y="445">sidekick to star-cross them, or edge</tspan><tspan x="48" y="486">your own pair toward home.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“A small shove in time. Three steps --</tspan><tspan x="375" y="780">enough to miss each other forever.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#2f6fb01a" stroke="#2f6fb0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#2f6fb0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">No points -- a ONE-SHOT ability.</tspan></text>
+  </g></g>
+</svg>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 2400 3000" font-family="Georgia, 'Times New Roman', serif">
+<rect width="2400" height="3000" fill="#ffffff"/>
+<line x1="75" y1="416" x2="75" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="75" y1="2558" x2="75" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="416" x2="825" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="825" y1="2558" x2="825" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="416" x2="1575" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="1575" y1="2558" x2="1575" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="416" x2="2325" y2="442" stroke="#999" stroke-width="1"/>
+<line x1="2325" y1="2558" x2="2325" y2="2584" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="450" x2="67" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="450" x2="2359" y2="450" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="1500" x2="67" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="1500" x2="2359" y2="1500" stroke="#999" stroke-width="1"/>
+<line x1="41" y1="2550" x2="67" y2="2550" stroke="#999" stroke-width="1"/>
+<line x1="2333" y1="2550" x2="2359" y2="2550" stroke="#999" stroke-width="1"/>
+<g transform="translate(75 450)">  <defs><clipPath id="clip-9-0"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-0)">
+    <rect x="0" y="0" width="750" height="1050" fill="#9c5a22" opacity="0.09"/>
+    <g opacity="0.20"><ellipse cx="375" cy="520" rx="168" ry="117.6" transform="rotate(-18 375 520)" fill="#9c5a22"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#9c5a22"/>
+    <ellipse cx="86" cy="75" rx="42" ry="29.4" transform="rotate(-18 86 75)" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">HOT POTATO</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">A Confused Child</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth -1. Playable from hand: bury</tspan><tspan x="48" y="363">(re-displace) anywhere in the Future via</tspan><tspan x="48" y="404">a cut.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Some poor kid yanked through time, asking</tspan><tspan x="375" y="780">for his mom. Pass him along -- gently.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#9c5a221a" stroke="#9c5a22" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#9c5a22" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">-1 at game end if still in hand. Playable:</tspan><tspan x="70" y="956">bury it in the Future.</tspan></text>
+  </g></g>
+<g transform="translate(825 450)">  <defs><clipPath id="clip-9-1"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-1)">
+    <rect x="0" y="0" width="750" height="1050" fill="#666666" opacity="0.09"/>
+    <g opacity="0.20"><circle cx="375" cy="520" r="142.79999999999998" fill="none" stroke="#666666" stroke-width="7"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#666666"/>
+    <circle cx="86" cy="75" r="35.699999999999996" fill="none" stroke="#ffffff" stroke-width="7"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">NEUTRAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Stragglers</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 0, but on take: peek +1 this turn</tspan><tspan x="48" y="363">(they point the way).</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Another mouth, another pair of hands,</tspan><tspan x="375" y="780">another set of eyes.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#6666661a" stroke="#666666" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#666666" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 0 -- on take, peek +1 this turn.</tspan></text>
+  </g></g>
+<g transform="translate(1575 450)">  <defs><clipPath id="clip-9-2"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-2)">
+    <rect x="0" y="0" width="750" height="1050" fill="#666666" opacity="0.09"/>
+    <g opacity="0.20"><circle cx="375" cy="520" r="142.79999999999998" fill="none" stroke="#666666" stroke-width="7"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#666666"/>
+    <circle cx="86" cy="75" r="35.699999999999996" fill="none" stroke="#ffffff" stroke-width="7"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">NEUTRAL</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x1</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">After Curfew</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">Worth 0, but on take: peek +1 this turn.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Heads down, moving fast under the</tspan><tspan x="375" y="780">searchlights.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#6666661a" stroke="#666666" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#666666" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Worth 0 -- on take, peek +1 this turn.</tspan></text>
+  </g></g>
+<g transform="translate(75 1500)">  <defs><clipPath id="clip-9-3"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-3)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7d44a0" opacity="0.09"/>
+    <g opacity="0.20"><circle cx="375" cy="444.4" r="70.56" fill="#7d44a0"/><path d="M 240.6 688 Q 375 503.2 509.4 688 Z" fill="#7d44a0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7d44a0"/>
+    <circle cx="86" cy="56.099999999999994" r="17.64" fill="#ffffff"/><path d="M 52.4 117 Q 86 70.8 119.6 117 Z" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">CHARACTER</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x2</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Defector</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">AURA: each turn you take an extra Fish +</tspan><tspan x="48" y="363">plant action.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Flipped, and fighting for the other side</tspan><tspan x="375" y="780">now.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7d44a01a" stroke="#7d44a0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7d44a0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Pay -2 points for its aura (kept face-up).</tspan></text>
+  </g></g>
+<g transform="translate(825 1500)">  <defs><clipPath id="clip-9-4"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-4)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7d44a0" opacity="0.09"/>
+    <g opacity="0.20"><circle cx="375" cy="444.4" r="70.56" fill="#7d44a0"/><path d="M 240.6 688 Q 375 503.2 509.4 688 Z" fill="#7d44a0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7d44a0"/>
+    <circle cx="86" cy="56.099999999999994" r="17.64" fill="#ffffff"/><path d="M 52.4 117 Q 86 70.8 119.6 117 Z" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">CHARACTER</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x2</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Defector</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">AURA: each turn you take an extra Fish +</tspan><tspan x="48" y="363">plant action.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Flipped, and fighting for the other side</tspan><tspan x="375" y="780">now.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7d44a01a" stroke="#7d44a0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7d44a0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Pay -2 points for its aura (kept face-up).</tspan></text>
+  </g></g>
+<g transform="translate(1575 1500)">  <defs><clipPath id="clip-9-5"><rect x="6" y="6" width="738" height="1038" rx="36"/></clipPath></defs>
+  <rect x="6" y="6" width="738" height="1038" rx="36" fill="#fbfaf7" stroke="#1a1a1a" stroke-width="6"/>
+  <g clip-path="url(#clip-9-5)">
+    <rect x="0" y="0" width="750" height="1050" fill="#7d44a0" opacity="0.09"/>
+    <g opacity="0.20"><circle cx="375" cy="444.4" r="70.56" fill="#7d44a0"/><path d="M 240.6 688 Q 375 503.2 509.4 688 Z" fill="#7d44a0"/></g>
+    <rect x="0" y="0" width="750" height="150" fill="#7d44a0"/>
+    <circle cx="86" cy="56.099999999999994" r="17.64" fill="#ffffff"/><path d="M 52.4 117 Q 86 70.8 119.6 117 Z" fill="#ffffff"/>
+    
+    <text x="150" y="68" fill="#fff" font-size="34" font-weight="bold" letter-spacing="2">CHARACTER</text>
+    <text x="716" y="58" fill="#fff" font-size="30" font-weight="bold" text-anchor="end">x2</text>
+    <text x="375" y="230" fill="#141414" font-size="48" font-weight="bold" text-anchor="middle"><tspan x="375" y="230">The Survivor</tspan></text>
+    <line x1="48" y1="294" x2="702" y2="294" stroke="#cfc9bb" stroke-width="2"/>
+    <text x="48" y="322" fill="#2a2a2a" font-size="31"><tspan x="48" y="322">AURA: your planted terminators cannot be</tspan><tspan x="48" y="363">buddied or taken by another terminator.</tspan></text>
+    <text x="375" y="745" fill="#6a6258" font-size="27" font-style="italic" text-anchor="middle"><tspan x="375" y="745">“Been hunted before. Learned.”</tspan></text>
+    <rect x="48" y="852" width="654" height="150" rx="16" fill="#7d44a01a" stroke="#7d44a0" stroke-width="2.5"/>
+    <text x="70" y="888" fill="#7d44a0" font-size="22" font-weight="bold" letter-spacing="2">SCORING</text>
+    <text x="70" y="922" fill="#222" font-size="26"><tspan x="70" y="922">Pay -2 points for its aura (kept face-up).</tspan></text>
+  </g></g>
+</svg>
