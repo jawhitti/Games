@@ -99,9 +99,13 @@ And the key dials move monotonically and intuitively:
 - **Table-talk is unmodeled.** Bots coordinate only through public mechanical
   signals (color bloc, flags, Castle). The `coordination` knob is a crude proxy
   for whispering-at-the-table.
-- **Deferred:** a finite grant deck (the king's branding is currently unlimited;
-  favour decay is a soft stand-in). The three asset *types* are collapsed to a
-  matched/mismatched grant.
+- **Houses are now real** (typed assets, finite grant deck, six edges, House
+  assigned independently of strategy). The measured distribution shows passive
+  per-round edges (Mildegaarde's +1 income -> 31% of noble wins) dominating
+  one-shot edges (Brandt 10%); fair share is ~17%. See `DESIGN_NOTES.md`.
+- **Deferred:** the deck size isn't binding at the default 4/4/4 in short reigns
+  (shrink `grantDeck` to feel the squeeze); House edges want rebalancing; the
+  Mandate deck's private win-conditions (Cincinnatus) are unmodeled.
 
 ## Files
 

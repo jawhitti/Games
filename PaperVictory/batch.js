@@ -47,6 +47,9 @@ function runBatch(cfg, n, baseSeed = 1) {
     misalignSurv: 0,
     paperVictory: 0, // castle COMPLETED but king loses the vote (the moment)
     houseWins: { farmer: 0, manufacturer: 0, banker: 0, king: 0, none: 0 },
+    houseByName: {},
+    grantsGiven: 0,
+    grantsDenied: 0,
     anySeize: 0,
     anyPrison: 0,
     seizeTotal: 0,
@@ -83,6 +86,9 @@ function runBatch(cfg, n, baseSeed = 1) {
     }
     if (r.trigger === "castle" && !r.kingSurvives) agg.paperVictory++;
     agg.houseWins[r.victorKind] = (agg.houseWins[r.victorKind] || 0) + 1;
+    agg.houseByName[r.victorHouse] = (agg.houseByName[r.victorHouse] || 0) + 1;
+    agg.grantsGiven += r.grantsGiven;
+    agg.grantsDenied += r.grantsDenied;
     if (r.seizes > 0 || r.seizesExecuted > 0) agg.anySeize++;
     if (r.imprisonments > 0) agg.anyPrison++;
     agg.seizeTotal += r.seizes;
@@ -133,9 +139,14 @@ function report(label, cfg, a) {
   if (a.misaligned > 0) {
     L(`  king was misaligned       ${pct(a.misaligned, a.n)}   (survived ${pct(a.misalignSurv, a.misaligned)})`);
   }
-  L("  --- individual victor by House (the win distribution) ---");
+  L("  --- individual victor by House kind (the win distribution) ---");
   const h = a.houseWins;
-  L(`  farmer ${pct(h.farmer, a.n)}  manufacturer ${pct(h.manufacturer, a.n)}  banker ${pct(h.banker, a.n)}  king ${pct(h.king, a.n)}  none ${pct(h.none, a.n)}`);
+  L(`  farmer ${pct(h.farmer, a.n)}  manufacturer ${pct(h.manufacturer, a.n)}  banker ${pct(h.banker, a.n)}  king ${pct(h.king, a.n)}`);
+  L("  by named House (among NOBLE victories only -- isolates the edges):");
+  const nobleWins = a.n - (h.king || 0) - (a.houseByName.none || 0);
+  const names = ["Varrochi", "Hesse", "Brandt", "Krael", "Mildegaarde", "Ostlander"];
+  L("  " + names.map((nm) => `${nm} ${pct(a.houseByName[nm] || 0, nobleWins || 1)}`).join("  "));
+  L(`  grant deck: ${(a.grantsGiven / a.n).toFixed(1)} given/game, denied (deck dry) ${pct(a.grantsDenied, a.grantsGiven + a.grantsDenied || 1)} of attempts`);
   L("  --- do the royal levers matter? ---");
   L(`  games with any seizure    ${pct(a.anySeize, a.n)}   (avg ${(a.seizeTotal / a.n).toFixed(2)}/game)`);
   const totalImprison = a.prisonTotal;

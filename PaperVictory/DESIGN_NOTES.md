@@ -156,12 +156,40 @@ danger set by how much of the room secretly hates him.
 
 ---
 
+## Decision 8 -- Typed assets, House edges, and decoupled assignment
+
+**Built (was the long-deferred item):** the three asset types are now real --
+farmers score estates, manufacturers factories, bankers charters. The king bestows
+from a **finite typed grant deck**; a matched grant enriches (scores), a mismatched
+one is a cheap brand (flag only). The six House edges are implemented, and House is
+now assigned **independently of strategy** so neither contaminates the other's
+statistics.
+
+**Why:** before this, Houses were mechanically identical, so "how do the Houses
+fare" had no real answer -- and the numbers it printed were a confound (the lone
+betrayer bot rode a banker seat and dragged bankers down).
+
+**What the sim showed (the win distribution, finally meaningful):**
+
+- By kind: farmer ~12% / manufacturer ~13% / banker ~21% / king ~55%.
+- By named House (noble victories only): **Mildegaarde 31%** (+1 income/round),
+  Krael 19%, Hesse 15%, Ostlander 15%, Varrochi 11%, **Brandt 10%** (one-shot
+  IOU->coin). Fair share is ~17%.
+- **Passive per-round edges dominate one-shot edges.** Mildegaarde's steady +1
+  income compounds into coin and wins the individual-victor tiebreak; the one-shot
+  abilities fire once and fade. The income edge wants a nerf, or the one-shots want
+  buffs. The "banker is weak" reading from before was entirely the betrayer
+  confound -- it inverts once House and strategy are decoupled.
+
+**Open within this:** at the default deck size (4/4/4) the finite deck is **not yet
+binding** -- ~9 grants given against 12 cards in ~9-round games means 0% denied. The
+bloc-fracturing squeeze exists but only activates with a smaller deck or longer
+reigns; `grantDeck` is the knob.
+
 ## Still open / deferred
 
-- **Finite grant deck.** The king's branding is currently unlimited (favour decay
-  is a soft stand-in for scarcity). The three asset types (estate/factory/charter)
-  are collapsed into a matched/mismatched grant. A finite, typed deck is the next
-  fidelity step, and it is the king's real tool for fracturing the bloc.
+- **Edge rebalance.** Equalize the Houses (nerf the passive income edge or buff the
+  one-shots) -- the sim now measures this directly.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win
   conditions (e.g. Cincinnatus) are not.
 - **Scoring weights and economy numbers** are provisional throughout.

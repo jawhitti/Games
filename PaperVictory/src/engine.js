@@ -23,6 +23,35 @@ function publicFlag(n) {
   return n.flag;
 }
 
+const ASSET_TYPES = ["estate", "factory", "charter"];
+
+function totalAssets(n) {
+  return n.assets.estate + n.assets.factory + n.assets.charter;
+}
+
+// seize one asset, taking the noble's OWN-House type first (the land the king covets)
+function seizeOneAsset(n) {
+  const order = [n.scoringType, ...ASSET_TYPES.filter((t) => t !== n.scoringType)];
+  for (const t of order) {
+    if (n.assets[t] > 0) {
+      n.assets[t] -= 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+function anyAvailableType(deck) {
+  for (const t of ASSET_TYPES) if (deck[t] > 0) return t;
+  return null;
+}
+
+function offType(own, deck, rng) {
+  const others = ASSET_TYPES.filter((t) => t !== own && deck[t] > 0);
+  if (others.length) return rng.pick(others);
+  return deck[own] > 0 ? own : anyAvailableType(deck);
+}
+
 function makeKing(cfg, rng) {
   const misaligned = rng.chance(cfg.mandateMisalignProb);
   return {
@@ -30,6 +59,9 @@ function makeKing(cfg, rng) {
     castle: 0,
     misaligned, // public face is crown; if misaligned the lethal color is crown too
     purgeFlag: misaligned ? "crown" : "rebellion", // which PUBLIC flag dies at purge
+    deck: { ...cfg.grantDeck }, // finite branding budget by type
+    grantsGiven: 0,
+    grantsDenied: 0, // wanted to grant but the deck was empty
     seizes: 0,
     seizeThreats: 0,
     seizesExecuted: 0,
@@ -58,11 +90,19 @@ function chooseGrantTarget(cfg, king, nobles, rng) {
 }
 
 function applyGrant(cfg, king, target, rng) {
-  // matched grant enriches (scores for that House); mismatched is a cheap brand.
-  const matched = cfg.kingStrategy === "gentle" ? rng.chance(0.6) : rng.chance(0.35);
-  target.brand += 1;
-  if (matched) target.score += 1;
-  target.favor += matched ? 2 : 1;
+  const own = target.scoringType;
+  // gentle kings enrich (matched type) often; adaptive/savage prefer the cheap brand.
+  const wantEnrich = cfg.kingStrategy === "gentle" ? rng.chance(0.6) : rng.chance(0.35);
+  let type = wantEnrich ? own : offType(own, king.deck, rng);
+  if (!type || king.deck[type] <= 0) type = anyAvailableType(king.deck);
+  if (!type) {
+    king.grantsDenied += 1; // deck is empty -- he can no longer brand
+    return;
+  }
+  king.deck[type] -= 1;
+  target.assets[type] += 1;
+  target.favor += type === own ? 2 : 1; // a matched grant is worth more
+  king.grantsGiven += 1;
 }
 
 function taxAmount(cfg, king) {
@@ -78,12 +118,25 @@ function chooseTaxTarget(cfg, nobles, rng) {
   if (pool.length === 0) return null;
   if (cfg.kingStrategy === "savage") return rng.pick(pool);
   // squeeze the asset-rich, cash-poor (the seizure target)
-  return pool.reduce((a, b) => (b.score - b.coin > a.score - a.coin ? b : a));
+  return pool.reduce((a, b) =>
+    totalAssets(b) - b.coin > totalAssets(a) - a.coin ? b : a
+  );
 }
 
 function kingDemand(cfg, king, target, rng) {
   if (!target || target.flag !== "crown") return; // rebels pay nothing
   const amt = taxAmount(cfg, king);
+  // EDGE -- Varrochi: once per game, refuse a demand outright and pay nothing.
+  if (target.refuseLeft > 0) {
+    target.refuseLeft -= 1;
+    return;
+  }
+  // EDGE -- Brandt: once per game, turn an IOU into the liquidity to settle.
+  if (target.coin < amt && target.iouToCoinLeft > 0) {
+    target.coin += amt;
+    target.iouToCoinLeft -= 1;
+    if (target.promises > 0) target.promises -= 1;
+  }
   if (target.coin >= amt) {
     target.coin -= amt;
     king.castle += amt;
@@ -92,11 +145,10 @@ function kingDemand(cfg, king, target, rng) {
   }
   // Cannot pay in coin -> the king reaches for the seizure lever (asset-rich,
   // cash-poor is exposed).
-  if (cfg.seizureEnabled && target.brand > 0) {
+  if (cfg.seizureEnabled && totalAssets(target) > 0) {
     if (cfg.seizeMode === "immediate") {
       king.castle += amt;
-      target.brand = 0;
-      if (target.score > 0) target.score -= 1;
+      seizeOneAsset(target);
       king.seizes += 1;
       if (cfg.prisonEnabled) {
         target.imprisoned = true;
@@ -123,10 +175,9 @@ function executePendingSeizures(cfg, king, nobles) {
     if (!n.alive || !n.pendingSeize) continue;
     n.pendingSeize -= 1;
     if (n.pendingSeize > 0) continue;
-    if (n.brand > 0) {
+    if (totalAssets(n) > 0) {
       king.castle += n.pendingAmt;
-      n.brand = 0;
-      if (n.score > 0) n.score -= 1;
+      seizeOneAsset(n);
       king.seizesExecuted += 1;
       if (cfg.prisonEnabled) {
         n.imprisoned = true;
@@ -261,8 +312,7 @@ function nobleUpdate(cfg, king, n, rng, read) {
   const ambush = n.lean === "depose" ? cfg.ambushTilt * pFall * survCrown : 0;
   const flagTarget = evRebel > evCrown + ambush ? "rebellion" : "crown";
   if (n.flag !== flagTarget && Math.abs(evRebel - evCrown) >= cfg.flagInertia) {
-    n.flag = flagTarget;
-    if (flagTarget === "rebellion") n.brand = 0; // renounce patronage to fly rebel
+    n.flag = flagTarget; // open defiance; the noble keeps its holdings either way
   }
 }
 
@@ -285,7 +335,8 @@ function maybeCallRebellion(cfg, king, nobles, rng) {
 function score(cfg, n, crownWon) {
   let rewards = crownWon ? n.promises * cfg.promiseVP : n.threats * cfg.threatVP;
   if (!crownWon && n.flag === "rebellion") rewards += cfg.rebelHeroVP; // defiance pays
-  return n.coin * cfg.coinVP + n.score * cfg.assetVP + rewards;
+  // a House scores ONLY its own asset type; off-type grants were just brands
+  return n.coin * cfg.coinVP + n.assets[n.scoringType] * cfg.assetVP + rewards;
 }
 
 function reckoning(cfg, king, nobles, trigger, round) {
@@ -363,7 +414,7 @@ function playGame(cfg, seed) {
     const read = blocRead(cfg, king, nobles);
     for (const n of nobles) {
       if (!n.alive) continue;
-      if (!n.imprisoned) n.coin += cfg.income;
+      if (!n.imprisoned) n.coin += cfg.income + n.incomeBonus; // Mildegaarde: +1
       maybePayDownSeize(cfg, king, n);
       n.resentment *= 0.9;
       n.favor *= 0.9; // buy-offs wear off (soft stand-in for a finite grant deck)
@@ -406,7 +457,7 @@ function finalize(cfg, king, nobles, res) {
   let frontrunner = null;
   let fw = -Infinity;
   for (const n of nobles) {
-    const w = n.coin * cfg.coinVP + n.score * cfg.assetVP;
+    const w = n.coin * cfg.coinVP + n.assets[n.scoringType] * cfg.assetVP;
     if (w > fw) {
       fw = w;
       frontrunner = n;
@@ -434,6 +485,9 @@ function finalize(cfg, king, nobles, res) {
     castle: king.castle,
     victorIsKing: res.victorIsKing,
     victorKind: res.victorIsKing ? "king" : res.victor ? res.victor.kind : "none",
+    victorHouse: res.victorIsKing ? "king" : res.victor ? res.victor.house : "none",
+    grantsGiven: king.grantsGiven,
+    grantsDenied: king.grantsDenied,
     betrayers,
     frontrunnerWon: frontrunner ? winnerSet.has(frontrunner) : false,
     frontrunnerAlive: frontrunner ? frontrunner.alive : false,

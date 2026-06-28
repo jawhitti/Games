@@ -21,6 +21,14 @@ const DEFAULT_CONFIG = {
   carriedThreatsMean: 1.2, // avg carried threats per noble (rebellion anchors)
   startingAssetMean: 1.5, // avg granted/owned assets at reign start
 
+  // --- finite grant deck (the king's branding budget) ---
+  // The king bestows typed assets: estates (farmers score), factories (manufacturers),
+  // charters (bankers). Matched type = enrich (scores for that House); mismatched =
+  // a cheap brand (flag only). The deck is FINITE -- he cannot buy off everyone, and
+  // when it runs dry the bloc he can no longer fracture grows. With 6 nobles, 4 of
+  // each is deliberately short.
+  grantDeck: { estate: 4, factory: 4, charter: 4 },
+
   // --- the Castle (king victory) ---
   castleTarget: 28, // total value the king must bank to finish
   castleVerdict: "trigger", // Q4: "outright" = finishing just wins;
