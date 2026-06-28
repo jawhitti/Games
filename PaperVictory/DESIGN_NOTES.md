@@ -186,10 +186,33 @@ binding** -- ~9 grants given against 12 cards in ~9-round games means 0% denied.
 bloc-fracturing squeeze exists but only activates with a smaller deck or longer
 reigns; `grantDeck` is the knob.
 
+## Decision 9 -- House-to-house rounds and a valued-land economy
+
+**Corrected (the round structure was entirely my guess):** the king now goes
+**House to House** each round rather than touching one noble. At each House he asks a
+favor costing **1-8** and chooses to **sweeten it with a land of similar value** or
+just **demand the tax**. Lands are **individually valued (1-8)** -- a noble scores
+only its own House's land type, summed by value, so not all lands are equal.
+Rebels refuse the king (he may gift a land to lure them back). Nobles may flip lean
+and flag **at any time, even mid-round** -- modeled as a re-evaluation after every
+House visit, which makes visit order a lever.
+
+**What the sim showed:** the new economy is ~6x richer per round (the king extracts
+from everyone), so the old `castleTarget: 28` finished in ~2 rounds and the king was
+~98% safe. Re-pricing the Castle to **120** restored the contest: king ~78% /
+rebellion ~22%, ~9-round reigns, all three triggers live, and the paper victory back
+at ~17% of completed castles. The mechanism was sound; only the master needle (tax
+vs Castle cost) needed rescaling to the new scale.
+
+**Open within this:** at the restored balance ~32% of games drift to the round cap
+(stall) -- the Q5 backstop wants attention (raise `roundCap` or shave `castleTarget`).
+The king's sweeten-vs-demand and visit-order logic is still simple AI.
+
 ## Still open / deferred
 
-- **Edge rebalance.** Equalize the Houses (nerf the passive income edge or buff the
-  one-shots) -- the sim now measures this directly.
+- **Edge rebalance.** Equalize the Houses (nerf Mildegaarde's passive income or buff
+  the one-shots) -- the sim measures this directly.
+- **The stall backstop (Q5).** ~1/3 of reigns hit the cap at the restored balance.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win
   conditions (e.g. Cincinnatus) are not.
 - **Scoring weights and economy numbers** are provisional throughout.

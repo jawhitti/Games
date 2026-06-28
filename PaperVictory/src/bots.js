@@ -55,13 +55,19 @@ function buildRoster(cfg, rng) {
     let promises = rng.chance(0.5) ? 1 : 0;
     const startAssets = Math.max(0, Math.round(cfg.startingAssetMean + rng.noise(1)));
 
-    const assets = { estate: 0, factory: 0, charter: 0 };
-    assets[scoringType] = startAssets; // a noble's pre-existing holdings are its own type
+    const landValue = () =>
+      cfg.landValueMin + rng.int(cfg.landValueMax - cfg.landValueMin + 1);
+
+    // a noble's pre-existing holdings are its own type, each with its own value
+    const lands = [];
+    for (let k = 0; k < startAssets; k++) lands.push({ type: scoringType, value: landValue() });
 
     // House edges that fire at setup
-    if (house.edge === "startEstate") assets.estate += 1;
+    if (house.edge === "startEstate") lands.push({ type: "estate", value: landValue() });
     if (house.edge === "extraThreat") threats += 1;
     if (house.edge === "extraIou") promises += 1;
+
+    const startWorth = lands.reduce((s, l) => s + l.value, 0);
 
     // public COLOR (set at the Coronation): losing-color = burned bloc
     const losing = !rng.chance(cfg.winColorProb);
@@ -81,14 +87,14 @@ function buildRoster(cfg, rng) {
       losing,
       flag: "crown",
       coin,
-      assets,
+      lands, // [{type, value}] -- typed, individually valued holdings
       threats,
       promises,
       lean,
       imprisoned: false,
       alive: true,
       resentment: 0,
-      favor: startAssets,
+      favor: startWorth,
       pendingSeize: 0,
       pendingAmt: 0,
       grievance: 0,

@@ -22,15 +22,26 @@ const DEFAULT_CONFIG = {
   startingAssetMean: 1.5, // avg granted/owned assets at reign start
 
   // --- finite grant deck (the king's branding budget) ---
-  // The king bestows typed assets: estates (farmers score), factories (manufacturers),
-  // charters (bankers). Matched type = enrich (scores for that House); mismatched =
-  // a cheap brand (flag only). The deck is FINITE -- he cannot buy off everyone, and
-  // when it runs dry the bloc he can no longer fracture grows. With 6 nobles, 4 of
-  // each is deliberately short.
+  // The king bestows typed lands: estates (farmers score), factories (manufacturers),
+  // charters (bankers). Each land carries its OWN value (landValue range). A matched
+  // type enriches (scores for that House); a mismatched one is a cheap brand. The
+  // deck is FINITE. With 6 nobles, 4 of each is deliberately short.
   grantDeck: { estate: 4, factory: 4, charter: 4 },
+  landValueMin: 1, // lands are not all equal -- each is worth landValueMin..landValueMax
+  landValueMax: 8,
+
+  // --- the king's favors (his demands), house to house ---
+  // Each round the king visits every House. The favor he asks costs 1..8, and he may
+  // SWEETEN it with a land of similar value or just demand the tax.
+  favorMin: 1,
+  favorMax: 8,
 
   // --- the Castle (king victory) ---
-  castleTarget: 28, // total value the king must bank to finish
+  // Priced for the house-to-house economy: the king now extracts from every House
+  // each round (~20-25/round), so the Castle must be large or the reign ends before
+  // leans can turn. 120 gives a ~9-round reign and restores the contest + paper
+  // victory; 60 is too fast (king ~94%), 200+ becomes unreachable (mostly stalls).
+  castleTarget: 120,
   castleVerdict: "trigger", // Q4: "outright" = finishing just wins;
   //                               "trigger"  = finishing only forces the count
   taxBase: 2, // base coin demanded per demand
@@ -138,7 +149,7 @@ const DEFAULT_CONFIG = {
   // --- scoring weights for the individual victor ---
   promiseVP: 2, // VP per promise collected (if Crown won)
   threatVP: 3, // VP per carried threat flipped (if Rebellion won)
-  assetVP: 2, // VP per unit of own-House asset
+  assetVP: 1, // multiplier on own-House land VALUE (lands already carry their worth)
   coinVP: 1, // VP per coin
 };
 

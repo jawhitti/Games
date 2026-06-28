@@ -40,16 +40,27 @@ The king has a **secret Mandate color** -- the flag he executes at the purge.
 It may not match his public face, so **neither flag is safe**; backing the king
 is a blind bet, and a misaligned king purges his own crown-flag loyalists.
 
-### The reign loop (per round)
+### The reign loop (per round) -- house to house
 
-1. **King phase.** Carry out matured seize-threats; grant a noble (to shore up a
-   wavering bloc member); demand tax from a crown-flagger (rebels refuse to pay);
-   pay prison upkeep. Then **decide whether to attack** a visible rebellion -- but
-   only if the court is genuinely restless and the Castle is not nearly done. A
-   calm court or a near-complete Castle means he builds instead.
-2. **Noble phase.** Income; pay down any seize-threat; then each noble re-chooses
-   its **flag** and **lean** by estimating who will win from the public board
-   (Castle progress, the visible flag split, the size of its own color bloc).
+1. **Upkeep.** Each noble takes income; anyone under a seize-threat may pay it down;
+   matured seize-threats are carried out; prison upkeep slows the Castle.
+2. **The king goes House to House.** He visits every noble in turn (the wavering,
+   burned-color Houses first). At each House he asks a favor costing **1-8**, and
+   either **sweetens it with a land of similar value** (courting that House) or just
+   **demands the tax**. Rebels refuse him; he may instead **gift a land to lure them
+   back**. Lands are **individually valued (1-8)**; a matched type enriches (it
+   scores for that House), a mismatched one is a cheap brand.
+3. **Nobles react after every visit.** Leans and flags may flip *at any time, even
+   on another House's turn* -- so visit order matters, and a noble watches what
+   befalls its neighbors. Each re-estimates who will win from the public board
+   (Castle progress, visible flag split, its own color bloc).
+4. **The king may attack** a visible rebellion -- but only if the court is genuinely
+   restless and the Castle is not nearly done (otherwise he lays the last stones).
+5. **End of round:** grudges fade; check for Castle completion or a called rebellion.
+
+Lands carry value, so every choice is real: which House to enrich vs cheap-brand,
+which land the king covets enough to seize (he takes the most valuable), and which
+holdings a noble must defend with liquid coin.
 
 ### The three reckoning triggers
 
