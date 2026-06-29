@@ -320,8 +320,10 @@ early-brutal king profile; not needed for now.)
 ## Still open / deferred
 
 - ~~One rising vs many~~ -- RESOLVED: the human king's choices cover it (see above).
-- **Edge re-tune for the muster.** The Decision-12 balance was tuned for the old
-  model; under the muster the spread loosened (Ostlander ~10%, Brandt ~22%). Re-tune.
+- ~~Edge re-tune for the muster~~ -- RESOLVED: dropped Brandt's factory 3->2 and gave
+  Ostlander a starting charter (value 2) since a lone promise is near-worthless under
+  the muster (it only pays on a crown win). Named-House shares tightened from a
+  10-22% spread back to **15.7-17.7%** (fair 16.7%); the three kinds sit even at ~21%.
 - **King's prize share (~37%)** may be a touch high; `kingReserve` is the dial.
 - **The parked Mandate (Q1)** -- whether the king's secret kill-color / Cincinnatus
   win-conditions come back on top of the muster.

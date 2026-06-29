@@ -72,6 +72,8 @@ function buildRoster(cfg, rng) {
       lands.push({ type: "estate", value: cfg.edgeVarrochiLand });
     if (house.edge === "iouToCoin" && cfg.edgeBrandtLand > 0)
       lands.push({ type: "factory", value: cfg.edgeBrandtLand });
+    if (house.edge === "extraIou" && cfg.edgeOstlanderLand > 0)
+      lands.push({ type: "charter", value: cfg.edgeOstlanderLand });
 
     const startWorth = lands.reduce((s, l) => s + l.value, 0);
 

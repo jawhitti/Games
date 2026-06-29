@@ -21,10 +21,12 @@ const DEFAULT_CONFIG = {
   edgeVarrochiLand: 2, // Varrochi: value of the ancestral estate she begins with
   edgeStartEstateValue: 2, // Hesse: value of the estate she begins holding
   edgeIouToCoin: 1, // Brandt: IOU->coin conversions per game
-  edgeBrandtLand: 3, // Brandt: value of the factory he begins with
+  edgeBrandtLand: 2, // Brandt: value of the factory he begins with
   edgeExtraThreat: 1, // Krael: extra starting threats
   edgeIncome: 2, // Mildegaarde: bonus income per round
   edgeExtraPromise: 1, // Ostlander: extra starting promises
+  edgeOstlanderLand: 2, // Ostlander: value of the charter he begins with (the promise
+  //                       alone is too weak -- it only pays on a crown win)
 
   // --- finite, valued grant deck ---
   grantDeck: { estate: 4, factory: 4, charter: 4 },
