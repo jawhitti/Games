@@ -31,10 +31,12 @@ const DEFAULT_CONFIG = {
   landValueMax: 8,
 
   // --- the king's favors (his demands), house to house ---
-  // Each round the king visits every House. The favor he asks costs 1..8, and he may
-  // SWEETEN it with a land of similar value or just demand the tax.
+  // Each round the king visits every House. The favor he asks SCALES with Castle
+  // progress: small early (~favorMin) so nobles pay easily and feel spoiled, growing
+  // toward favorMax late, when he must squeeze hard (and brutally) to finish.
   favorMin: 1,
   favorMax: 8,
+  favorJitter: 1.5, // random spread around the progress-scaled favor cost
 
   // --- the Castle (king victory) ---
   // Priced for the house-to-house economy: the king now extracts from every House
@@ -44,8 +46,12 @@ const DEFAULT_CONFIG = {
   castleTarget: 120,
   castleVerdict: "trigger", // Q4: "outright" = finishing just wins;
   //                               "trigger"  = finishing only forces the count
-  taxBase: 2, // base coin demanded per demand
-  income: 2, // coin each non-imprisoned noble earns per round
+  taxBase: 2, // base coin demanded per demand (legacy; favorCost now scales w/ progress)
+  // income 2 is the keystone of the generosity->brutality arc: nobles can pay the
+  // cheap EARLY demands (and bank a little) so they feel spoiled, but ~108 total
+  // income across the court cannot cover a 120 Castle -- so the king MUST seize land
+  // a few times LATE to finish, and that brutality is what breeds the rebellion.
+  income: 2,
   prisonUpkeep: 1, // coin/turn the king pays per prisoner (PD)
 
   // --- royal levers (A/B switches to test whether they matter) ---

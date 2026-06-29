@@ -232,10 +232,29 @@ seizes and jails most of the court every game. For the overpay to land as a dram
 *exception* rather than the steady state, income vs favor-cost wants tuning (raise
 income, lower/▼frequency of demands, or fatter starting coin).
 
+## Decision 11 -- The generosity-then-brutality arc (income vs favor cost)
+
+**Goal (Jason's):** spoil the court with favors early, run short of them, and force
+the king to be brutal a few times late to win -- the brutality breeding the
+rebellion.
+
+**Built:** three coupled changes. (1) Favor cost **scales with Castle progress** --
+cheap early (~1-2), dear late (~7-8). (2) The king's generosity is **rationed to his
+deck** -- he spoils broadly while it's full, then closes the purse as it empties.
+(3) Income is **2**, deliberately too low: ~108 total income across the court cannot
+cover a 120 Castle, so the king *must* extract from land (seize) late to finish.
+
+**What the sim showed:** the arc landed cleanly. **Early seizures 0.00, late seizures
+1.56** per game -- brutality is now entirely late. King ~81% / rebellion ~19%, paper
+victory ~16% of completed castles. A representative game: rounds 1-5 gentle and
+sweetened, rebel flags go up round 6 as favors dry, the king seizes-and-jails three
+nobles in round 8 to complete the Castle -- and is deposed on the reveal, the spoils
+going to a noble he had just jailed. Generosity -> scarcity -> brutality -> paper
+victory, exactly as specified. Income is the keystone: 2 gives the arc, 2.6 lets the
+king coast (92%), 3 removes brutality entirely (97%).
+
 ## Still open / deferred
 
-- **Income vs favor-cost.** The squeeze is too frequent; nobles are chronically
-  illiquid. Tune so the overpay is occasional and dramatic.
 - **Edge rebalance.** Equalize the Houses (Krael's extra-threat now leads at ~30%).
 - **The stall backstop (Q5).** ~1/3 of reigns hit the cap at the restored balance.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win

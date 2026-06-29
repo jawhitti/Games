@@ -45,10 +45,12 @@ is a blind bet, and a misaligned king purges his own crown-flag loyalists.
 1. **Upkeep.** Each noble takes income; anyone under a seize-threat may pay it down;
    matured seize-threats are carried out; prison upkeep slows the Castle.
 2. **The king goes House to House.** He visits every noble in turn (the wavering,
-   burned-color Houses first). At each House he asks a favor costing **1-8**, and
-   either **sweetens it with a land of similar value** (courting that House) or just
-   **demands the tax**. Rebels refuse him; he may instead **gift a land to lure them
-   back**. Lands are **individually valued (1-8)**; a matched type enriches (it
+   burned-color Houses first). At each House he asks a favor whose cost **scales with
+   Castle progress** -- cheap early (~1-2), dear late (~7-8) -- and either **sweetens
+   it with a land of similar value** (courting that House) or just **demands the
+   tax**. His generosity is **rationed to a finite deck**: he spoils the court while
+   it is full, then closes the purse. Rebels refuse him; he may **gift a land to lure
+   them back**. Lands are **individually valued (1-8)**; a matched type enriches (it
    scores for that House), a mismatched one is a cheap brand.
    An **illiquid** noble -- one who cannot cover the demand in coin -- must surrender
    a land as payment with **no change** (an estate worth 8 settles a tax of 2), and is
@@ -87,6 +89,12 @@ richest survivor (own-House asset + coin + promises-or-flipped-threats) takes it
 Starting point: with the rules as first written, **the king was ~100%
 unbeatable.** Six design corrections (see `DESIGN_NOTES.md`) turned it into a real
 contest whose outcome turns on the court the king inherited and his hidden Mandate.
+
+The reign now plays a **generosity-then-brutality arc**: the king spoils the court
+with favors early (cheap demands, lands flowing), runs short as his deck empties and
+demands climb, and -- because income can't cover the Castle -- is forced to seize
+land a few times late to finish. That late brutality breeds the rebellion that can
+depose him. (Measured: early seizures ~0, late seizures ~1.5/game.)
 
 Both target moments now occur and are tunable:
 

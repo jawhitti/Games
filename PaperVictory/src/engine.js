@@ -83,6 +83,7 @@ function makeKing(cfg, rng) {
     misaligned,
     purgeFlag: misaligned ? "crown" : "rebellion",
     deck, // [{type, value}] -- finite, individually valued
+    deckSize0: deck.length, // for rationing generosity as it empties
     grantsGiven: 0,
     grantsDenied: 0,
     seizes: 0,
@@ -90,13 +91,24 @@ function makeKing(cfg, rng) {
     seizesExecuted: 0,
     seizesPaidDown: 0,
     imprisonments: 0,
+    earlySeizes: 0, // land-grabs while the Castle is < 40% done
+    lateSeizes: 0, // land-grabs while the Castle is >= 40% done
     attacked: 0,
   };
 }
 
-// draw the favor cost for one House visit (1..8)
-function favorCost(cfg, rng) {
-  return cfg.favorMin + rng.int(cfg.favorMax - cfg.favorMin + 1);
+// the favor cost SCALES with Castle progress: cheap early, dear late
+function favorCost(cfg, king, rng) {
+  const progress = Math.min(1, king.castle / cfg.castleTarget);
+  const base = cfg.favorMin + (cfg.favorMax - cfg.favorMin) * progress;
+  const c = Math.round(base + rng.noise(cfg.favorJitter * 2));
+  return Math.max(cfg.favorMin, Math.min(cfg.favorMax, c));
+}
+
+// record whether a land-grab happened early or late in the build
+function tallySeize(cfg, king) {
+  if (king.castle / cfg.castleTarget < 0.4) king.earlySeizes += 1;
+  else king.lateSeizes += 1;
 }
 
 // pull a land from the deck near `cost`, preferring the chosen type. Returns the
@@ -157,6 +169,7 @@ function collectDemand(cfg, king, target, amt, rng, rec) {
   // a land is a SETTLEMENT, not a punitive seizure, so by default it does not jail.
   if (cfg.seizureEnabled && totalWorth(target) > 0) {
     if (cfg.seizeMode === "immediate") {
+      tallySeize(cfg, king);
       const v = seizeBestLand(target);
       king.castle += v; // full land value, no change given
       king.seizes += 1;
@@ -200,15 +213,17 @@ function collectDemand(cfg, king, target, amt, rng, rec) {
 // does the king sweeten this House's demand with a land?
 function decideSweeten(cfg, king, target, rng) {
   if (king.deck.length === 0) return false;
-  if (cfg.kingStrategy === "savage") return false; // pure extraction
-  if (cfg.kingStrategy === "gentle") return rng.chance(0.7);
-  // adaptive: sweeten the wavering (burned-color, not-yet-bought) to hold them
-  if (target.losing && target.favor < cfg.boughtOffFavor + 2) return rng.chance(0.8);
-  return rng.chance(0.25);
+  // spoil the court while the deck is full; ration generosity as it empties
+  const deckFrac = king.deckSize0 ? king.deck.length / king.deckSize0 : 0;
+  if (cfg.kingStrategy === "savage") return rng.chance(0.2 * deckFrac);
+  if (cfg.kingStrategy === "gentle") return rng.chance(0.5 + 0.5 * deckFrac);
+  // adaptive: lavish on the wavering early, then close the purse
+  if (target.losing && target.favor < cfg.boughtOffFavor + 2) return rng.chance(0.5 + 0.5 * deckFrac);
+  return rng.chance(0.2 + 0.5 * deckFrac);
 }
 
 function kingVisitHouse(cfg, king, target, rng, rec) {
-  const cost = favorCost(cfg, rng);
+  const cost = favorCost(cfg, king, rng);
   if (target.flag === "rebellion") {
     // open defiance: refuses demands. The king may gift a land to lure them back.
     if (cfg.kingStrategy !== "savage" && king.deck.length && target.losing && rng.chance(0.5)) {
@@ -314,6 +329,7 @@ function executePendingSeizures(cfg, king, nobles, rec) {
     n.pendingSeize -= 1;
     if (n.pendingSeize > 0) continue;
     if (totalWorth(n) > 0) {
+      tallySeize(cfg, king);
       const v = seizeBestLand(n);
       king.castle += v; // the coveted land, no change for the small unpaid tax
       king.seizesExecuted += 1;
@@ -577,6 +593,8 @@ function finalize(cfg, king, nobles, res) {
     seizeThreats: king.seizeThreats,
     seizesExecuted: king.seizesExecuted,
     seizesPaidDown: king.seizesPaidDown,
+    earlySeizes: king.earlySeizes,
+    lateSeizes: king.lateSeizes,
     imprisonments: king.imprisonments,
     castle: king.castle,
     victorIsKing: res.victorIsKing,

@@ -57,6 +57,8 @@ function runBatch(cfg, n, baseSeed = 1) {
     threatTotal: 0,
     execTotal: 0,
     paidTotal: 0,
+    earlySeizeTotal: 0,
+    lateSeizeTotal: 0,
     // lever usage among kings who SURVIVE (do winners ever pull them?)
     survSeize: 0,
     survPrison: 0,
@@ -96,6 +98,8 @@ function runBatch(cfg, n, baseSeed = 1) {
     agg.threatTotal += r.seizeThreats;
     agg.execTotal += r.seizesExecuted;
     agg.paidTotal += r.seizesPaidDown;
+    agg.earlySeizeTotal += r.earlySeizes;
+    agg.lateSeizeTotal += r.lateSeizes;
     if (r.kingSurvives) {
       agg.survCount++;
       if (r.seizes > 0) agg.survSeize++;
@@ -151,7 +155,7 @@ function report(label, cfg, a) {
   L(`  games with any seizure    ${pct(a.anySeize, a.n)}   (avg ${(a.seizeTotal / a.n).toFixed(2)}/game)`);
   const totalImprison = a.prisonTotal;
   const totalSeize = a.seizeTotal + a.execTotal;
-  L(`  land-grabs (overpays)     ${(totalSeize / a.n).toFixed(2)}/game`);
+  L(`  land-grabs (overpays)     ${(totalSeize / a.n).toFixed(2)}/game  (early ${(a.earlySeizeTotal / a.n).toFixed(2)} vs late ${(a.lateSeizeTotal / a.n).toFixed(2)} -- want the arc late-heavy)`);
   L(`  imprisonments             ${(totalImprison / a.n).toFixed(2)}/game (destitute only, unless landPaymentImprisons)`);
   if (cfg.seizeMode === "threat") {
     const t = a.threatTotal || 1;
