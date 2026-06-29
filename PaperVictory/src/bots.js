@@ -75,12 +75,9 @@ function buildRoster(cfg, rng) {
 
     const startWorth = lands.reduce((s, l) => s + l.value, 0);
 
-    // public COLOR (set at the Coronation): losing-color = burned bloc
+    // public COLOR (set at the Coronation): losing-color = burned bloc, the natural
+    // core of any rising
     const losing = !rng.chance(cfg.winColorProb);
-    let lean = losing ? "depose" : "survive";
-    if (strat === "safeFlagBetrayer") lean = "depose";
-    else if (strat === "loyalist") lean = "survive";
-    else if (strat === "opportunist") lean = rng.chance(0.5) ? "survive" : "depose";
 
     return {
       id: i,
@@ -91,12 +88,11 @@ function buildRoster(cfg, rng) {
       strat,
       color: losing ? "lose" : "win",
       losing,
-      flag: "crown",
       coin,
       lands, // [{type, value}] -- typed, individually valued holdings
       threats,
       promises,
-      lean,
+      joined: false, // transient: set at a muster (did this noble answer the call)
       imprisoned: false,
       alive: true,
       resentment: 0,

@@ -282,11 +282,48 @@ Castle completion. The paper victory is healthy (~14.5% of castles) but the "kin
 attacks into the hidden knife" moment is now rare; nudging rebellion back toward ~20%
 (and reviving the attack) is the next tuning pass if wanted.
 
+## Decision 13 -- Rebellion rebuilt as a discrete MUSTER (replaces flag/lean/Mandate)
+
+**Correction (Jason's):** the old rebellion -- a continuous, secret, bloodless lean
+tally surfaced at a reckoning -- was not what he pictured. The new model: the king
+pushes; when he goes too far someone cries **"Rebellion!"**; every noble **secretly
+commits** to join (send help) or stand with the crown; all **reveal at once**; and a
+**strict majority of nobles topples the king.** A crushed (minority) rising is purged
+and the reign continues. Resolved per his three answers: help = a **headcount**,
+resolution = **simple majority**, and the commitment is **secret-then-revealed** (the
+hidden knife is the loyal-seeming noble who answered).
+
+This removed the standing public flag, the continuous secret lean, and the secret
+Mandate purge-color (the muster's secrecy *is* the hidden layer now; the Mandate is
+**parked**). The economy -- house-to-house favors, valued lands, the
+generosity->brutality arc, the High Society squeeze, the king judged on held lands --
+is unchanged.
+
+**What the sim showed:** king ~61% / rebellion ~39% (a livelier, more precarious crown
+than the ~78/22 before), and the **paper victory is strong** -- completing the Castle
+forces a final muster that topples the king ~31% of the time. The king's `kingReserve`
+(lands he won't grant away) restored his shot at the personal prize (0.2% -> ~37%) and
+made "give to build vs keep to win" a live choice.
+
+**The key finding (a genuine tension, not a bug):** because the arc keeps the king
+*gentle early and brutal late*, there is no grievance to rebel over until late -- and
+his late brutality is *also* what finishes the Castle. So the rising and the Castle
+arrive together; a standalone **mid-reign declared rising is rare (~3%)** and the
+"crush a rising, push on" comeback almost never happens. There is essentially ONE
+climactic rising, right as he pushes too far. Genuine mid-game risings would require
+early provocation, which fights the arc -- a design choice to make, not a number to
+tune.
+
 ## Still open / deferred
 
-- **Rebellion strength / attack revival.** King ~84% is a touch safe; the attack
-  trigger is nearly dead. Retune toward ~78/22 and bring the attack-gamble back.
-- **The stall backstop (Q5).** Currently 0% stall at this balance (was ~1/3); watch it.
+- **One rising vs many.** Decide whether the game wants the single climactic rising
+  (current, arc-consistent) or earlier provocations that can be crushed (needs an
+  early grievance source).
+- **Edge re-tune for the muster.** The Decision-12 balance was tuned for the old
+  model; under the muster the spread loosened (Ostlander ~10%, Brandt ~22%). Re-tune.
+- **King's prize share (~37%)** may be a touch high; `kingReserve` is the dial.
+- **The parked Mandate (Q1)** -- whether the king's secret kill-color / Cincinnatus
+  win-conditions come back on top of the muster.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win
   conditions (e.g. Cincinnatus) are not.
 - **Scoring weights and economy numbers** are provisional throughout.

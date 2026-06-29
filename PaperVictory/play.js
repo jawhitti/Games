@@ -35,10 +35,10 @@ function parseArgs(argv) {
 }
 
 const MOMENTS = {
-  paper: (r) => r.trigger === "castle" && !r.kingSurvives,
-  attackloss: (r) => r.kingAttacked && !r.kingSurvives,
-  selfpurge: (r) => r.kingMisaligned && !r.kingSurvives && r.trigger !== "stall",
-  upset: (r) => !r.kingSurvives && r.tie,
+  paper: (r) => r.paperVictory, // king completes his Castle, the court rises, he falls
+  declared: (r) => r.trigger === "declared", // a mid-reign rising succeeds
+  crushed: (r) => r.crushed > 0, // at least one rising was put down
+  comeback: (r) => r.crushed > 0 && r.kingSurvives, // crushed a rising and held on
   outright: (r) => r.trigger === "castle" && r.kingSurvives,
 };
 
@@ -49,8 +49,7 @@ function tell(cfg, seed) {
   console.log(rec.join("\n"));
   console.log(
     `\nOutcome: ${r.kingSurvives ? "King survives" : "KING DEPOSED"} ` +
-      `(trigger: ${r.trigger}${r.tie ? ", on the tiebreak" : ""}). ` +
-      `Mandate was ${r.kingMisaligned ? "MISALIGNED" : "aligned"}.`
+      `(ended by ${r.trigger}; ${r.musters} rising(s), ${r.crushed} crushed).`
   );
 }
 

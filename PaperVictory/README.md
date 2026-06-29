@@ -28,17 +28,19 @@ design; the defaults just make it run.
 
 ## The model (current)
 
-Each noble carries **three** allegiances, on three axes:
+Rebellion is a **discrete muster**, not a standing stance. During the reign nobles
+have no public side -- they pay the king's favors and accumulate grievance. Each
+noble has a public **color** (win/lose, fixed at the Coronation -- the burned losing
+bloc is the natural core of any rising) and, *only when a rising is called*, a
+**secret commitment** to join or stand aside.
 
-| axis | visibility | when set | what it does |
-|---|---|---|---|
-| **color** (win/lose) | public, fixed | Coronation | losing-color nobles are the visible opposition bloc |
-| **flag** (crown/rebellion) | public, chosen each round | the reign | declares allegiance; a rebel flag refuses tax + earns the hero bonus |
-| **lean** (survive/depose) | secret, chosen each round | the reign | the actual deposing vote at the reckoning |
-
-The king has a **secret Mandate color** -- the flag he executes at the purge.
-It may not match his public face, so **neither flag is safe**; backing the king
-is a blind bet, and a misaligned king purges his own crown-flag loyalists.
+When the king pushes too far, a rising is called (see triggers). Every noble
+**secretly** chooses to **join (send help)** or **stand with the crown**, all reveal
+at once, and **a majority of nobles topples the king.** The hidden layer is that
+commitment: the ally who seemed loyal and secretly answered the call is the knife no
+one saw. A crushed (minority) rising is purged -- the exposed rebels executed -- and
+the reign goes on. (The earlier flag/lean/secret-Mandate model was replaced by this
+muster; see `DESIGN_NOTES.md` Decision 13.)
 
 ### The reign loop (per round) -- house to house
 
@@ -56,40 +58,41 @@ is a blind bet, and a misaligned king purges his own crown-flag loyalists.
    a land as payment with **no change** (an estate worth 8 settles a tax of 2), and is
    **jailed** for it (debtor's justice: the asset and the man). So land wealth must be
    defended with liquid coin -- the High Society squeeze.
-3. **Nobles react after every visit.** Leans and flags may flip *at any time, even
-   on another House's turn* -- so visit order matters, and a noble watches what
-   befalls its neighbors. Each re-estimates who will win from the public board
-   (Castle progress, visible flag split, its own color bloc).
-4. **The king may attack** a visible rebellion -- but only if the court is genuinely
-   restless and the Castle is not nearly done (otherwise he lays the last stones).
-5. **End of round:** grudges fade; check for Castle completion or a called rebellion.
+   The king also **reserves** a few lands he won't grant away (`kingReserve`): to
+   build he must give lands out, but to win he must still control some -- the central
+   give-vs-keep tension.
+3. **End of round:** favour fades (grievance does not); then the rising checks below.
 
 Lands carry value, so every choice is real: which House to enrich vs cheap-brand,
-which land the king covets enough to seize (he takes the most valuable), and which
-holdings a noble must defend with liquid coin.
+which land the king covets enough to seize (he takes the most valuable), which
+holdings a noble must defend with liquid coin, and how much of his deck the king
+dares keep for himself.
 
-### The three reckoning triggers
+### What calls a rising
 
-- **Castle complete** -- the king's victory race. Under `castleVerdict: "trigger"`
-  it only *forces the count*; a secret majority can still depose him (the paper
-  victory). Under `"outright"` it just wins.
-- **Rebels call** -- a rebel-flag noble bets the frozen snapshot favors them.
-- **King attacks** -- he strikes a rebel, which *is* a reckoning; decided on
-  visible flags, counted on secret leans.
+- **The Castle is completed** -- the king believes he has won, but completion forces
+  a final muster; a majority can still topple him (the paper victory). Under
+  `castleVerdict: "outright"` completion simply wins instead.
+- **A brutal push** -- the round the king jails someone, an aggrieved noble may cry
+  "Rebellion!" and force a muster then and there.
+- **The round cap** -- a final muster is forced if nothing else has ended it.
 
-### The Reckoning
+### The muster
 
-Freeze -> the king purges everyone flying his secret lethal color (jailed nobles
-are exempt and still vote) -> surviving secret leans are counted, king is +1, ties
-break per `tieRule` -> the losing faction is purged; among the winning faction the
-richest survivor (own-House land value + coin + promises-or-flipped-threats) takes it.
+Every noble secretly commits (join / stand aside), all reveal at once, and the heads
+are counted: **a strict majority of nobles answering the call topples the king.** If
+the rising falls short it is crushed -- the exposed rebels are purged. The winning
+faction (the joiners if the king falls, the abstainers + king if he holds) then
+contests the **individual prize**: the richest survivor by own-House land value + coin
++ (flipped threats if the rebellion won, or promises if the crown won), plus a hero
+bonus for a noble who joined a winning rising.
 
-If the crown wins, **the king competes for that individual prize too -- judged on the
-lands he still CONTROLS (his undealt deck plus what he has seized), never the Castle.**
-This is the keystone tension: to build the Castle he must give lands away (courting
-nobles); to win personally he must still hold some -- and seizing land (his main way
-to keep holding) is exactly the brutality that breeds the rebellion. The Castle is the
-win condition for the crown faction, not the king's personal wealth.
+The king competes for that individual prize too, **judged on the lands he still
+CONTROLS (his undealt deck plus what he has seized), never the Castle.** This is the
+keystone tension: to build the Castle he must give lands away (courting nobles); to
+win personally he must still hold some -- and seizing land (his main way to keep
+holding) is exactly the brutality that breeds the rising. The Castle is the crown
+faction's win condition, not the king's personal wealth.
 
 ## What the simulator established
 

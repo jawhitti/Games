@@ -1,180 +1,82 @@
-// Provisional rulings for every Open Question, exposed as knobs.
-// Defaults are playtest-defaults (PD); none of these are settled design.
-// The point of the simulator is to vary them and watch what breaks.
+// Config for Paper Victory: The Reign (second-half simulator).
+// Rebellion is a DISCRETE MUSTER: someone declares "Rebellion!", every noble
+// secretly commits to join or stand aside, all reveal at once, and a majority of
+// nobles topples the king. The economy (house-to-house favors, valued lands, the
+// generosity->brutality arc) is unchanged.
 
 const DEFAULT_CONFIG = {
   // --- table shape ---
-  nobles: 6, // nobles besides the king (so 7 seats total)
+  nobles: 6,
   kingStrategy: "adaptive", // gentle | savage | adaptive
+  strategyMix: { honest: 4, loyalist: 1, opportunist: 1 },
 
-  // --- House edge magnitudes (tunable for balance; fair share is ~16.7% of 6) ---
-  // A purely defensive one-shot (refuse, convert) cannot win a "richest survivor"
-  // game, so Varrochi and Brandt also get a small SCORING land (their flavor: ancient
-  // land, working mills) on top of the flavor ability.
+  // --- Phase 1/2 carry-over ---
+  carriedCoinMean: 6,
+  carriedCoinSpread: 4,
+  carriedThreatsMean: 1.2,
+  startingAssetMean: 1.5,
+
+  // --- House edge magnitudes (tunable; fair share ~16.7% of 6) ---
   edgeRefuse: 1, // Varrochi: free demand-refusals per game
   edgeVarrochiLand: 2, // Varrochi: value of the ancestral estate she begins with
-  edgeStartEstateValue: 2, // Hesse: value of the estate she begins holding (0 = none)
+  edgeStartEstateValue: 2, // Hesse: value of the estate she begins holding
   edgeIouToCoin: 1, // Brandt: IOU->coin conversions per game
   edgeBrandtLand: 3, // Brandt: value of the factory he begins with
   edgeExtraThreat: 1, // Krael: extra starting threats
   edgeIncome: 2, // Mildegaarde: bonus income per round
   edgeExtraPromise: 1, // Ostlander: extra starting promises
 
-  // --- noble strategy mix (counts; padded/truncated to `nobles`) ---
-  // honest      : lean follows favor-minus-resentment, flag follows fear
-  // loyalist    : strongly favor-weighted, tends Crown
-  // opportunist : leans toward whoever looks like winning
-  // safeFlagBetrayer : ALWAYS keeps a grant (flies Crown) but ALWAYS depose.
-  //                    This bot exists to detect the Q3 safe-flag degeneracy.
-  strategyMix: { honest: 3, loyalist: 1, opportunist: 1, safeFlagBetrayer: 1 },
-
-  // --- Q6: strength of leverage carried in from Phase 1/2 ---
-  carriedCoinMean: 6,
-  carriedCoinSpread: 4,
-  carriedThreatsMean: 1.2, // avg carried threats per noble (rebellion anchors)
-  startingAssetMean: 1.5, // avg granted/owned assets at reign start
-
-  // --- finite grant deck (the king's branding budget) ---
-  // The king bestows typed lands: estates (farmers score), factories (manufacturers),
-  // charters (bankers). Each land carries its OWN value (landValue range). A matched
-  // type enriches (scores for that House); a mismatched one is a cheap brand. The
-  // deck is FINITE. With 6 nobles, 4 of each is deliberately short.
+  // --- finite, valued grant deck ---
   grantDeck: { estate: 4, factory: 4, charter: 4 },
-  landValueMin: 1, // lands are not all equal -- each is worth landValueMin..landValueMax
+  landValueMin: 1,
   landValueMax: 8,
 
-  // --- the king's favors (his demands), house to house ---
-  // Each round the king visits every House. The favor he asks SCALES with Castle
-  // progress: small early (~favorMin) so nobles pay easily and feel spoiled, growing
-  // toward favorMax late, when he must squeeze hard (and brutally) to finish.
+  // --- the Castle (king's win path) ---
+  castleTarget: 120,
+  castleVerdict: "trigger", // "outright" = completing just wins; "trigger" = it forces
+  //                            a final muster (the paper victory can still topple him)
+  income: 2, // low on purpose: cannot cover the Castle, so the king must seize late
+  prisonUpkeep: 1,
+
+  // --- the king's favors (demands), house to house; cost scales with progress ---
   favorMin: 1,
   favorMax: 8,
-  favorJitter: 1.5, // random spread around the progress-scaled favor cost
+  favorJitter: 1.5,
+  boughtOffFavor: 2, // favour above which a noble looks bought off (deck rationing)
+  kingReserve: 3, // lands the king refuses to grant away -- his hoard for the personal
+  //                 prize. Give to build vs keep to win: a bigger reserve = richer king
+  //                 but a less-courted, more rebellious court.
 
-  // --- the Castle (king victory) ---
-  // Priced for the house-to-house economy: the king now extracts from every House
-  // each round (~20-25/round), so the Castle must be large or the reign ends before
-  // leans can turn. 120 gives a ~9-round reign and restores the contest + paper
-  // victory; 60 is too fast (king ~94%), 200+ becomes unreachable (mostly stalls).
-  castleTarget: 120,
-  castleVerdict: "trigger", // Q4: "outright" = finishing just wins;
-  //                               "trigger"  = finishing only forces the count
-  taxBase: 2, // base coin demanded per demand (legacy; favorCost now scales w/ progress)
-  // income 2 is the keystone of the generosity->brutality arc: nobles can pay the
-  // cheap EARLY demands (and bank a little) so they feel spoiled, but ~108 total
-  // income across the court cannot cover a 120 Castle -- so the king MUST seize land
-  // a few times LATE to finish, and that brutality is what breeds the rebellion.
-  income: 2,
-  prisonUpkeep: 1, // coin/turn the king pays per prisoner (PD)
-
-  // --- royal levers (A/B switches to test whether they matter) ---
+  // --- seizure (the High Society squeeze) ---
   seizureEnabled: true,
   prisonEnabled: true,
-  // seizeMode: "immediate" = take the asset the turn a debtor cannot pay (old rule).
-  //            "threat"    = issue a THREAT to seize now; actually seize a later turn
-  //                          unless the noble pays it down in the grace window.
-  // The threat-to-seize is a live grievance that does NOT decay and arms the noble
-  // (it is itself a threat token -> VP if the king falls). This is the experimental
-  // rule and the candidate non-decaying lean driver.
-  seizeMode: "threat",
-  seizeGrace: 2, // turns from threat to earliest execution (the pay-down window)
-  seizeRedeemMult: 1, // coin to pay down a seize-threat, as a multiple of the demand.
-  //                     1 = cheap (redeem ~ the missed tax); higher = the land is
-  //                     dear, few can redeem, most seizures execute. This number
-  //                     flips whether the telegraphed rule helps king or rebellion.
+  seizeMode: "threat", // "immediate" | "threat" (telegraphed, with a redeem window)
+  seizeGrace: 2,
+  seizeRedeemMult: 1, // redeem cost = the tax (pay it to keep the land)
   seizeGrievance: 3, // persistent depose-pressure while a seize-threat is live
-  seizeExecGrievance: 4, // additional permanent grievance once actually seized
-  // Debtor's justice (the doc's rule, Jason's call): taking a noble's land to settle
-  // a demand ALSO imprisons him -- the asset AND the man. Every land-grab jails, which
-  // costs the king upkeep and the noble's future tax. Set false to make a land
-  // surrender a no-jail payment (prison only for the destitute).
-  landPaymentImprisons: true,
+  seizeExecGrievance: 4, // added once the land is actually taken
+  landPaymentImprisons: true, // taking a land to settle a demand also jails (debtor's justice)
 
-  // --- Q2: how Leans move ---
-  // leanModel: "strategic" = a noble flips toward the side it BELIEVES will win
-  //              (losing faction is purged -> back the winner), reading the count
-  //              from public signals it can see. This is the corrected model.
-  //            "grudge"    = the old thermostat (flip when resentment > favor).
-  //              Kept only to show it manufactures the ~50% tie artifact.
-  leanModel: "strategic",
-  leanChangeCost: 0, // coin a noble pays to flip its secret lean (0 = free)
-  leanInertia: 0.25, // resistance to flipping; higher = stickier leans
-  leanNoise: 0.15, // random wobble in the (grudge-model) read
+  // --- the rebellion MUSTER ---
+  winColorProb: 0.5, // P(a noble shares the king's winning color). <0.5 => a bigger
+  //                    burned bloc, more rebellion-prone (inherited from the Campaign)
+  colorTilt: 1.5, // burned-color nobles lean toward joining; king's-color away
+  coordination: 0.6, // 0..1 how much a noble's join is swayed by the room's mood
+  iouTilt: 0.3, // how much carried threats push a noble toward joining
+  musterK: 1.4, // weight on the bandwagon (read of overall discontent)
+  musterNoise: 0.8, // per-noble noise on the secret commitment (the blind gamble)
+  musterThreshold: 0.6, // a noble joins only if its join-score clears this bar
+  declareThreshold: 0.6, // court discontent needed before a brutal push provokes a rising
 
-  // strategic-model signal weights: how a noble GUESSES who is winning.
-  leanSignalCastle: 2.0, // weight on castle progress (king looks strong as it rises)
-  leanSignalFlags: 1.5, // weight on the visible crown/rebellion flag split
-  leanReadK: 2.0, // logistic steepness of the win-probability read
-  leanReadNoise: 0.8, // per-noble noise on the read (leans are secret -> guessing)
-  iouTilt: 0.3, // how much a noble's own promises/threats tilt its choice
+  // --- scoring for the individual victor ---
+  promiseVP: 2, // per promise (if the crown wins)
+  threatVP: 3, // per threat (if the rebellion wins)
+  rebelHeroVP: 4, // bonus for a noble who JOINED a winning rebellion
+  assetVP: 1, // multiplier on own-House land value
+  coinVP: 1,
 
-  // --- public COLOR bloc (the rebellion's coordination nucleus) ---
-  // After the Coronation colors are face-up. Losing-color nobles (those who
-  // backed the wrong color) are a VISIBLE bloc and the natural opposition.
-  winColorProb: 0.5, // P(a noble shares the king's winning color). <0.5 => the
-  //                     burned losing bloc tends to be a majority (rebellion-prone).
-  colorTilt: 1.5, // baseline lean tilt from color (losing->depose, winning->survive)
-  coordination: 0.6, // 0..1 how well the losing bloc reads/acts as one (table-talk
-  //                     proxy). 0 = atomized (no rebellion ever); 1 = perfect bloc.
-  urgencyWeight: 2.5, // "now or never": how hard imminent Castle completion rallies
-  //                      the losing bloc to commit and call before it is too late.
-  boughtOffFavor: 2, // favour above which a losing-color noble looks bought off
-  //                     (visibly defected from the bloc, shrinking it)
-
-  // --- a REASON to throw up the rebel flag ---
-  // Flying rebel must pay, or no one commits and the bloc never becomes visible.
-  taxReliefTilt: 1.2, // standing pull to rebel: a rebel-flagger REFUSES the king's
-  //                     demands -> keeps coin, denies the Castle. The concrete now-payoff.
-  rebelHeroVP: 4, // bonus at the reckoning for a rebel-flag SURVIVOR if the king falls
-  //                 (the resistance-hero reward for public defiance).
-  purgeFearRebel: 1.2, // standing pull back to crown: fear of the purge if the flag
-  //                      you fly turns out to be the king's lethal color.
-  flagInertia: 0.6, // hysteresis so public flags do not jitter round to round
-
-  // --- the AMBUSH (a reason to NOT throw up the flag) ---
-  // A noble who secretly leans depose may stay crown-flagged: lie in wait, keep
-  // paying tax (funding the Castle that will doom him), never provoke the king's
-  // attack, and cast the deposing vote only at the reckoning. High ambushTilt
-  // produces the "king completes his Castle and loses the vote" paper victory.
-  ambushTilt: 1.6,
-
-  // --- Q3 / Q7: is "safe flag" a blind guess? ---
-  mandateMisalignProb: 0.5, // ACTUAL chance the king's lethal color != his public
-  //                            face (crown). 1.0 = he always kills crown-flaggers;
-  //                            0.0 = he always kills rebels (crown truly safe).
-  perceivedMisalign: 0.5, // what nobles BELIEVE that chance is. At 0.5 neither flag
-  //                          is safe (the blind guess). Low = naive "crown is safe"
-  //                          play (which a misaligned king then slaughters).
-
-  // --- Q4 reckoning resolution ---
-  tieRule: "crown", // crown = incumbent holds on a tie
-
-  // --- rebellion call ---
-  callerConfidence: 0.15, // how favorable a rebel's (noisy) read must look
-  //                          before they call the reckoning. Lower = trigger-happy.
-  callNoise: 1.2, // noise on a caller's estimate of rebellion strength
-
-  // --- king attacks the rebellion (the forced-gamble trigger) ---
-  // The king may strike a rebel flag at any time to put it down -- but the attack
-  // TRIGGERS the reckoning, which he might lose. He decides from VISIBLE flags; the
-  // count is on SECRET leans, so an overconfident king walks into the hidden knife.
-  kingAttackEnabled: true,
-  kingAttackConfidence: 0.18, // visible edge the king needs before he dares attack
-  attackReadNoise: 0.5, // noise on the king's read of the room
-  attackThreshold: 0.25, // visible rebel fraction below which the king ignores it and
-  //                        just builds (a calm court invites the paper victory)
-  buildCommit: 0.7, // once the Castle is this far along, the king lays the last stones
-  //                   rather than attack -- he believes completion is his win. The trap.
-
-  // --- Q5: stall backstop ---
-  roundCap: 12, // forced reckoning if neither trigger fires by here
-  stallDefault: "count", // on cap: "count" (resolve as-is) | "crown" | "rebellion"
-
-  // --- scoring weights for the individual victor ---
-  promiseVP: 2, // VP per promise collected (if Crown won)
-  threatVP: 3, // VP per carried threat flipped (if Rebellion won)
-  assetVP: 1, // multiplier on own-House land VALUE (lands already carry their worth)
-  coinVP: 1, // VP per coin
+  // --- backstop ---
+  roundCap: 12, // if neither the Castle nor a rising ends it, a final muster is forced
 };
 
 function makeConfig(overrides = {}) {
