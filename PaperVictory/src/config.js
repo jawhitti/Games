@@ -7,6 +7,19 @@ const DEFAULT_CONFIG = {
   nobles: 6, // nobles besides the king (so 7 seats total)
   kingStrategy: "adaptive", // gentle | savage | adaptive
 
+  // --- House edge magnitudes (tunable for balance; fair share is ~16.7% of 6) ---
+  // A purely defensive one-shot (refuse, convert) cannot win a "richest survivor"
+  // game, so Varrochi and Brandt also get a small SCORING land (their flavor: ancient
+  // land, working mills) on top of the flavor ability.
+  edgeRefuse: 1, // Varrochi: free demand-refusals per game
+  edgeVarrochiLand: 2, // Varrochi: value of the ancestral estate she begins with
+  edgeStartEstateValue: 2, // Hesse: value of the estate she begins holding (0 = none)
+  edgeIouToCoin: 1, // Brandt: IOU->coin conversions per game
+  edgeBrandtLand: 3, // Brandt: value of the factory he begins with
+  edgeExtraThreat: 1, // Krael: extra starting threats
+  edgeIncome: 2, // Mildegaarde: bonus income per round
+  edgeExtraPromise: 1, // Ostlander: extra starting promises
+
   // --- noble strategy mix (counts; padded/truncated to `nobles`) ---
   // honest      : lean follows favor-minus-resentment, flag follows fear
   // loyalist    : strongly favor-weighted, tends Crown

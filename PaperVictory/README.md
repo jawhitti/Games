@@ -82,7 +82,14 @@ holdings a noble must defend with liquid coin.
 Freeze -> the king purges everyone flying his secret lethal color (jailed nobles
 are exempt and still vote) -> surviving secret leans are counted, king is +1, ties
 break per `tieRule` -> the losing faction is purged; among the winning faction the
-richest survivor (own-House asset + coin + promises-or-flipped-threats) takes it.
+richest survivor (own-House land value + coin + promises-or-flipped-threats) takes it.
+
+If the crown wins, **the king competes for that individual prize too -- judged on the
+lands he still CONTROLS (his undealt deck plus what he has seized), never the Castle.**
+This is the keystone tension: to build the Castle he must give lands away (courting
+nobles); to win personally he must still hold some -- and seizing land (his main way
+to keep holding) is exactly the brutality that breeds the rebellion. The Castle is the
+win condition for the crown faction, not the king's personal wealth.
 
 ## What the simulator established
 

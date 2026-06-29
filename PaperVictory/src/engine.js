@@ -55,13 +55,11 @@ function bestLandValue(n) {
   const i = bestLandIdx(n);
   return i < 0 ? 0 : n.lands[i].value;
 }
-// remove and return the value of the land the king most covets
+// remove and return the land object the king most covets (null if none)
 function seizeBestLand(n) {
   const i = bestLandIdx(n);
-  if (i < 0) return 0;
-  const v = n.lands[i].value;
-  n.lands.splice(i, 1);
-  return v;
+  if (i < 0) return null;
+  return n.lands.splice(i, 1)[0];
 }
 
 // ---- king setup -----------------------------------------------------------
@@ -84,6 +82,7 @@ function makeKing(cfg, rng) {
     purgeFlag: misaligned ? "crown" : "rebellion",
     deck, // [{type, value}] -- finite, individually valued
     deckSize0: deck.length, // for rationing generosity as it empties
+    lands: [], // lands the king has SEIZED and now holds (his personal score)
     grantsGiven: 0,
     grantsDenied: 0,
     seizes: 0,
@@ -170,8 +169,10 @@ function collectDemand(cfg, king, target, amt, rng, rec) {
   if (cfg.seizureEnabled && totalWorth(target) > 0) {
     if (cfg.seizeMode === "immediate") {
       tallySeize(cfg, king);
-      const v = seizeBestLand(target);
-      king.castle += v; // full land value, no change given
+      const land = seizeBestLand(target);
+      const v = land.value;
+      king.castle += v; // funds the Castle (no change for the small tax)
+      king.lands.push(land); // ...and the king now HOLDS it (his personal score)
       king.seizes += 1;
       if (cfg.landPaymentImprisons) {
         target.imprisoned = true;
@@ -330,8 +331,10 @@ function executePendingSeizures(cfg, king, nobles, rec) {
     if (n.pendingSeize > 0) continue;
     if (totalWorth(n) > 0) {
       tallySeize(cfg, king);
-      const v = seizeBestLand(n);
-      king.castle += v; // the coveted land, no change for the small unpaid tax
+      const land = seizeBestLand(n);
+      const v = land.value;
+      king.castle += v; // the coveted land funds the Castle (no change)
+      king.lands.push(land); // ...and the king now holds it for his personal score
       king.seizesExecuted += 1;
       if (cfg.landPaymentImprisons) {
         n.imprisoned = true;
@@ -458,9 +461,17 @@ function reckoning(cfg, king, nobles, trigger, round, rec) {
       victor = n;
     }
   }
+  // If the crown wins, the king competes for the individual prize like a noble -- but
+  // judged on the LANDS HE CONTROLS (undealt deck + what he seized), NOT the Castle.
+  // To build he must give lands away; to win he must still hold some. Brutality (seize)
+  // is his main way to hold land -- and the very thing that breeds the rebellion.
   let victorIsKing = false;
+  let kingWorth = 0;
   if (crownWon) {
-    const kingScore = king.castle * cfg.assetVP + king.coin * cfg.coinVP;
+    const deckWorth = king.deck.reduce((s, l) => s + l.value, 0);
+    const seizedWorth = king.lands.reduce((s, l) => s + l.value, 0);
+    kingWorth = deckWorth + seizedWorth;
+    const kingScore = kingWorth * cfg.assetVP + king.coin * cfg.coinVP;
     if (kingScore >= victorScore) {
       victorIsKing = true;
       victor = null;
@@ -468,6 +479,8 @@ function reckoning(cfg, king, nobles, trigger, round, rec) {
   }
   if (rec) {
     rec.push(`  >> The king ${crownWon ? "HOLDS the throne" : "FALLS"}${tie ? " (on the tiebreak)" : ""}.`);
+    if (crownWon)
+      rec.push(`  >> The king controls lands worth ${kingWorth} (${king.lands.length} seized + ${king.deck.length} ungranted).`);
     rec.push(`  >> Spoils to ${victorIsKing ? "the KING himself" : victor ? label(victor) : "no one"}.`);
   }
   return { crownWon, tie, outright, trigger, round, winners, victor, victorIsKing };

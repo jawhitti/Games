@@ -62,10 +62,16 @@ function buildRoster(cfg, rng) {
     const lands = [];
     for (let k = 0; k < startAssets; k++) lands.push({ type: scoringType, value: landValue() });
 
-    // House edges that fire at setup
-    if (house.edge === "startEstate") lands.push({ type: "estate", value: landValue() });
-    if (house.edge === "extraThreat") threats += 1;
-    if (house.edge === "extraIou") promises += 1;
+    // House edges that fire at setup (magnitudes from config, for balance tuning)
+    if (house.edge === "startEstate" && cfg.edgeStartEstateValue > 0)
+      lands.push({ type: "estate", value: cfg.edgeStartEstateValue });
+    if (house.edge === "extraThreat") threats += cfg.edgeExtraThreat;
+    if (house.edge === "extraIou") promises += cfg.edgeExtraPromise;
+    // the one-shot Houses also hold a small SCORING land (ancient land / mills)
+    if (house.edge === "refuse" && cfg.edgeVarrochiLand > 0)
+      lands.push({ type: "estate", value: cfg.edgeVarrochiLand });
+    if (house.edge === "iouToCoin" && cfg.edgeBrandtLand > 0)
+      lands.push({ type: "factory", value: cfg.edgeBrandtLand });
 
     const startWorth = lands.reduce((s, l) => s + l.value, 0);
 
@@ -99,9 +105,9 @@ function buildRoster(cfg, rng) {
       pendingAmt: 0,
       grievance: 0,
       // one-shot / passive edge state
-      refuseLeft: house.edge === "refuse" ? 1 : 0,
-      iouToCoinLeft: house.edge === "iouToCoin" ? 1 : 0,
-      incomeBonus: house.edge === "income" ? 1 : 0,
+      refuseLeft: house.edge === "refuse" ? cfg.edgeRefuse : 0,
+      iouToCoinLeft: house.edge === "iouToCoin" ? cfg.edgeIouToCoin : 0,
+      incomeBonus: house.edge === "income" ? cfg.edgeIncome : 0,
     };
   });
 }

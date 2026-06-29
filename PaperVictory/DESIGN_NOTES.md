@@ -253,10 +253,40 @@ going to a noble he had just jailed. Generosity -> scarcity -> brutality -> pape
 victory, exactly as specified. Income is the keystone: 2 gives the arc, 2.6 lets the
 king coast (92%), 3 removes brutality entirely (97%).
 
+## Decision 12 -- The king judged on lands he holds; the Houses equalized
+
+**Correction (Jason's, the elegant one):** the king's individual-victor score is the
+**lands he still controls** (undealt deck + seized), **not the Castle**. Building the
+Castle means giving lands away to court nobles; winning personally means still holding
+some -- and seizing (his main way to hold land) is the brutality that breeds the
+rebellion. The Castle is the crown faction's win condition, never the king's wealth.
+
+**Why it was needed:** when the king scored the Castle (always ~120), he scooped every
+crown-win individual prize, starving crown-aligned nobles and concentrating noble wins
+into the ~19% rebellion games -- which made threat-edges (Krael) look 2x too strong
+(31.8%) and crown-edges (Ostlander's promise) useless. Pure measurement artifact of
+the scoring rule, not the edges.
+
+**What the sim showed:** scoring the king on held lands rebalanced the Houses almost
+by itself. With two small follow-up nudges (Varrochi/Brandt given a small scoring land
+since pure one-shot edges can't win a richest-survivor game; Mildegaarde income 1->2;
+Hesse estate 3->2, Brandt factory 2->3) the named-House win shares went from a 10-32%
+spread to **15.6-17.5%** -- all within a point of the 16.7% fair line. The king takes
+~29% of individual victories (competing, not monopolizing). Edge magnitudes are config
+knobs (`edge*`).
+
+**Side effects to watch:** king survival drifted up to ~84% (rebellion ~16%, was
+~78/22), and the king's *attack* trigger nearly vanished (~0.5%) -- with nobles a bit
+wealthier and seizures down to ~1.2/game, rebellions stay smaller and games resolve by
+Castle completion. The paper victory is healthy (~14.5% of castles) but the "king
+attacks into the hidden knife" moment is now rare; nudging rebellion back toward ~20%
+(and reviving the attack) is the next tuning pass if wanted.
+
 ## Still open / deferred
 
-- **Edge rebalance.** Equalize the Houses (Krael's extra-threat now leads at ~30%).
-- **The stall backstop (Q5).** ~1/3 of reigns hit the cap at the restored balance.
+- **Rebellion strength / attack revival.** King ~84% is a touch safe; the attack
+  trigger is nearly dead. Retune toward ~78/22 and bring the attack-gamble back.
+- **The stall backstop (Q5).** Currently 0% stall at this balance (was ~1/3); watch it.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win
   conditions (e.g. Cincinnatus) are not.
 - **Scoring weights and economy numbers** are provisional throughout.
