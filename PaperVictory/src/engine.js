@@ -37,21 +37,30 @@ function totalWorth(n) {
   for (const l of n.lands) s += l.value;
   return s;
 }
-// remove and return the value of the land the king most covets (best own-type, else best any)
-function seizeBestLand(n) {
+// index of the land the king most covets (best own-type, else best by value)
+function bestLandIdx(n) {
   let idx = -1;
   let best = -1;
   for (let i = 0; i < n.lands.length; i++) {
     const l = n.lands[i];
-    const pref = (l.type === n.scoringType ? 100 : 0) + l.value; // prefer own type, then value
+    const pref = (l.type === n.scoringType ? 100 : 0) + l.value;
     if (pref > best) {
       best = pref;
       idx = i;
     }
   }
-  if (idx < 0) return 0;
-  const v = n.lands[idx].value;
-  n.lands.splice(idx, 1);
+  return idx;
+}
+function bestLandValue(n) {
+  const i = bestLandIdx(n);
+  return i < 0 ? 0 : n.lands[i].value;
+}
+// remove and return the value of the land the king most covets
+function seizeBestLand(n) {
+  const i = bestLandIdx(n);
+  if (i < 0) return 0;
+  const v = n.lands[i].value;
+  n.lands.splice(i, 1);
   return v;
 }
 
@@ -142,29 +151,47 @@ function collectDemand(cfg, king, target, amt, rng, rec) {
     if (rec) rec.push(`    ${label(target)} pays ${amt}. Castle ${king.castle}/${cfg.castleTarget}.`);
     return;
   }
-  // cannot pay -> the seizure lever (asset-rich, cash-poor is exposed)
+  // Illiquid: cannot cover the demand in coin. The king eyes the land he covets and
+  // demands IT as payment -- with NO change (the High Society squeeze): a noble with
+  // 1 coin and an estate worth 8 loses the estate to settle a tax of 2. Surrendering
+  // a land is a SETTLEMENT, not a punitive seizure, so by default it does not jail.
   if (cfg.seizureEnabled && totalWorth(target) > 0) {
     if (cfg.seizeMode === "immediate") {
       const v = seizeBestLand(target);
-      king.castle += v;
+      king.castle += v; // full land value, no change given
       king.seizes += 1;
-      if (cfg.prisonEnabled) {
+      if (cfg.landPaymentImprisons) {
         target.imprisoned = true;
         king.imprisonments += 1;
       }
-      target.resentment += 4;
-      if (rec) rec.push(`    ${label(target)} cannot pay -- SEIZED a land worth ${v} and jailed.`);
+      target.resentment += (v - amt) * 0.5 + amt * 0.4; // the overpay stings
+      if (rec)
+        rec.push(
+          `    ${label(target)} holds only ${target.coin} coin -- King takes a land worth ${v} to settle a ${amt} tax (no change)` +
+            (cfg.landPaymentImprisons ? " and jails them. A brutal overpay, and a martyr made." : ". A brutal overpay.")
+        );
       return;
     }
     if (!target.pendingSeize) {
+      const bestV = bestLandValue(target);
       target.pendingSeize = cfg.seizeGrace;
-      target.pendingAmt = Math.round(amt * cfg.seizeRedeemMult);
+      target.pendingAmt = amt; // redeem = pay the tax in coin and keep the land
       target.threats += 1;
       target.grievance += cfg.seizeGrievance;
       king.seizeThreats += 1;
       if (rec)
-        rec.push(`    ${label(target)} cannot pay -- THREATENED with seizure (redeem ${target.pendingAmt}).`);
+        rec.push(
+          `    ${label(target)} holds only ${target.coin} coin -- King demands their land worth ${bestV} for a ${amt} tax. Pay ${amt} coin in time, or lose it.`
+        );
     }
+    return;
+  }
+  // truly destitute: no coin, no land -> debtor's prison (the doc's last resort)
+  if (cfg.prisonEnabled && totalWorth(target) === 0) {
+    target.imprisoned = true;
+    king.imprisonments += 1;
+    target.resentment += 4;
+    if (rec) rec.push(`    ${label(target)} is destitute -- jailed for the unpaid demand.`);
     return;
   }
   target.resentment += 1;
@@ -288,14 +315,18 @@ function executePendingSeizures(cfg, king, nobles, rec) {
     if (n.pendingSeize > 0) continue;
     if (totalWorth(n) > 0) {
       const v = seizeBestLand(n);
-      king.castle += v;
+      king.castle += v; // the coveted land, no change for the small unpaid tax
       king.seizesExecuted += 1;
-      if (cfg.prisonEnabled) {
+      if (cfg.landPaymentImprisons) {
         n.imprisoned = true;
         king.imprisonments += 1;
       }
       n.grievance += cfg.seizeExecGrievance;
-      if (rec) rec.push(`  Grace runs out -- King seizes ${label(n)}'s land (worth ${v}) and jails them. A martyr is made.`);
+      if (rec)
+        rec.push(
+          `  Grace runs out -- King takes ${label(n)}'s land worth ${v} for an unpaid ${n.pendingAmt} tax. No change` +
+            (cfg.landPaymentImprisons ? ", and jails them. A martyr made." : ". A bitter overpay.")
+        );
     }
     n.pendingSeize = 0;
   }

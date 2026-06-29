@@ -65,6 +65,11 @@ const DEFAULT_CONFIG = {
   //                     flips whether the telegraphed rule helps king or rebellion.
   seizeGrievance: 3, // persistent depose-pressure while a seize-threat is live
   seizeExecGrievance: 4, // additional permanent grievance once actually seized
+  // Debtor's justice (the doc's rule, Jason's call): taking a noble's land to settle
+  // a demand ALSO imprisons him -- the asset AND the man. Every land-grab jails, which
+  // costs the king upkeep and the noble's future tax. Set false to make a land
+  // surrender a no-jail payment (prison only for the destitute).
+  landPaymentImprisons: true,
 
   // --- Q2: how Leans move ---
   // leanModel: "strategic" = a noble flips toward the side it BELIEVES will win

@@ -50,6 +50,10 @@ is a blind bet, and a misaligned king purges his own crown-flag loyalists.
    **demands the tax**. Rebels refuse him; he may instead **gift a land to lure them
    back**. Lands are **individually valued (1-8)**; a matched type enriches (it
    scores for that House), a mismatched one is a cheap brand.
+   An **illiquid** noble -- one who cannot cover the demand in coin -- must surrender
+   a land as payment with **no change** (an estate worth 8 settles a tax of 2), and is
+   **jailed** for it (debtor's justice: the asset and the man). So land wealth must be
+   defended with liquid coin -- the High Society squeeze.
 3. **Nobles react after every visit.** Leans and flags may flip *at any time, even
    on another House's turn* -- so visit order matters, and a noble watches what
    befalls its neighbors. Each re-estimates who will win from the public board

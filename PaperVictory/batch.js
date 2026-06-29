@@ -151,8 +151,8 @@ function report(label, cfg, a) {
   L(`  games with any seizure    ${pct(a.anySeize, a.n)}   (avg ${(a.seizeTotal / a.n).toFixed(2)}/game)`);
   const totalImprison = a.prisonTotal;
   const totalSeize = a.seizeTotal + a.execTotal;
-  L(`  games with any prison     ${pct(a.anyPrison, a.n)}   (avg ${(totalImprison / a.n).toFixed(2)} prisoners/game)`);
-  L(`  seizures -> prison check  ${totalSeize} seizures, ${totalImprison} imprisonments (should match: seize requires prison)`);
+  L(`  land-grabs (overpays)     ${(totalSeize / a.n).toFixed(2)}/game`);
+  L(`  imprisonments             ${(totalImprison / a.n).toFixed(2)}/game (destitute only, unless landPaymentImprisons)`);
   if (cfg.seizeMode === "threat") {
     const t = a.threatTotal || 1;
     L(`  seize-threats issued      ${(a.threatTotal / a.n).toFixed(2)}/game  -> executed ${pct(a.execTotal, t)}, paid down ${pct(a.paidTotal, t)}`);

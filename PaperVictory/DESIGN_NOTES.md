@@ -208,10 +208,35 @@ vs Castle cost) needed rescaling to the new scale.
 (stall) -- the Q5 backstop wants attention (raise `roundCap` or shave `castleTarget`).
 The king's sweeten-vs-demand and visit-order logic is still simple AI.
 
+## Decision 10 -- The High Society squeeze (illiquid overpay + debtor's prison)
+
+**Built:** an illiquid noble (cannot cover a demand in coin) must surrender a land as
+payment with **no change** -- a 1-coin noble holding an estate worth 8 loses the
+estate to settle a 2 tax. The king takes the land he covets (most valuable), credits
+its full value to the Castle, and -- per Jason's call, matching the doc's debtor's
+justice -- **jails the noble too** (the asset and the man). `landPaymentImprisons`
+toggles this; default true. Truly destitute nobles (no coin, no land) are jailed
+outright.
+
+**Why:** this is the doc's central "wealth must be defended with liquidity." Coin is
+safe; land is seizable; an asset-rich, cash-poor noble is the king's prey. The
+telegraphed (`seizeMode: threat`) version gives a grace window to scrape the coin and
+keep the land -- the real dilemma ("find one more coin or lose my estate").
+
+**What the sim showed:** balance held (king ~78% / rebellion ~22%, paper victory
+~17% of completed castles), and land-grabs now equal imprisonments by construction.
+**But the squeeze is currently chronic, not special: ~4 land-grabs/jailings per
+6-noble game**, because favor costs (1-8, avg ~4.5 from every House each round)
+badly outpace income (~2/round). Nobles are almost always illiquid, so the king
+seizes and jails most of the court every game. For the overpay to land as a dramatic
+*exception* rather than the steady state, income vs favor-cost wants tuning (raise
+income, lower/▼frequency of demands, or fatter starting coin).
+
 ## Still open / deferred
 
-- **Edge rebalance.** Equalize the Houses (nerf Mildegaarde's passive income or buff
-  the one-shots) -- the sim measures this directly.
+- **Income vs favor-cost.** The squeeze is too frequent; nobles are chronically
+  illiquid. Tune so the overpay is occasional and dramatic.
+- **Edge rebalance.** Equalize the Houses (Krael's extra-threat now leads at ~30%).
 - **The stall backstop (Q5).** ~1/3 of reigns hit the cap at the restored balance.
 - **The Mandate deck (Q1).** Only the purge-color half is modeled; private win
   conditions (e.g. Cincinnatus) are not.
