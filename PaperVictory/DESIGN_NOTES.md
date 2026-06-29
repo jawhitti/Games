@@ -305,20 +305,21 @@ forces a final muster that topples the king ~31% of the time. The king's `kingRe
 (lands he won't grant away) restored his shot at the personal prize (0.2% -> ~37%) and
 made "give to build vs keep to win" a live choice.
 
-**The key finding (a genuine tension, not a bug):** because the arc keeps the king
-*gentle early and brutal late*, there is no grievance to rebel over until late -- and
-his late brutality is *also* what finishes the Castle. So the rising and the Castle
-arrive together; a standalone **mid-reign declared rising is rare (~3%)** and the
-"crush a rising, push on" comeback almost never happens. There is essentially ONE
-climactic rising, right as he pushes too far. Genuine mid-game risings would require
-early provocation, which fights the arc -- a design choice to make, not a number to
-tune.
+**The key finding, and its resolution:** with the AI king's fixed *gentle-early/
+brutal-late* policy, the rising and the Castle arrive together, so a standalone
+mid-reign declared rising is rare (~3%) -- one climactic rising. **Resolved (Jason):
+this is fine, because a human plays the king and chooses when and how brutal to be.**
+The convergence is an artifact of the bot's fixed brutality schedule, not the rules --
+the progress-scaled demands are just the AI's stand-in for human judgment. A human
+king can front-load brutality to provoke a crushable early rising, spread it to
+survive several, or stay gentle and gamble on a clean finish. The mechanics support
+the whole crush-and-comeback space; the single climactic rising is only the default
+bot's line through it. (If we ever want to *exercise* that space in the sim, add an
+early-brutal king profile; not needed for now.)
 
 ## Still open / deferred
 
-- **One rising vs many.** Decide whether the game wants the single climactic rising
-  (current, arc-consistent) or earlier provocations that can be crushed (needs an
-  early grievance source).
+- ~~One rising vs many~~ -- RESOLVED: the human king's choices cover it (see above).
 - **Edge re-tune for the muster.** The Decision-12 balance was tuned for the old
   model; under the muster the spread loosened (Ostlander ~10%, Brandt ~22%). Re-tune.
 - **King's prize share (~37%)** may be a touch high; `kingReserve` is the dial.
