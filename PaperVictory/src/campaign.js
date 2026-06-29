@@ -17,7 +17,7 @@
 const { Rng } = require("./rng");
 const { HOUSES, shuffle } = require("./bots");
 
-function runCampaign(cfg, seed) {
+function runCampaign(cfg, seed, rec) {
   const rng = new Rng(seed);
   const houses = shuffle(HOUSES.slice(), rng); // which lord is which House
   const players = [];
@@ -36,9 +36,17 @@ function runCampaign(cfg, seed) {
     });
   }
 
+  if (rec) {
+    rec.push(`### THE CAMPAIGN -- six lords vie for the throne (colors hidden) ###`);
+    for (const p of players)
+      rec.push(`  Lord of ${p.house.name} (${p.house.kind}) -- ambition ${p.crownDesire.toFixed(2)}.`);
+  }
+
   let remaining = players.slice();
   let rank = 1;
+  let round = 0;
   while (remaining.length > 1) {
+    round += 1;
     const spends = new Map();
     for (const c of remaining) {
       const spend = Math.min(c.coin, c.coin * c.crownDesire * cfg.campSpendRate);
@@ -60,6 +68,11 @@ function runCampaign(cfg, seed) {
     const out = remaining.shift();
     out.candidate = false;
     out.elimRank = rank++;
+    if (rec)
+      rec.push(
+        `  Round ${round}: ${out.house.name}, least supported, is cast from the running -- ` +
+          `and banks a full hand (coin ${Math.round(out.coin)}, ${out.threats} threats) for the reign.`
+      );
   }
 
   // coronation
@@ -73,6 +86,15 @@ function runCampaign(cfg, seed) {
     p.losing = p.color !== winColor; // burned bloc = wrong color (relative to the king)
     p.coin = Math.round(p.coin);
     p.promises = Math.round(p.promises);
+  }
+  if (rec) {
+    rec.push(
+      `  CORONATION: the Lord of ${king.house.name} outlasts them all and is crowned KING -- ` +
+        `vacating his House, his campaign threats forgiven, his war-chest spent (coin ${king.coin}).`
+    );
+    rec.push(`  The colors flip: the king flies ${winColor.toUpperCase()} -- the winning color.`);
+    const burned = players.filter((p) => p.losing && !p.isKing).map((p) => p.house.name);
+    rec.push(`  Burned (backed the wrong color), the natural rebels: ${burned.join(", ") || "(none)"}.`);
   }
   return { players, kingId: king.id, winColor };
 }
