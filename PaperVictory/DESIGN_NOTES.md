@@ -317,7 +317,38 @@ the whole crush-and-comeback space; the single climactic rising is only the defa
 bot's line through it. (If we ever want to *exercise* that space in the sim, add an
 early-brutal king profile; not needed for now.)
 
+## Decision 14 -- Phase 1/2 modeled; the full game runs end-to-end
+
+**Built (Jason: "I bet we can come up with something"):** an emergent six-player
+Campaign (`campaign.js`). Each player is the lord of one House, with a hidden color
+and a `crownDesire`; over five rounds a committed candidate spends to win support, the
+least-supported is eliminated (keeping its banked hand), and the last standing is
+crowned -- **vacating his House** (becoming the House-less king) with his threats
+voided. The output feeds the reign as injected carry-over (`fullgame.js`), so the
+reign's five nobles, their colors, and their coin/threat hands all come from the
+Campaign instead of being randomized. The six players are the six Houses; the king's
+House sits vacant.
+
+Abstraction (honest): blind negotiation is collapsed to spend = support -- it measures
+the elimination/leverage/color skeleton, not the dealmaking.
+
+**Findings:**
+- **The race-to-lose is real, but it's "come SECOND."** Overall win-rate by campaign
+  rank: 1st-out 7%, ... runner-up **35%**, KING 12% (fair = 17%). The carry-over
+  gradient (coin 13->3, threats 2->6, king empty) means the runner-up banks the most
+  threats and rides the threat-flooded reign (~78% rebellion) to the prize. Bailing
+  early is worst; the crown is a trap; losing *last* is the sweet spot. This is the
+  doc's Open Question 6, now measured.
+- **The six-player correction broke the crown's balance.** At 5 nobles the muster
+  majority is 3/5 (60%) vs 4/6 (67%), so the king's reign survival cratered (~61% ->
+  ~22-29%). The muster was tuned for 6 nobles; it needs re-tuning for 5.
+
 ## Still open / deferred
+
+- **Rebalance the crown for the six-player game.** King survival ~22-29% is far too
+  weak; the 3/5 muster majority + campaign threat-flood need tuning.
+- **Tune the campaign threat economy.** "+1 threat per round you stay" hands the
+  runner-up 6 threats; flatten the win-by-rank curve (the race-to-lose lever).
 
 - ~~One rising vs many~~ -- RESOLVED: the human king's choices cover it (see above).
 - ~~Edge re-tune for the muster~~ -- RESOLVED: dropped Brandt's factory 3->2 and gave
