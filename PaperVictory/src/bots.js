@@ -26,33 +26,37 @@ function shuffle(arr, rng) {
   return arr;
 }
 
-function expandMix(cfg) {
+function expandMix(cfg, count = cfg.nobles) {
   const strats = [];
-  for (const [name, count] of Object.entries(cfg.strategyMix)) {
-    for (let i = 0; i < count; i++) strats.push(name);
+  for (const [name, n] of Object.entries(cfg.strategyMix)) {
+    for (let i = 0; i < n; i++) strats.push(name);
   }
-  while (strats.length < cfg.nobles) strats.push("honest");
-  strats.length = cfg.nobles;
+  while (strats.length < count) strats.push("honest");
+  strats.length = count;
   return strats;
 }
 
-function buildRoster(cfg, rng) {
-  // independent shuffles: House is not correlated with strategy
+// inject (optional): per-noble carry-over from the Campaign --
+//   [{ losing, coin, threats, promises, elimRank, crownDesire, id }]
+// House, lands, and edges are reign-level and still assigned here; the Campaign only
+// supplies color, coin, and the IOU hand (which the edges then add to).
+function buildRoster(cfg, rng, inject) {
   const houses = shuffle(HOUSES.slice(), rng);
-  const strats = shuffle(expandMix(cfg), rng);
+  const count = inject ? inject.length : cfg.nobles;
+  const strats = shuffle(expandMix(cfg, count), rng);
 
-  return Array.from({ length: cfg.nobles }, (_, i) => {
-    const house = houses[i % houses.length];
+  return Array.from({ length: count }, (_, i) => {
+    const inj = inject ? inject[i] : null;
+    const house = inj ? inj.house : houses[i % houses.length]; // Campaign fixes the House
     const kind = house.kind;
     const scoringType = SCORING_TYPE[kind];
     const strat = strats[i];
 
-    const coin = Math.max(
-      0,
-      Math.round(cfg.carriedCoinMean + rng.noise(cfg.carriedCoinSpread))
-    );
-    let threats = Math.max(0, Math.round(cfg.carriedThreatsMean + rng.noise(1)));
-    let promises = rng.chance(0.5) ? 1 : 0;
+    const coin = inj
+      ? Math.max(0, Math.round(inj.coin))
+      : Math.max(0, Math.round(cfg.carriedCoinMean + rng.noise(cfg.carriedCoinSpread)));
+    let threats = inj ? Math.max(0, inj.threats) : Math.max(0, Math.round(cfg.carriedThreatsMean + rng.noise(1)));
+    let promises = inj ? Math.max(0, inj.promises) : (rng.chance(0.5) ? 1 : 0);
     const startAssets = Math.max(0, Math.round(cfg.startingAssetMean + rng.noise(1)));
 
     const landValue = () =>
@@ -78,8 +82,8 @@ function buildRoster(cfg, rng) {
     const startWorth = lands.reduce((s, l) => s + l.value, 0);
 
     // public COLOR (set at the Coronation): losing-color = burned bloc, the natural
-    // core of any rising
-    const losing = !rng.chance(cfg.winColorProb);
+    // core of any rising. From the Campaign when injected, else random.
+    const losing = inj ? inj.losing : !rng.chance(cfg.winColorProb);
 
     return {
       id: i,
@@ -90,6 +94,8 @@ function buildRoster(cfg, rng) {
       strat,
       color: losing ? "lose" : "win",
       losing,
+      elimRank: inj ? inj.elimRank : null, // Campaign provenance (for race-to-lose stats)
+      crownDesire: inj ? inj.crownDesire : null,
       coin,
       lands, // [{type, value}] -- typed, individually valued holdings
       threats,

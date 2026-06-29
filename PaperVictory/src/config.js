@@ -6,9 +6,17 @@
 
 const DEFAULT_CONFIG = {
   // --- table shape ---
-  nobles: 6,
+  // SIX players total: the Campaign elects one King, the other five become Nobles.
+  nobles: 5, // reign nobles (= players - 1)
   kingStrategy: "adaptive", // gentle | savage | adaptive
-  strategyMix: { honest: 4, loyalist: 1, opportunist: 1 },
+  strategyMix: { honest: 3, loyalist: 1, opportunist: 1 },
+
+  // --- Phase 1: the Campaign (emergent elimination tournament) ---
+  players: 6, // 6 players, 5 elimination rounds, last standing is King
+  campStartCoin: 10, // each player's starting war-chest
+  campSpendRate: 0.55, // fraction of resources a fully-committed candidate spends/round
+  campCourtShare: 0.5, // fraction of a candidate's spend that flows to others (courting)
+  campNoise: 1.5, // noise on a round's support tally (the blind, fuzzy negotiation)
 
   // --- Phase 1/2 carry-over ---
   carriedCoinMean: 6,

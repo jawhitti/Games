@@ -310,10 +310,11 @@ function score(cfg, n, rebelWon) {
 
 // ---- top-level game -------------------------------------------------------
 
-function playGame(cfg, seed, rec) {
+// inject (optional): { nobles: [campaign carry-over], king: {elimRank, crownDesire} }
+function playGame(cfg, seed, rec, inject) {
   const rng = new Rng(seed);
   const king = makeKing(cfg, rng);
-  const nobles = buildRoster(cfg, rng);
+  const nobles = buildRoster(cfg, rng, inject ? inject.nobles : null);
   for (const n of nobles) n.joined = false;
 
   if (rec) {
@@ -387,11 +388,11 @@ function playGame(cfg, seed, rec) {
   if (rec) {
     rec.push(`\n  >> The king ${rebelWon ? "FALLS" : "HOLDS the throne"}.`);
   }
-  return finalize(cfg, king, nobles, { rebelWon, trigger, round: endRound, rec });
+  return finalize(cfg, king, nobles, { rebelWon, trigger, round: endRound, rec, inject });
 }
 
 function finalize(cfg, king, nobles, st) {
-  const { rebelWon, trigger, round, rec } = st;
+  const { rebelWon, trigger, round, rec, inject } = st;
   // winning faction: if the rebellion won, the joiners; else the abstainers (+ king)
   const winners = nobles.filter((n) => n.alive && n.joined === rebelWon);
   let victor = null, victorScore = -Infinity;
@@ -439,6 +440,13 @@ function finalize(cfg, king, nobles, st) {
     victorIsKing,
     victorKind: victorIsKing ? "king" : victor ? victor.kind : "none",
     victorHouse: victorIsKing ? "king" : victor ? victor.house : "none",
+    // Campaign provenance of the overall winner (for the race-to-lose measurement)
+    victorElimRank: victorIsKing
+      ? inject && inject.king ? inject.king.elimRank : null
+      : victor ? victor.elimRank : null,
+    victorCrownDesire: victorIsKing
+      ? inject && inject.king ? inject.king.crownDesire : null
+      : victor ? victor.crownDesire : null,
     grantsGiven: king.grantsGiven,
     grantsDenied: king.grantsDenied,
     frontrunnerWon: frontrunner ? winnerSet.has(frontrunner) : false,
