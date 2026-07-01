@@ -73,6 +73,11 @@ function ghPRs(repo, limit) {
   return ghJson(["pr", "list", "--repo", repo, "--state", "all", "--limit", String(limit),
     "--json", "number,title,state,createdAt,closedAt,mergedAt,author"]);
 }
+function ghReleases(repo, limit) {
+  return ghJson(["release", "list", "--repo", repo, "--limit", String(limit),
+    "--json", "tagName,name,publishedAt,isPrerelease"]);
+}
+const isBot = s => /\[bot\]|dependabot|renovate|github-actions|greenkeeper|snyk-bot/i.test(s || "");
 
 export async function buildLevel({ repo, limit = 120, commits = 400, onProgress = () => {} }) {
   repo = normalizeRepo(repo);
@@ -86,6 +91,10 @@ export async function buildLevel({ repo, limit = 120, commits = 400, onProgress 
   onProgress(14, "reading pull requests…");
   let prs = [];
   try { prs = await ghPRs(repo, limit); } catch { prs = []; }
+
+  onProgress(15, "reading releases…");
+  let rels = [];
+  try { rels = await ghReleases(repo, 60); } catch { rels = []; }
 
   onProgress(16, "reading commits…");
   const per = 100, pages = Math.max(1, Math.ceil(commits / per));
@@ -166,7 +175,7 @@ export async function buildLevel({ repo, limit = 120, commits = 400, onProgress 
 
   const stars = commitList
     .filter(c => { const ms = new Date(c.date).getTime(); return ms >= t0 - DAY && ms <= t1 + DAY; })
-    .map(c => ({ sha: c.sha, login: c.login, msg: c.msg, t: frac(new Date(c.date).getTime()) }))
+    .map(c => ({ sha: c.sha, login: c.login, msg: c.msg, bot: isBot(c.login), t: frac(new Date(c.date).getTime()) }))
     .sort((a, b) => a.t - b.t);
 
   // PRs -> airplanes (a PR is a branch that came and either merged or was abandoned)
@@ -177,6 +186,20 @@ export async function buildLevel({ repo, limit = 120, commits = 400, onProgress 
     const endMs = p.mergedAt ? new Date(p.mergedAt).getTime() : (p.closedAt ? new Date(p.closedAt).getTime() : createdMs);
     return { n: p.number, title: p.title, state, author: p.author?.login || "", t: frac(createdMs), endT: Math.max(frac(createdMs), frac(endMs)) };
   }).sort((a, b) => a.t - b.t);
+
+  // releases within the window -> checkpoint banners
+  const releases = rels
+    .filter(r => r.publishedAt)
+    .map(r => ({ tag: r.tagName, name: r.name || r.tagName, pre: !!r.isPrerelease, ms: new Date(r.publishedAt).getTime() }))
+    .filter(r => r.ms >= t0 - DAY && r.ms <= t1 + DAY)
+    .map(r => ({ tag: r.tag, name: r.name, pre: r.pre, t: frac(r.ms) }))
+    .sort((a, b) => a.t - b.t);
+
+  // the most-discussed closed issue becomes the boss
+  let boss = null;
+  for (const o of obstacles) if (o.state === "closed" && (!boss || o.comments > boss.comments)) boss = o;
+  if (!boss) for (const o of obstacles) if (!boss || o.comments > boss.comments) boss = o;
+  if (boss && boss.comments >= 3) boss.boss = true;
 
   const closedN = obstacles.filter(o => o.state === "closed").length;
   const openN = obstacles.filter(o => o.state === "open").length;
@@ -189,8 +212,8 @@ export async function buildLevel({ repo, limit = 120, commits = 400, onProgress 
     repo, generatedAt: new Date(now).toISOString(),
     span: { start: new Date(t0).toISOString(), end: new Date(t1).toISOString(), days: Math.round(span / DAY) },
     counts: { total: obstacles.length, closed: closedN, open: openN, openActive: openActiveN, idle: openN - openActiveN,
-      commits: stars.length, prs: planes.length, prMerged, prRejected },
-    heroes, lead, obstacles, stars, planes,
+      commits: stars.length, bots: stars.filter(s => s.bot).length, prs: planes.length, prMerged, prRejected, releases: releases.length },
+    heroes, lead, obstacles, stars, planes, releases,
   };
 }
 
@@ -208,7 +231,7 @@ if (isMain) {
     onProgress: (p, m) => process.stderr.write(`\rGITBOY ${String(p).padStart(3)}%  ${m}                    `),
   }).then(level => {
     writeFileSync(opt("out", "level-data.js"), levelToJs(level));
-    process.stderr.write(`\nGITBOY: ${level.counts.total} trucks (${level.counts.closed} closed, ${level.counts.open} open), ${level.counts.commits} stars, ${level.counts.prs} planes (${level.counts.prMerged} merged / ${level.counts.prRejected} rejected); ${level.span.days}-day window\n`);
+    process.stderr.write(`\nGITBOY: ${level.counts.total} trucks (${level.counts.closed} closed, ${level.counts.open} open), ${level.counts.commits} stars (${level.counts.bots} bot), ${level.counts.prs} planes (${level.counts.prMerged}m/${level.counts.prRejected}r), ${level.counts.releases} releases; ${level.span.days}-day window\n`);
     process.stderr.write(`GITBOY: squads -> ${level.heroes.map(h => h.name + "(" + h.count + ")").join(", ")}   lead=${level.lead}\n`);
   }).catch(e => { console.error("\nGITBOY error:", e.message || e); process.exit(1); });
 }

@@ -17,7 +17,7 @@ const TYPES = { ".html": "text/html", ".js": "application/javascript", ".css": "
 async function serveFile(res, file, extraHeaders = {}) {
   try {
     const body = await readFile(path.join(DIR, file));
-    res.writeHead(200, { "Content-Type": TYPES[path.extname(file)] || "text/plain", ...extraHeaders });
+    res.writeHead(200, { "Content-Type": TYPES[path.extname(file)] || "text/plain", "Cache-Control": "no-store", ...extraHeaders });
     res.end(body);
   } catch { res.writeHead(404); res.end("not found"); }
 }
