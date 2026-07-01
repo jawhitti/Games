@@ -158,7 +158,7 @@ export async function buildLevel({ repo, limit = 120, commits = 400, onProgress 
     else { const active = comments > 0 || (updatedMs - createdMs) > HOUR; engage = active; resolves = false; endMs = active ? updatedMs : createdMs; }
     const size = comments >= 6 ? 3 : comments >= 2 ? 2 : 1;
     return {
-      n: issue.number, title: issue.title, url: issue.url,
+      n: issue.number, title: issue.title, url: issue.url, author: issue.author?.login || "",
       state: closedState ? "closed" : "open",
       kind: "truck", hero: cat, diff, comments, size,
       t: frac(createdMs), endT: Math.max(frac(createdMs), frac(endMs)),
