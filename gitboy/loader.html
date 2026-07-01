@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GITBOY</title>
+<style>
+  :root{ --red:#c92b2b; --red2:#e04a4a; --ink:#e7b7bd; --panel:#1a0e12; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:#0a0608; color:var(--ink);
+    font-family:"Courier New",monospace; display:flex; align-items:center; justify-content:center; }
+  #card{ width:min(560px,92vw); background:var(--panel); border:3px solid #2a1015;
+    box-shadow:0 0 0 3px #000, 0 0 60px #000 inset; padding:28px 26px 24px; image-rendering:pixelated; }
+  h1{ margin:0 0 2px; font-size:44px; letter-spacing:4px; color:var(--red);
+    text-shadow:3px 3px 0 #000, 0 0 18px rgba(201,43,43,.5); }
+  .sub{ margin:0 0 20px; font-size:12px; color:#7a3038; letter-spacing:2px; }
+  label{ display:block; font-size:11px; letter-spacing:1px; color:#9a6a72; margin:14px 0 5px; }
+  input{ width:100%; padding:11px 12px; background:#0c0709; color:#ffd; border:2px solid #3a1620;
+    font-family:inherit; font-size:16px; letter-spacing:1px; outline:none; }
+  input:focus{ border-color:var(--red); }
+  .row{ display:flex; gap:12px; }
+  .row > div{ flex:1; }
+  small{ color:#5f2a30; font-size:10px; }
+  button{ margin-top:20px; width:100%; padding:13px; background:var(--red); color:#fff; border:none;
+    font-family:inherit; font-size:17px; letter-spacing:3px; cursor:pointer; text-shadow:1px 1px 0 #000;
+    box-shadow:0 4px 0 #7a1a1a; }
+  button:hover{ background:var(--red2); }
+  button:active{ transform:translateY(3px); box-shadow:0 1px 0 #7a1a1a; }
+  button:disabled{ background:#4a2530; box-shadow:0 4px 0 #2a1015; cursor:default; }
+  #bar{ margin-top:22px; height:16px; background:#0c0709; border:2px solid #3a1620; display:none; }
+  #fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--red),var(--red2)); transition:width .18s; }
+  #status{ margin-top:8px; font-size:12px; color:#9a6a72; min-height:16px; letter-spacing:1px; }
+  #err{ margin-top:10px; color:var(--red2); font-size:12px; min-height:14px; }
+  .ex{ color:#7a3038; cursor:pointer; text-decoration:underline; }
+</style>
+</head>
+<body>
+<div id="card">
+  <h1>GITBOY</h1>
+  <p class="sub">RUN A REPO'S ISSUE LOG AS A 16-BIT GAUNTLET</p>
+
+  <label>GITHUB REPO</label>
+  <input id="repo" placeholder="owner/name" autofocus spellcheck="false" autocomplete="off">
+  <small>e.g. <span class="ex" data-r="cli/cli">cli/cli</span> ·
+    <span class="ex" data-r="jawhitti/kitten-rescue">jawhitti/kitten-rescue</span> ·
+    <span class="ex" data-r="facebook/react">facebook/react</span> (needs your <code>gh</code> auth)</small>
+
+  <div class="row">
+    <div><label>ISSUES / STATE</label><input id="limit" type="number" value="100" min="10" max="300"></div>
+    <div><label>COMMITS (STARS)</label><input id="commits" type="number" value="800" min="0" max="5000" step="100"></div>
+  </div>
+
+  <button id="go">GO</button>
+  <div id="bar"><div id="fill"></div></div>
+  <div id="status"></div>
+  <div id="err"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const repo = $("repo"), go = $("go"), bar = $("bar"), fill = $("fill"), status = $("status"), err = $("err");
+document.querySelectorAll(".ex").forEach(e => e.onclick = () => { repo.value = e.dataset.r; repo.focus(); });
+repo.addEventListener("keydown", e => { if (e.key === "Enter") start(); });
+go.onclick = start;
+
+let es = null;
+function start(){
+  let r = repo.value.trim().replace(/\.git$/, "").replace(/\/+$/, "");
+  const m = r.match(/github\.com[/:]+([^/]+\/[^/#?]+)/i); if (m) r = m[1];   // accept full URLs
+  repo.value = r;
+  err.textContent = "";
+  if (!r.includes("/")) { err.textContent = "enter a repo as owner/name"; return; }
+  go.disabled = true; go.textContent = "LOADING…"; bar.style.display = "block"; fill.style.width = "3%";
+  status.textContent = "contacting github…";
+  const q = new URLSearchParams({ repo: r, limit: $("limit").value || 100, commits: $("commits").value || 800 });
+  es = new EventSource("/api/build?" + q.toString());
+  es.onmessage = ev => {
+    const d = JSON.parse(ev.data);
+    if (d.error) { err.textContent = "✕ " + d.error; reset(); return; }
+    if (d.done) {
+      fill.style.width = "100%";
+      status.textContent = `${d.counts.total} issues (${d.counts.closed} closed, ${d.counts.open} open) · ${d.counts.commits} commits · ${d.span.days}-day window`;
+      es.close();
+      setTimeout(() => { location.href = "/game?t=" + Date.now(); }, 550);
+      return;
+    }
+    if (typeof d.pct === "number") fill.style.width = Math.max(3, d.pct) + "%";
+    if (d.msg) status.textContent = d.msg;
+  };
+  es.onerror = () => { err.textContent = "✕ lost connection to the loader (is server.mjs running?)"; reset(); };
+}
+function reset(){ if (es) es.close(); go.disabled = false; go.textContent = "GO"; }
+</script>
+</body>
+</html>
