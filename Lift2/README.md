@@ -85,3 +85,46 @@ The same machine runs you to bankruptcy *or* to riches depending which side of t
 action — pumps, firemen, restructuring — is really about nudging the **ratio**
 across the tip, never about the absolute size of either lagoon. **This is the
 design to build toward on any revisit.**
+
+### The instrument taxonomy
+
+Everything the player builds is assembled from three parts — a **growth tank**
+(appreciates), a **water tap** (throws off cash), and a **goo leak** (negative
+cash flow) — plus **valves** that open/close taps and **routing** decisions. The
+menu:
+
+| Instrument | Growth tank | Water tap | Goo leak | Notes |
+|------------|:-----------:|:---------:|:--------:|-------|
+| **Job** | — | ✔ steady | — | A fresh water source that emits **no** goo. |
+| **House (owned)** | ✔ | — | ✔ | Appreciates but throws off no cash; still leaks goo (upkeep/interest/tax). |
+| **House (rented)** | ✔ | ✔ | ✔ | Same house — the **rent valve** opens the cash tap. |
+| **Stocks** | ✔ (higher/variable rate) | optional | small | A growth tank you can set to reinvest or consume. |
+| **Student loan** | — | — | ✔ | Adds to the goo pond **but permanently widens the Job's water tap** — the one *good* leverage. |
+| **Consumer debt** | — | — | ✔ | Goo that only ever leaks. The mirror of the student loan. |
+
+Two structural notes this table encodes:
+
+- **An asset is not one thing.** It's a growth tank + a goo leak with an
+  *optional* water tap; **renting is a valve** (same primitive as reinvest/consume)
+  that opens the tap. Appreciation and cash flow are independent outputs.
+- **Good vs bad leverage falls out of *where the debt points*,** with no
+  special-casing: "add to the goo pond" is one action, but a student loan also
+  fattens a tap while consumer debt does not.
+
+### Routing: the core verb
+
+Goo flows through a **sewer pipe to a treatment facility**, and the player decides
+**how much clean water to send to treat it.** Water routed to treatment is water
+that isn't compounding — so debt service *is* the defend-vs-build triage, made
+continuous. The full verb set is small: **build** an instrument, **valve** it
+(rent? reinvest?), **route** water (how much to treatment vs the growth tanks).
+
+### Deliberately omitted: taxes
+
+Taxes are cut on purpose. They don't fit the instrument model because they aren't
+an instrument — they're a **leak on the flows themselves** (a tap on Job water;
+another on realized growth), and the real game of taxes is *routing to avoid them*
+(tax-advantaged accounts), which would need a whole second treatment layer. Out of
+scope for the core dynamic. The one place the omission shows: without taxes there's
+no real-world reason to prefer slow-appreciation / no-cash-flow assets (unrealized
+gains going untaxed). That's the seam if taxes are ever added.
