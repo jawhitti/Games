@@ -1,0 +1,16 @@
+{
+  "name": "lift-sim",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lift Layer 1: headless, log-space simulation core",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}
