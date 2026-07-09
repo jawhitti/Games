@@ -1,0 +1,16 @@
+{
+  "name": "lift2-sim",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lift 2: flow-first personal-finance sim core (towers, pumps, goo, firemen)",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}
