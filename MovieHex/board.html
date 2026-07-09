@@ -1,0 +1,38 @@
+<!doctype html><meta charset=utf-8><title>Board</title>
+<style>
+ html,body{margin:0;height:100%;background:#14131a;color:#cfc8b8;font:13px system-ui;overflow:hidden}
+ #hud{position:fixed;top:10px;left:14px;z-index:2;line-height:1.5}#hud b{color:#f5c542}
+ .legend{position:fixed;top:10px;right:14px;z-index:2;text-align:right}
+ .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-left:8px}
+ svg{width:100vw;height:100vh;cursor:grab;touch-action:none}svg.drag{cursor:grabbing}
+ text{pointer-events:none;font:11px system-ui}
+</style>
+<div id=hud><b>STAR TREK VI THE UNDISCOVERED COUNTRY</b> ⟶ <b>NIGHT PATROL</b><br>15 titles · 29 links · avg ways-in 1.93 · target has 4 ways in · depth 4<br>drag to pan · wheel to zoom</div>
+<div class=legend>
+ <span class=sw style="background:#8b5cf6"></span> start
+ <span class=sw style="background:#2bb3a3"></span> on a start→target path
+ <span class=sw style="background:#e0c04a"></span> target
+</div>
+<svg id=svg><g id=cam></g></svg>
+<script>
+const B={"nodes":[{"t":"NIGHT PATROL","x":940,"y":0,"r":"target"},{"t":"DEAD OF NIGHT","x":705,"y":-75,"r":"live"},{"t":"DAY FOR NIGHT","x":705,"y":-25,"r":"live"},{"t":"IT HAPPENED ONE NIGHT","x":705,"y":25,"r":"live"},{"t":"NIGHT OF THE LIVING DEAD","x":470,"y":-100,"r":"live"},{"t":"DAY OF THE DEAD","x":470,"y":-50,"r":"live"},{"t":"NIGHT AND DAY","x":470,"y":0,"r":"live"},{"t":"LIFE OR SOMETHING LIKE IT","x":470,"y":50,"r":"live"},{"t":"MOTHER NIGHT","x":705,"y":75,"r":"live"},{"t":"YOU LIGHT UP MY LIFE","x":235,"y":-25,"r":"live"},{"t":"COUNTRY LIFE","x":235,"y":25,"r":"live"},{"t":"NIGHT MOTHER","x":470,"y":100,"r":"live"},{"t":"YOU CANT TAKE IT WITH YOU","x":0,"y":-50,"r":"live"},{"t":"IT COULD HAPPEN TO YOU","x":0,"y":0,"r":"live"},{"t":"STAR TREK VI THE UNDISCOVERED COUNTRY","x":0,"y":50,"r":"start"}],"edges":[{"a":"DEAD OF NIGHT","b":"NIGHT PATROL"},{"a":"DEAD OF NIGHT","b":"NIGHT OF THE LIVING DEAD"},{"a":"DEAD OF NIGHT","b":"NIGHT AND DAY"},{"a":"DEAD OF NIGHT","b":"NIGHT MOTHER"},{"a":"DAY FOR NIGHT","b":"NIGHT PATROL"},{"a":"DAY FOR NIGHT","b":"NIGHT OF THE LIVING DEAD"},{"a":"DAY FOR NIGHT","b":"NIGHT AND DAY"},{"a":"DAY FOR NIGHT","b":"NIGHT MOTHER"},{"a":"IT HAPPENED ONE NIGHT","b":"NIGHT PATROL"},{"a":"IT HAPPENED ONE NIGHT","b":"NIGHT OF THE LIVING DEAD"},{"a":"IT HAPPENED ONE NIGHT","b":"NIGHT AND DAY"},{"a":"IT HAPPENED ONE NIGHT","b":"NIGHT MOTHER"},{"a":"NIGHT OF THE LIVING DEAD","b":"DEAD OF NIGHT"},{"a":"DAY OF THE DEAD","b":"DEAD OF NIGHT"},{"a":"NIGHT AND DAY","b":"DAY FOR NIGHT"},{"a":"NIGHT AND DAY","b":"DAY OF THE DEAD"},{"a":"LIFE OR SOMETHING LIKE IT","b":"IT HAPPENED ONE NIGHT"},{"a":"LIFE OR SOMETHING LIKE IT","b":"IT COULD HAPPEN TO YOU"},{"a":"MOTHER NIGHT","b":"NIGHT PATROL"},{"a":"MOTHER NIGHT","b":"NIGHT OF THE LIVING DEAD"},{"a":"MOTHER NIGHT","b":"NIGHT AND DAY"},{"a":"MOTHER NIGHT","b":"NIGHT MOTHER"},{"a":"YOU LIGHT UP MY LIFE","b":"LIFE OR SOMETHING LIKE IT"},{"a":"COUNTRY LIFE","b":"LIFE OR SOMETHING LIKE IT"},{"a":"NIGHT MOTHER","b":"MOTHER NIGHT"},{"a":"YOU CANT TAKE IT WITH YOU","b":"YOU LIGHT UP MY LIFE"},{"a":"IT COULD HAPPEN TO YOU","b":"YOU LIGHT UP MY LIFE"},{"a":"IT COULD HAPPEN TO YOU","b":"YOU CANT TAKE IT WITH YOU"},{"a":"STAR TREK VI THE UNDISCOVERED COUNTRY","b":"COUNTRY LIFE"}]};
+const FILL={start:'#8b5cf6',live:'#1f6f66',target:'#e0c04a'},STROKE={start:'#b79cf0',live:'#2bb3a3',target:'#fff0b0'};
+const NS='http://www.w3.org/2000/svg',cam=document.getElementById('cam');
+const P=new Map(B.nodes.map(n=>[n.t,n]));
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+for(const e of B.edges){const a=P.get(e.a),b=P.get(e.b);if(!a||!b)continue;
+ cam.appendChild(el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#4a4436','stroke-width':1,opacity:0.55}));}
+for(const n of B.nodes){const g=el('g',{transform:'translate('+n.x+','+n.y+')'});
+ const w=176,label=n.t.length>27?n.t.slice(0,25)+'…':n.t;
+ g.appendChild(el('rect',{x:-w/2,y:-14,width:w,height:28,rx:8,fill:FILL[n.r],stroke:STROKE[n.r],'stroke-width':n.r==='live'?1.2:2.6}));
+ const tx=el('text',{x:0,y:4,'text-anchor':'middle',fill:'#eee','font-weight':n.r==='live'?500:700});tx.textContent=label;g.appendChild(tx);
+ if(n.r!=='live'){const l=el('text',{x:0,y:-20,'text-anchor':'middle',fill:'#fff','font-weight':800});l.textContent=n.r.toUpperCase();g.appendChild(l);}
+ cam.appendChild(g);}
+let tx=innerWidth*0.1,ty=innerHeight*0.5,s=0.85;
+const apply=()=>cam.setAttribute('transform','translate('+tx+','+ty+') scale('+s+')');apply();
+const svg=document.getElementById('svg');let drag=null;
+svg.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,tx,ty};svg.classList.add('drag');svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove',e=>{if(!drag)return;tx=drag.tx+(e.clientX-drag.x);ty=drag.ty+(e.clientY-drag.y);apply();});
+svg.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('drag');});
+svg.addEventListener('wheel',e=>{e.preventDefault();const f=e.deltaY<0?1.1:1/1.1;tx=e.clientX-(e.clientX-tx)*f;ty=e.clientY-(e.clientY-ty)*f;s*=f;apply();},{passive:false});
+</script>
