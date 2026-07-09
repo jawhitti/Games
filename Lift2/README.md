@@ -129,95 +129,56 @@ scope for the core dynamic. The one place the omission shows: without taxes ther
 no real-world reason to prefer slow-appreciation / no-cash-flow assets (unrealized
 gains going untaxed). That's the seam if taxes are ever added.
 
-## Modeling notes (advisor-sim fidelity)
+## The model (minimal core)
 
 The intended use is a **sandbox**, not a game: *"here's your situation now — plunk
-down the house you want to buy and watch what happens."* For the projection to be
-truthful rather than rosy, the water/goo picture needs the refinements below. These
-supersede the loose "goo = interest" framing above.
+down the house you want to buy and watch what happens."* The whole model is small —
+resist the urge to grow it. It's a **gravity plumbing** picture:
 
-### Goo is any drag on cash flow — and it splits by *fate*
+- **Sources sit uphill.** A job is a spring — fresh water, no goo — feeding down.
+- **Water tanks and goo tanks sit downhill.** Both **compound at their own rate**
+  (water tank ~4%/yr, a debt/goo tank ~8%/yr). Rate = visible speed.
+- **The only action on goo is to pour water into it to dissolve it, 1:1.** Pour is
+  the payment.
+- **Assets are separate.** A house/car/business sits upstream and appreciates (or
+  not) on its own; *its growth is unrelated to the water/goo plumbing.* An asset
+  touches the plumbing only through a **valve** — open a tap (rent → a water source)
+  or dump the tank (sell → a slug of water).
 
-Goo is **not** just interest; it's *any* drag on cash flow — all of PITI, rent,
-upkeep, lifestyle. For the first question the sim answers (*will I drown this
-month?*) lumping it is correct: water leaving is water leaving. But the honest model
-must split goo by **where the water goes**:
+That's the entire model. The equation behind a goo tank is just `dB/dt = rB − pour`.
 
-- **Evaporating goo** — interest, taxes, insurance, rent, upkeep: water that leaves
-  and is **gone forever**.
-- **Transferring goo** — the **P in PITI** (mortgage principal): leaves your liquid
-  tank but lands in the house's (locked) equity tank. Same drag on cash flow this
-  month; **opposite** consequence for wealth. Principal is a drag on cash flow but
-  not a *cost* — it's forced savings into a locked tank.
+### Everything else is emergent — do not track it
 
-Why the split is load-bearing:
-- **Rent vs buy at the same payment aren't equal.** The renter's payment is 100%
-  evaporation; the owner's principal is water banked into equity. Cash-flow-drag
-  alone says they're identical; the fate split shows they aren't.
-- **It's what makes the four-square scam visible** (see below): stretching a loan's
-  term lowers the payment *and* shifts its composition toward evaporation.
-- The truly honest lifetime number is the **area under the *evaporation* curve**
-  (total interest + tax + insurance over the life), not total cash out — because the
-  principal comes back as (illiquid) equity.
+The refinements an earlier draft made into machinery all fall out of the plumbing
+for free. They are consequences to *observe*, not quantities to *store*:
 
-There's a second, weaker cut — by **incidence**: *rate-on-a-stock* goo (interest,
-which shrinks as the debt tank drains) vs a *fixed drip* (property tax, insurance,
-HOA — constant, indifferent to any tank). It governs the leak's shape over time but
-matters less than the fate split.
+- **Principal vs interest.** Pour exactly the goo's growth → tank flat (interest-only,
+  treading water). Pour more → tank shrinks (principal). No "fate tag" on any dollar
+  — the split is just whether your pour beats the leak.
+- **Equity.** Not a tank. Derived on demand: `asset value − goo level`.
+- **Liquidity / lockup.** *Topological.* An upstream asset with no open downhill pipe
+  can't be routed — that *is* illiquidity. Appreciation is inert until you open a tap
+  (rent) or dump the tank (sell). "Asset-rich, cash-poor, one shock from a forced
+  sale" is just a locked asset above a draining water tank — drawn, not ruled.
+- **The four-square / total cost.** Total water poured over a goo tank's life *is*
+  the honest number (the area). Pour slower (lower payment) → goo compounds on a
+  bigger balance longer → you pour **more** total. `pour × time` rises as `pour`
+  falls, so the stretched-term scam emerges from the one equation — you never model
+  "term" at all.
+- **Underwater / rolled negative equity.** `asset value < goo level` — two numbers.
+  Sell before the goo drained and the leftover goo merges into the next tank.
 
-### The honest number is the area, not the stock or the flow
+The one thin pipe that *must* exist: an asset is **collateral** for its own goo, so
+**dumping an asset dissolves its own goo tank first**, remainder to your water tank.
+Otherwise you could sell the house and keep the mortgage. Appreciation stays
+decoupled from the flows; only the *sale* is wired to the lien.
 
-Neither the lagoon's size nor the stream's height is the truth. Three quantities,
-and the whole of predatory finance lives in the gaps between them:
+## Rendering (the actually-hard part)
 
-- **Stock** — the debt tank's size (≈ price financed). *Naive error:* fear this
-  ("a $400k mortgage is terrifying"). The flow-first correction fixed this error.
-- **Flow** — the payment; the height of the goo stream right now. *Four-square
-  error:* watch only this. A comfortable height hides everything else.
-- **Integral** — total (evaporating) goo before the tank drains = flow × drain-time
-  = **area under the leak curve.** This is the honest figure, and it is neither the
-  peak stock nor the instantaneous flow.
-
-The hidden dial that decouples flow from integral is the **term (drain time).** A
-longer term thins the stream (lower payment) but the tank leaks for more years, so
-the **area grows.** The four-square worksheet is a *shape trick on this curve*:
-lower the height, widen the base, keep or grow the area — the buyer watches the
-height and loses on the area.
-
-The ugliest four-square move the model shows for free: **negative equity rolled
-forward.** Trade in before the old debt tank drained and the un-emptied tank is
-**poured into the new one** — the new debt tank starts *bigger than the new asset*
-(underwater) while the payment still looks comfortable. Same visible flow; a debt
-tank overtopping the asset it's tied to.
-
-> One-sentence model: **goo splits by fate into burned vs banked, and every
-> predatory-finance trick raises the burned fraction while lowering the flow you're
-> watching.**
-
-### Liquidity: not all tanks are tappable
-
-For "plunk down a house," the *first* event is a **liquidity** event, not a
-cash-flow one: the liquid tank (checking/savings) craters by the down payment +
-closing, instantly. Survival then depends on how much **routable** water is left —
-and here's the gap: **home equity is not routable water.** You can't spray a locked
-growth tank on a goo spike without selling. So the model needs **tank tappability**:
-
-- **Liquid water** — spendable/routable now.
-- **Locked water** — home equity, retirement: can't fight a leak without a sale.
-
-This is how real people blow up — asset-rich, cash-poor, one shock forces a sale at
-the worst time. If every tank is equally tappable, the sim will cheerfully report
-"fine" when the player is one water-heater failure from a forced sale. Corollary:
-**appreciation is inert until realized** — a rising locked-tank level does nothing
-to help you survive a goo spike; it helps net worth, not flows, until rent (open the
-tap) or sale (drain the tank).
-
-### Amortization is emergent (a reason to build the model)
-
-The flow model *produces* an amortization curve with no special code, if
-"neutralize" and "shrink" are distinct routes: the debt tank leaks interest-goo at
-rate r; routing exactly enough water to neutralize the leak leaves the tank
-unchanged (**interest-only, treading water**); routing *more* than the leak shrinks
-the tank (**principal**). Early on almost all routed water just holds the goo line;
-as the tank shrinks its leak shrinks, so a fixed payment bites more each year. The
-curve falls out of the physics — the sim *shows* what a spreadsheet only tabulates.
+The model is easy; making it *appealing* is the work. The target is **SimCity-ish**:
+**assets on the surface** — houses, cars, businesses as little buildings you place —
+over a visible **subterranean network of water and goo pipes, pumps, and valves.**
+You watch water flow downhill from job-springs, pool in tanks, and get poured into
+goo to dissolve it; you build and toggle the plumbing. The surface reads as a life;
+the underground reads as its cash flow. Nailing that split — legible plumbing that's
+also nice to look at — is the open problem, not the sim.
