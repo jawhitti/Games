@@ -1,6 +1,6 @@
 // Generate a branchy board and emit a PLAYABLE hex-flower play.html.
 import { readFileSync, writeFileSync } from 'node:fs';
-const T = readFileSync(new URL('./movies.txt', import.meta.url), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
+const T = readFileSync(new URL('./movies-famous.txt', import.meta.url), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
 const words = (t) => t.split(/\s+/).map((w) => w.replace(/^[^A-Z0-9]+|[^A-Z0-9]+$/gi, '')).filter(Boolean);
 const head = (t) => words(t)[0], tail = (t) => words(t).at(-1);
 const startsWith = new Map(), endsWith = new Map();
@@ -40,7 +40,20 @@ function genBoard() {
   const startOut = adj[START].length;
   let fp = 0, c = START; while (adj[c] && adj[c].length === 1 && c !== TARGET) { c = adj[c][0]; fp++; }
   const branch = kept.filter((n) => adj[n].length >= 2).length / kept.length;
-  return { start: START, target: TARGET, adj, size: kept.length, par: bfs.get(TARGET), startOut, fp, branch };
+  // TRAPS: at some junctions, add a decoy door that dead-ends (never reaches the
+  // target). It looks like any other door — only its gold last word warns you —
+  // so a careless click costs a backtrack and reading the board starts to matter.
+  const inB = new Set(kept);
+  let traps = 0;
+  for (const n of kept) {
+    if (n === TARGET || Math.random() >= 0.45) continue;
+    const cs = (startsWith.get(tail(n)) || []).filter((d) => d !== n && !inB.has(d) && !adj[n].includes(d));
+    if (!cs.length) continue;
+    const d = cs[(Math.random() * cs.length) | 0];
+    adj[n].push(d);
+    if (!adj[d]) { adj[d] = []; traps++; }         // dead-end cul-de-sac
+  }
+  return { start: START, target: TARGET, adj, size: kept.length, par: bfs.get(TARGET), startOut, fp, branch, traps };
 }
 let B = null, tries = 0;
 for (; tries < 4000 && !B; tries++) { const g = genBoard(); if (g && g.size >= 14 && g.par >= 4 && g.startOut >= 2 && g.fp === 0 && g.branch >= 0.55) B = g; }
