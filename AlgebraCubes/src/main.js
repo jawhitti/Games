@@ -504,7 +504,9 @@ stage.addEventListener('pointerup', (evt) => {
     const sd = selDrag; selDrag = null; sd.ghost.remove();
     const dist = Math.hypot(p.x - sd.start.x, p.y - sd.start.y);
     if (dist < 6) { clearSelection(); return; } // tapped the selection again → deselect
-    if (IN_STRIP(p.y)) { stagingSel = null; for (const tk of sd.toks) staging.push({ ...tk }); renderStaging(); chime('gather'); }
+    // dropped into the editor: focus moves to the tray, so the equation
+    // selection must clear too or the flip buttons keep acting on the equation
+    if (IN_STRIP(p.y)) { clearSelection(); stagingSel = null; for (const tk of sd.toks) staging.push({ ...tk }); renderStaging(); chime('gather'); }
     return;
   }
   if (stageItemDrag) {
