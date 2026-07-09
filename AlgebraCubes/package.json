@@ -1,0 +1,16 @@
+{
+  "name": "algebra-cubes",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Algebra Cubes: a row of colored cubes is an equation; unlabeled buttons apply legal algebraic moves",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

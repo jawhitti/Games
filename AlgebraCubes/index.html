@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Balance</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #efe9dd; font: 15px system-ui, sans-serif; color: #3a3226; }
+      html, body { overflow-y: auto; }
+      #wrap { display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 14px; }
+      h1 { font-size: 15px; letter-spacing: 0.14em; font-weight: 700; color: #8a7f66; margin: 16px 0 0; }
+      #stagewrap { width: 100%; display: flex; align-items: center; justify-content: center; }
+      svg { width: min(1120px, 98vw); aspect-ratio: 1120 / 640; height: auto; touch-action: none; }
+      #solved { font: 700 15px system-ui; color: #4a8f4a; opacity: 0; transition: opacity 0.3s; }
+      #status { min-height: 20px; color: #6b6152; font-size: 14px; text-align: center; padding: 0 12px; }
+      #tools { display: flex; gap: 10px; margin-bottom: 18px; }
+      button.tool {
+        font: 600 14px system-ui; padding: 8px 18px; border-radius: 10px;
+        border: 2px solid #b7ad97; background: #f6f1e6; color: #3a3226; cursor: pointer;
+      }
+      button.tool:hover { background: #ece4d2; }
+      input.apply {
+        font: 600 16px system-ui; padding: 8px 14px; width: 180px; border-radius: 10px;
+        border: 2px solid #b7ad97; background: #fff; color: #3a3226; text-align: center;
+      }
+      input.apply:focus { outline: none; border-color: #e0b020; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <h1>BALANCE</h1>
+      <div id="stagewrap">
+        <svg id="stage" viewBox="-560 -175 1120 640" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
