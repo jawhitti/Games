@@ -1,0 +1,15 @@
+{
+  "id": "3-01-sealed-vault",
+  "cells": [
+    { "min": [-2, -1, -1, -0.5], "max": [2, 0, 1, 0.5], "kind": "start" },
+    { "min": [-2, -1, -1, 0.5], "max": [2, 0, 1, 2], "kind": "goal" }
+  ],
+  "switches": [
+    { "id": "s0", "plane": "xy", "angle": 90, "dir": 1, "trigger": [-1, -0.5, 0, 0], "anchor": null },
+    { "id": "s1", "plane": "xw", "angle": 90, "dir": 1, "trigger": [1, -0.5, 0, 0], "anchor": null }
+  ],
+  "start": [0, -0.5, 0, 0],
+  "goal": [0, -0.5, 0, 1.25],
+  "act": 3,
+  "needsW": true
+}
