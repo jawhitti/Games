@@ -1,0 +1,212 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Lift2 — goo under the asset</title>
+<style>
+  html,body{margin:0;background:#0e1116;color:#cdd6e4;font:14px/1.4 system-ui,sans-serif}
+  #wrap{max-width:980px;margin:0 auto;padding:12px}
+  canvas{width:100%;height:auto;display:block;border-radius:8px;background:#0b0d12;cursor:crosshair}
+  .bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .bar button{background:#26303f;color:#cdd6e4;border:1px solid #3a4658;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:13px}
+  .bar button.on{background:#3a5b8c;border-color:#5a82c0;color:#fff}
+  .bar button.onw{background:#1f6fd0;border-color:#5ac0ff;color:#fff}
+  .bar button.ong{background:#4c6f1f;border-color:#8fbe4a;color:#fff}
+  .sep{width:1px;height:22px;background:#33404f;margin:0 4px}
+  label{display:flex;gap:8px;align-items:center;font-size:13px;color:#9aa7bd}
+  input[type=range]{width:160px}
+  .note{color:#6f7c92;font-size:12px;margin-top:6px}
+  b{color:#e8eef7}
+</style>
+<div id="wrap">
+  <canvas id="c" width="980" height="660"></canvas>
+  <div class="bar">
+    <button data-tool="waterpipe" class="onw">Water pipe</button>
+    <button data-tool="goopipe">Goo pipe</button>
+    <span class="sep"></span>
+    <button data-tool="job">Job</button>
+    <button data-tool="savings">Savings</button>
+    <button data-tool="mortgage">House+Mortgage</button>
+    <button data-tool="lagoon">Lagoon</button>
+    <button data-tool="erase">Erase</button>
+    <span class="sep"></span>
+    <label>pour <input id="pour" type="range" min="0" max="60000" step="1000" value="26000"><span id="pourv"></span></label>
+    <label>speed <input id="spd" type="range" min="0.1" max="2" step="0.1" value="0.6"></label>
+    <button id="reset">reset $</button>
+    <span class="sep"></span>
+    <button id="view">▣ Underground</button>
+  </div>
+  <div class="note"><b>Goo lives in a cistern under the leveraged asset.</b> <b style="color:#5ac0ff">Water pipe</b> feeds money from the Job through Savings to the house, dissolving the mortgage-goo below it. <b style="color:#8fbe4a">Goo pipe</b> is the sewer: if the cistern overtops (pour &lt; interest), it drains to a Lagoon — or, unplumbed, it <b style="color:#e07a5a">floods the surface</b>.</div>
+</div>
+<script>
+const cv=document.getElementById('c'), g=cv.getContext('2d');
+const pourEl=document.getElementById('pour'), pourv=document.getElementById('pourv'), spdEl=document.getElementById('spd');
+const TW=64,TH=32,OX=470,OY=64,N=11;
+const cx=(c,r)=>OX+(c-r)*TW/2, cy=(c,r)=>OY+(c+r)*TH/2;
+const EDGE={E:[TW/4,TH/4],W:[-TW/4,-TH/4],S:[-TW/4,TH/4],N:[TW/4,-TH/4]};
+const DELTA={E:[1,0],W:[-1,0],S:[0,1],N:[0,-1]};
+const opp=d=>({E:'W',W:'E',N:'S',S:'N'}[d]);
+const inGrid=(c,r)=>c>=0&&r>=0&&c<N&&r<N;
+const key=(c,r)=>c+','+r;
+
+const T=new Map();
+function cell(c,r){const k=key(c,r);if(!T.has(k))T.set(k,{c,r,cW:new Set(),cG:new Set(),kind:null});return T.get(k);}
+function setKind(c,r,kind){if(inGrid(c,r))cell(c,r).kind=kind;}
+function erase(c,r){const t=T.get(key(c,r));if(!t)return;
+  for(const [set,nk] of [[t.cW,'cW'],[t.cG,'cG']])for(const d of set){const nt=T.get(key(c+DELTA[d][0],r+DELTA[d][1]));if(nt)nt[nk].delete(opp(d));}
+  T.delete(key(c,r));}
+function dirBetween(a,b){const dc=b[0]-a[0],dr=b[1]-a[1];for(const d in DELTA)if(DELTA[d][0]===dc&&DELTA[d][1]===dr)return d;}
+function layPath(a,b,net){const set=net==='cG'?'cG':'cW';const path=[];let c=a[0],r=a[1];path.push([c,r]);
+  while(c!==b[0]){c+=Math.sign(b[0]-c);path.push([c,r]);}while(r!==b[1]){r+=Math.sign(b[1]-r);path.push([c,r]);}
+  for(let i=0;i<path.length-1;i++){if(!inGrid(...path[i])||!inGrid(...path[i+1]))continue;
+    const d=dirBetween(path[i],path[i+1]);cell(...path[i])[set].add(d);cell(...path[i+1])[set].add(opp(d));}}
+
+// default scene
+setKind(1,2,'job');setKind(3,2,'savings');setKind(5,4,'mortgage');setKind(8,6,'lagoon');
+layPath([1,2],[3,2],'cW');layPath([3,2],[5,4],'cW');   // supply
+layPath([5,4],[8,6],'cG');                              // sewer overflow
+
+let waterOn=false,gooOn=false,liveW=new Set(),liveG=new Set();
+function reach(start,set){const seen=new Set([key(start.c,start.r)]),q=[start];
+  while(q.length){const t=q.shift();for(const d of t[set]){const nk=key(t.c+DELTA[d][0],t.r+DELTA[d][1]);
+    if(!seen.has(nk)&&T.has(nk)){seen.add(nk);q.push(T.get(nk));}}}return seen;}
+function computeFlow(){waterOn=gooOn=false;liveW=new Set();liveG=new Set();
+  const sav=[...T.values()].find(t=>t.kind==='savings'),ho=[...T.values()].find(t=>t.kind==='mortgage'),la=[...T.values()].find(t=>t.kind==='lagoon');
+  if(sav&&ho){liveW=reach(sav,'cW');waterOn=liveW.has(key(ho.c,ho.r));}
+  if(ho&&la){liveG=reach(ho,'cG');gooOn=liveG.has(key(la.c,la.r));}}
+
+// economics
+const CAP=340000;
+const START={water:20000,goo:300000,lagoon:0,years:0,flood:0,health:1};let S={...START};
+const RW=0.04,RG=0.07,INCOME=60000,EXP=35000;
+document.getElementById('reset').onclick=()=>S={...START};
+let pourFlow=0,waterFlow=0,overflowing=false;
+function step(dt){computeFlow();
+  const P=waterOn?+pourEl.value:0;
+  const pour=Math.min(P*dt,Math.max(0,S.water),S.goo+RG*S.goo*dt);
+  S.water+=(INCOME-EXP)*dt+RW*S.water*dt-pour;if(S.water<0)S.water=0;
+  S.goo+=RG*S.goo*dt-pour;if(S.goo<0)S.goo=0;
+  overflowing=false;
+  if(S.goo>CAP){const ex=S.goo-CAP;
+    if(gooOn){S.goo=CAP;S.lagoon+=ex;overflowing=true;}          // sewer carries it off
+    else{S.flood=Math.min(1,S.flood+dt*0.4);}}                    // no sewer -> surface floods
+  else if(S.flood>0)S.flood=Math.max(0,S.flood-dt*0.3);
+  if(S.flood>0.25)S.health=Math.max(0,S.health-dt*0.12);          // flooding goo eats the asset (permanent)
+  S.years+=dt;pourFlow=pour/dt/40000;waterFlow=(INCOME-EXP)/40000;}
+
+// input
+let tool='waterpipe',hover=null,drag=null,dragNet=null,view='under';
+{const vb=document.getElementById('view');vb.onclick=()=>{view=view==='under'?'surface':'under';vb.textContent=view==='under'?'▣ Underground':'▤ Surface';};}
+document.querySelectorAll('.bar button[data-tool]').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;
+  document.querySelectorAll('.bar button[data-tool]').forEach(x=>x.classList.remove('on','onw','ong'));
+  b.classList.add(tool==='waterpipe'?'onw':tool==='goopipe'?'ong':'on');});
+function pick(ev){const rc=cv.getBoundingClientRect(),sx=(ev.clientX-rc.left)*(980/rc.width),sy=(ev.clientY-rc.top)*(660/rc.height);
+  const a=(sx-OX)/(TW/2),b=(sy-OY)/(TH/2),c=Math.round((a+b)/2),r=Math.round((b-a)/2);return inGrid(c,r)?[c,r]:null;}
+cv.addEventListener('mousemove',e=>hover=pick(e));
+cv.addEventListener('mousedown',e=>{const t=pick(e);if(!t)return;
+  if(tool==='waterpipe'){drag=t;dragNet='cW';}else if(tool==='goopipe'){drag=t;dragNet='cG';}
+  else if(tool==='erase')erase(...t);else setKind(...t,tool);});
+window.addEventListener('mouseup',e=>{if(drag){const t=pick(e);if(t)layPath(drag,t,dragNet);}drag=null;});
+
+// drawing
+function diamond(c,r,fill,stroke,lw){const x=cx(c,r),y=cy(c,r);g.beginPath();
+  g.moveTo(x,y-TH/2);g.lineTo(x+TW/2,y);g.lineTo(x,y+TH/2);g.lineTo(x-TW/2,y);g.closePath();
+  if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=lw||1;g.stroke();}}
+let phase=0;
+function tube(x0,y0,x1,y1,col,flow,live){g.lineCap='round';
+  g.strokeStyle='#2b333e';g.lineWidth=12;line(x0,y0,x1,y1);
+  g.strokeStyle='#0b0d12';g.lineWidth=7;line(x0,y0,x1,y1);
+  g.strokeStyle=live?col:'#48525f';g.lineWidth=5.5;
+  if(live){g.setLineDash([10,9]);g.lineDashOffset=-phase*Math.max(0.25,flow);}line(x0,y0,x1,y1);g.setLineDash([]);}
+function line(x0,y0,x1,y1){g.beginPath();g.moveTo(x0,y0);g.lineTo(x1,y1);g.stroke();}
+function isoBox(c,r,w,h,top,left,right,dy){const x=cx(c,r),y=cy(c,r)-(dy||0),hw=w*TW/2,hh=w*TH/2;
+  g.fillStyle=right;g.beginPath();g.moveTo(x,y+hh);g.lineTo(x+hw,y);g.lineTo(x+hw,y-h);g.lineTo(x,y+hh-h);g.closePath();g.fill();
+  g.fillStyle=left;g.beginPath();g.moveTo(x,y+hh);g.lineTo(x-hw,y);g.lineTo(x-hw,y-h);g.lineTo(x,y+hh-h);g.closePath();g.fill();
+  g.fillStyle=top;g.beginPath();g.moveTo(x,y-hh-h);g.lineTo(x+hw,y-h);g.lineTo(x,y+hh-h);g.lineTo(x-hw,y-h);g.closePath();g.fill();}
+
+// goo cistern UNDER the asset: a cutaway sump sunk into the earth beneath the tile
+function cistern(c,r){const x=cx(c,r),y=cy(c,r),w=48,D=72,ix=x-w/2,iy=y-2;
+  // earth cutaway walls
+  g.fillStyle='#241a11';g.fillRect(ix-4,iy,w+8,D+6);
+  g.fillStyle='#0d0a07';g.fillRect(ix,iy,w,D);
+  // goo fill
+  const frac=Math.min(1.08,S.goo/CAP),lh=Math.min(D-4,frac*(D-6)),ly=iy+D-2-lh;
+  const gr=g.createLinearGradient(0,ly,0,iy+D);gr.addColorStop(0,'#9ccb52');gr.addColorStop(1,'#3f561a');
+  g.fillStyle=gr;g.fillRect(ix,ly,w,lh);
+  g.strokeStyle='rgba(200,230,140,0.5)';g.lineWidth=1.5;
+  g.beginPath();for(let i=0;i<=w;i+=5){const yy=ly+Math.sin(i*0.3+S.years*5)*1.8;i?g.lineTo(ix+i,yy):g.moveTo(ix+i,yy);}g.stroke();
+  // capacity line
+  g.strokeStyle='rgba(224,168,90,0.7)';g.setLineDash([4,3]);g.beginPath();g.moveTo(ix,iy+4);g.lineTo(ix+w,iy+4);g.stroke();g.setLineDash([]);
+  // rim + label
+  g.strokeStyle='#3a2c1c';g.lineWidth=2;g.strokeRect(ix,iy,w,D);
+  g.fillStyle='#9aa7bd';g.font='10px system-ui';g.textAlign='center';g.fillText('MORTGAGE',x,iy+D+13);
+  g.fillStyle='#cbd6b0';g.font='bold 11px system-ui';g.fillText('$'+Math.round(S.goo/1000)+'k',x,iy+D+25);}
+function house(c,r,hp){
+  const dy=30, wh=Math.max(6,Math.round(24*(0.45+0.55*hp))), s=0.4+0.6*hp; // sinks & darkens as it dies
+  isoBox(c,r,0.56,wh,shade('#efe0c2',s),shade('#d4c09a',s),shade('#b9a67f',s),dy);
+  const x=cx(c,r),y=cy(c,r)-dy-wh,hw=0.56*TW/2,hh=0.56*TH/2,peak=6+16*hp;
+  g.fillStyle=shade('#b5533c',s);g.beginPath();g.moveTo(x-hw,y-hh);g.lineTo(x,y-hh-peak);g.lineTo(x,y+hh-peak);g.lineTo(x-hw,y+hh);g.closePath();g.fill();
+  g.fillStyle=shade('#963f2c',s);g.beginPath();g.moveTo(x+hw,y-hh);g.lineTo(x,y-hh-peak);g.lineTo(x,y+hh-peak);g.lineTo(x+hw,y+hh);g.closePath();g.fill();
+  if(hp<0.8){ g.strokeStyle='rgba(20,10,5,0.55)';g.lineWidth=1.5; const by=cy(c,r)-dy-wh*0.5;
+    g.beginPath();g.moveTo(x-hw*0.4,cy(c,r)-dy);g.lineTo(x-hw*0.4+4,by);g.lineTo(x-hw*0.4-3,by-wh*0.3);g.stroke();
+    if(hp<0.5){g.beginPath();g.moveTo(x+hw*0.4,cy(c,r)-dy);g.lineTo(x+hw*0.35,by);g.lineTo(x+hw*0.5,by-wh*0.3);g.stroke();} }
+  g.strokeStyle=shade('#8a7a5a',s);g.lineWidth=3; // stilts over the sump
+  g.beginPath();g.moveTo(x-hw+4,cy(c,r)-2);g.lineTo(x-hw+4,cy(c,r)-dy);g.moveTo(x+hw-4,cy(c,r)-2);g.lineTo(x+hw-4,cy(c,r)-dy);g.stroke();}
+function rubble(c,r){const x=cx(c,r),y=cy(c,r)-6;
+  g.fillStyle='#4a4230';g.beginPath();g.moveTo(x-22,y+6);g.lineTo(x-6,y-8);g.lineTo(x+6,y-4);g.lineTo(x+20,y+8);g.lineTo(x,y+16);g.closePath();g.fill();
+  g.fillStyle='#6f9a34';g.globalAlpha=0.6;g.beginPath();g.ellipse(x,y+10,20,7,0,0,7);g.fill();g.globalAlpha=1;
+  g.fillStyle='#e07a5a';g.font='bold 11px system-ui';g.textAlign='center';g.fillText('FORECLOSED',x,y-14);}
+function cyl(c,r,frac,top,bot,label,val){const x=cx(c,r),y=cy(c,r),rw=20,rh=8,H=42,ty=y-H;
+  g.fillStyle='rgba(255,255,255,0.05)';g.fillRect(x-rw,ty,rw*2,H);
+  const lh=Math.max(0,Math.min(1,frac))*(H-4),ly=y-2-lh;g.save();g.beginPath();g.rect(x-rw,ty,rw*2,H);g.clip();
+  const gr=g.createLinearGradient(0,ly,0,y);gr.addColorStop(0,top);gr.addColorStop(1,bot);g.fillStyle=gr;g.fillRect(x-rw,ly,rw*2,lh+4);
+  g.fillStyle='rgba(255,255,255,0.22)';g.beginPath();g.ellipse(x,ly,rw,rh,0,0,7);g.fill();g.restore();
+  g.strokeStyle='#4a5769';g.lineWidth=2;g.beginPath();g.moveTo(x-rw,ty);g.lineTo(x-rw,y);g.moveTo(x+rw,ty);g.lineTo(x+rw,y);g.stroke();
+  g.beginPath();g.ellipse(x,y,rw,rh,0,0,Math.PI);g.stroke();g.beginPath();g.ellipse(x,ty,rw,rh,0,0,7);g.stroke();
+  g.fillStyle='#9aa7bd';g.font='11px system-ui';g.textAlign='center';g.fillText(label,x,ty-7);
+  g.fillStyle='#e8eef7';g.font='bold 12px system-ui';g.fillText('$'+Math.round(val/1000)+'k',x,y+15);}
+function job(c,r){isoBox(c,r,0.5,18,'#4a5563','#3a434f','#2c343e');g.fillStyle='#9aa7bd';g.font='11px system-ui';g.textAlign='center';g.fillText('JOB',cx(c,r),cy(c,r)-28);}
+function lagoon(c,r){const x=cx(c,r),y=cy(c,r);g.fillStyle='#2a3417';g.beginPath();
+  g.moveTo(x,y-TH/2);g.lineTo(x+TW/2,y);g.lineTo(x,y+TH/2);g.lineTo(x-TW/2,y);g.closePath();g.fill();
+  const f=Math.min(1,S.lagoon/400000);g.fillStyle='#6f9a34';g.globalAlpha=0.4+0.5*f;g.beginPath();
+  g.moveTo(x,y-TH/2+3);g.lineTo(x+TW/2-4,y);g.lineTo(x,y+TH/2-3);g.lineTo(x-TW/2+4,y);g.closePath();g.fill();g.globalAlpha=1;
+  g.fillStyle='#9aa7bd';g.font='10px system-ui';g.textAlign='center';g.fillText('LAGOON $'+Math.round(S.lagoon/1000)+'k',x,y-TH/2-4);}
+
+let last=0;
+function frame(t){const dtR=Math.min(0.05,(t-last)/1000||0);last=t;step(dtR*(+spdEl.value));phase+=dtR*55;
+  pourv.textContent='$'+(+pourEl.value/1000)+'k';g.clearRect(0,0,980,660);
+  for(let s=0;s<2*N;s++)for(let c=0;c<N;c++){const r=s-c;if(r<0||r>=N)continue;
+    const up=1-(c-r)/(2*N),base=(c+r)%2?'#6f8f4a':'#668544';diamond(c,r,shade(base,0.72+0.5*up),'rgba(0,0,0,0.16)');}
+  if(hover)diamond(hover[0],hover[1],'rgba(255,255,255,0.10)','rgba(255,255,255,0.5)',1.5);
+  const tiles=[...T.values()].sort((a,b)=>(a.c+a.r)-(b.c+b.r));
+  const underG=(view==='under');
+  if(underG){g.fillStyle='rgba(8,6,16,0.42)';g.fillRect(0,0,980,660);}      // subterranean gloom
+  // cisterns are only visible from below
+  if(underG)for(const t of tiles)if(t.kind==='mortgage')cistern(t.c,t.r);
+  // networks: full underground, ghosted on the surface
+  g.globalAlpha=underG?1:0.12;
+  for(const t of tiles){if(t.cW.size===0)continue;const x=cx(t.c,t.r),y=cy(t.c,t.r),live=liveW.has(key(t.c,t.r))&&waterOn;
+    for(const d of t.cW){const e=EDGE[d];tube(x,y,x+e[0],y+e[1],'#46b0ff',waterFlow,live);}g.fillStyle='#2b333e';g.beginPath();g.arc(x,y,5.5,0,7);g.fill();}
+  for(const t of tiles){if(t.cG.size===0)continue;const x=cx(t.c,t.r),y=cy(t.c,t.r)+6,live=liveG.has(key(t.c,t.r))&&gooOn&&overflowing;
+    for(const d of t.cG){const e=EDGE[d];tube(x,y,x+e[0],y+e[1],'#8fbe4a',pourFlow+0.4,live);}g.fillStyle='#2b333e';g.beginPath();g.arc(x,y,5.5,0,7);g.fill();}
+  g.globalAlpha=1;
+  // surface objects: full on the surface, ghosted underground
+  g.globalAlpha=underG?0.32:1;
+  for(const t of tiles){const {c,r,kind}=t;if(!kind)continue;
+    if(kind==='job')job(c,r);
+    if(kind==='savings')cyl(c,r,S.water/60000,'#5ac0ff','#1f6fd0','SAVINGS',S.water);
+    if(kind==='lagoon')lagoon(c,r);
+    if(kind==='mortgage'){ if(S.flood>0){g.fillStyle=`rgba(120,150,50,${0.5*S.flood})`;const x=cx(c,r),y=cy(c,r);
+        g.beginPath();g.moveTo(x,y-TH/2);g.lineTo(x+TW/2,y);g.lineTo(x,y+TH/2);g.lineTo(x-TW/2,y);g.closePath();g.fill();}
+      if(S.health>0)house(c,r,S.health);else rubble(c,r); } }
+  g.globalAlpha=1;
+  // hud
+  g.textAlign='left';g.font='13px system-ui';g.fillStyle='#9aa7bd';g.fillText('year '+S.years.toFixed(1),24,26);
+  if(!waterOn)g.fillStyle='#e0a85a',g.fillText('⚠ water not piped to the house — mortgage compounding untouched',24,46);
+  else{const interest=RG*S.goo;g.fillStyle=S.flood>0.02?'#e07a5a':(+pourEl.value)<interest?'#e0a85a':'#7fbf46';
+    g.fillText(S.flood>0.02?'⚠ cistern overflowing — no sewer! goo flooding the lot':
+      (+pourEl.value)<interest?'pour < interest → cistern filling toward overflow':'pour > interest → mortgage draining',24,46);}
+  if(S.goo<=0){g.fillStyle='#7fbf46';g.font='bold 15px system-ui';g.fillText('MORTGAGE PAID OFF',24,68);}
+  requestAnimationFrame(frame);}
+function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,gr=(n>>8)&255,b=n&255;
+  return `rgb(${Math.min(255,r*f)|0},${Math.min(255,gr*f)|0},${Math.min(255,b*f)|0})`;}
+requestAnimationFrame(frame);
+</script>

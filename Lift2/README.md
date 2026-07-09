@@ -182,3 +182,26 @@ You watch water flow downhill from job-springs, pool in tanks, and get poured in
 goo to dissolve it; you build and toggle the plumbing. The surface reads as a life;
 the underground reads as its cash flow. Nailing that split — legible plumbing that's
 also nice to look at — is the open problem, not the sim.
+
+### Prototype: `proto/iso-edit.html`
+
+A self-contained canvas prototype (open in a browser) that proves the rendering
+paradigm is reachable. Not coherent yet — a vertical slice, not a design:
+
+- **Isometric tile grid** with **segment-by-segment pipes** (each tube is tile-center
+  → shared-edge, so straights / elbows / tees / crosses emerge from the connections).
+- **Editable:** tool palette to drop Job / Savings / House+Mortgage / Lagoon on tiles
+  and click-drag two independent networks — a **water supply** (blue) and a **goo
+  sewer** (green).
+- **Goo lives in a cistern under the leveraged asset.** Water piped to the house
+  dissolves it; connectivity-gated (`dB/dt = rB − pour` runs only when actually
+  plumbed).
+- **Overflow destroys the asset.** Pour below the interest with no sewer → the
+  cistern overtops, floods the lot, and the goo eats the house (cracks → sinks →
+  `FORECLOSED`). Plumb the sewer to the Lagoon and the excess drains off safely.
+- **Surface / Underground view toggle** — the tidy neighborhood vs. the plumbing
+  truth beneath it.
+
+Known-incoherent: single hardcoded mortgage loop (not per-instrument economics),
+plain geometric building art (the sprite-polish ceiling), global flow-direction
+animation. All incremental; none are walls.
