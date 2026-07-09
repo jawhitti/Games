@@ -41,3 +41,25 @@ npm run dev   # open the printed URL
 Click a branch tip to select it. Make ONE change — prune, pinch, or wire —
 then advance the day (the real game gates this on the wall clock; here it's a
 button). `▶ timelapse` replays the whole life; `● record` saves it as `.webm`.
+
+## Tuning history (hard-won — read before touching the growth model)
+
+The organic growth was fiddly. Fixes that landed during development:
+- **Runaway growth** → *saturating couplings*: bound the feedback between segments
+  so growth can't explode exponentially.
+- **Witch's-broom (tips exploding into dense clusters)** → *apex guard*:
+  `if (seg.isTip) continue` — a tip must not recursively spawn children.
+- **Performance** → a *binned suppression field* (spatial grid) instead of
+  all-pairs segment interactions.
+- Tuned toward: much more branching / bushier, ~10× tips, branches biased to grow
+  **upward** more aggressively, branch **thickness increasing more slowly**, and
+  wire/prune effects applied **instantly** (the player must see the result the
+  same day, not weeks later).
+
+## Known issue (open)
+
+**Growth stalls** — "at some point the tree stops growing at all." This recurred
+during development and was never fully resolved. Start any revisit by auditing the
+growth / termination condition — most likely a saturation or suppression-field
+threshold that clamps everything to zero once the canopy fills in.
+
