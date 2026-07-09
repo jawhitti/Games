@@ -1,0 +1,16 @@
+{
+  "name": "bonsai",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Bonsai: one deliberate cut per real day; a tree that grows for months",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

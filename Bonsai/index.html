@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Bonsai</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #efe9dd; overflow: hidden; font: 13px/1.5 system-ui, sans-serif; }
+      canvas { display: block; }
+      #ui {
+        position: fixed; left: 14px; top: 12px; color: #3a3228;
+        background: rgba(239,233,221,0.82); padding: 10px 12px; border-radius: 8px;
+        max-width: 260px; user-select: none;
+      }
+      #ui h1 { font-size: 15px; margin: 0 0 6px; letter-spacing: 0.06em; }
+      #ui .row { margin: 4px 0; }
+      #ui button {
+        font: inherit; border: 1px solid #b7ad97; background: #f6f1e6; color: #3a3228;
+        border-radius: 6px; padding: 3px 8px; cursor: pointer; margin: 2px 2px 2px 0;
+      }
+      #ui button:hover { background: #ece4d2; }
+      #ui .hint { color: #6b6152; font-size: 12px; }
+      #ui .big { font-size: 20px; font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div id="ui">
+      <h1>BONSAI</h1>
+      <div class="row big" id="clock">day 0 · spring</div>
+      <div class="row hint" id="mode">click a branch tip to select</div>
+      <div class="row">
+        <button id="prune">prune</button>
+        <button id="pinch">pinch</button>
+        <button id="wireL">wire ↰</button>
+        <button id="wireR">wire ↱</button>
+      </div>
+      <div class="row hint">one change, then:</div>
+      <div class="row">
+        <button id="next">next day →</button>
+        <button id="skip">+30 days</button>
+      </div>
+      <div class="row">
+        <button id="timelapse">▶ timelapse</button>
+        <button id="record">● record .webm</button>
+      </div>
+      <div class="row hint" id="status"></div>
+    </div>
+    <script type="module" src="/src/render/main.js"></script>
+  </body>
+</html>
