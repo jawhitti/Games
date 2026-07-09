@@ -6,20 +6,22 @@
 
 import {
   varTerm, constTerm, groupTerm, createSession, crossEquals, gather, addBoth, addTermBoth, negateBoth, appendTerm,
-  wrapBoth, distributeAll, combineAll, simplifyAll, needsSettle, hasGroup, hasNaN, isSolvedLeft, areLike, getTerm,
+  wrapBoth, distributeAll, combineAll, simplifyAll, needsSettle, hasGroup, hasNaN, isSolved, areLike, getTerm,
+  negateTermById, invertTermById,
 } from './engine.js';
 
 const IN_STRIP = (y) => y >= -158 && y <= -100; // the editor strip's y-band
 
-const TARGET = 'x'; // the goal: isolate x, alone, on the LEFT
+const TARGET = 'x'; // the goal: isolate x, alone, on EITHER side (x = 5 or 5 = x)
 import * as R from './rational.js';
 
-// starting equation: 2x + 1 = 5  →  solves to x = 2
-// (cross the +1 → 2x = 4, then ÷2 → x = 2)
+// starting equation: 2x + 7 = 3x + 2  →  solves to x = 5
+// (x now lives on BOTH sides: cross the 3x → −x + 7 = 2, cross the 7 →
+//  −x = −5, then ×(−1) → x = 5)
 function startEquation() {
   return {
-    left: [varTerm('x1', 'x', R.rat(2)), constTerm('c1', R.rat(1))],
-    right: [constTerm('c2', R.rat(5))],
+    left: [varTerm('x1', 'x', R.rat(2)), constTerm('c1', R.rat(7))],
+    right: [varTerm('x2', 'x', R.rat(3)), constTerm('c2', R.rat(2))],
   };
 }
 
@@ -46,6 +48,16 @@ function el(tag, attrs = {}, ...kids) {
   return e;
 }
 function text(s, attrs = {}) { const t = el('text', attrs); t.textContent = s; return t; }
+
+// a small white corner dot encoding a value's sign & inverse:
+//   right/left = positive/negative,  up/down = normal/reciprocal
+function drawDot(inner, size, neg, inv) {
+  const off = size * 0.34;
+  inner.appendChild(el('circle', {
+    cx: neg ? -off : off, cy: inv ? off : -off, r: size * 0.088,
+    fill: '#fff', stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 1, 'pointer-events': 'none',
+  }));
+}
 
 // every cube is bright — no gray, no black. color still encodes type, and
 // each operator gets its own hue so the eye learns them.
@@ -91,52 +103,62 @@ function cubeColor(tok) {
 // and operators (+ − × / ( ) =). Nothing is evaluated — a rational like 3/2
 // is the three cubes [3][/][2]; multiplication is an [×] cube.
 
-// one cube per digit — a multi-digit integer is several adjacent digit cubes
-function emitDigits(intVal, out, meta) {
+// Dots encode sign and inverse, so there are no − or / cubes in the equation:
+//   neg  → dot moves LEFT   (positive = right)
+//   inv  → dot moves DOWN   (normal   = up)   [denominator / reciprocal]
+// one cube per digit; the whole number carries the flags on every digit.
+//
+// ADJACENCY MULTIPLIES — unless the neighbours are two SAME-ORIENTATION digits,
+// which concatenate. So:
+//   [2][x]        implicit × (2x)          — value touching a variable
+//   n(…), )(…)    implicit ×               — value touching a paren
+//   [2][5]        concatenate → 25         — both upright: positional numeral
+//   [2⁻¹][5⁻¹]    concatenate → 1/25       — both inverted: denominator numeral
+//   [2][2⁻¹]      multiply → 2 × ½ = 1     — DIFFERENT orientation ⇒ multiply
+// An inverted digit is a reciprocal, so [3][2⁻¹] = 3 × ½ = 3/2 IS the fraction —
+// numerator-run × (1/denominator-run). The only surviving × cube sits between
+// two bare same-orientation numbers (2×3), so they can't be misread as 23.
+function emitDigits(intVal, out, meta, neg = false, inv = false) {
   const s = String(intVal < 0n ? -intVal : intVal);
-  for (const ch of s) out.push({ k: 'num', t: ch, ...meta });
+  for (const ch of s) out.push({ k: 'num', t: ch, neg, inv, ...meta, atomRole: 'num' });
 }
-// a magnitude (abs rational) as digit cubes, with a [/] between for fractions
-function emitNumber(mag, out, meta) {
-  emitDigits(mag.n, out, meta);
-  if (mag.d !== 1n) {
-    out.push({ k: 'op', t: '/', ...meta });
-    emitDigits(mag.d, out, meta);
-  }
+// a magnitude (abs rational): numerator digits, then denominator digits marked
+// inverse (a lower dot) — no [/] cube
+function emitNumber(mag, out, meta, neg = false) {
+  emitDigits(mag.n, out, meta, neg, false);
+  if (mag.d !== 1n) emitDigits(mag.d, out, meta, false, true);
 }
 
 // one term's cubes (sign is handled by the caller as glue). meta.term is the
 // TOP-level draggable term id, so every sub-cube drags the whole term.
 function emitTerm(term, out, meta) {
+  const neg = R.isNeg(term.coeff);
   const mag = R.abs(term.coeff);
   if (term.kind === 'const') {
-    emitNumber(mag, out, meta);
+    emitNumber(mag, out, meta, neg);
   } else if (term.kind === 'var') {
     if (R.isOne(mag)) {
-      out.push({ k: 'var', t: term.varName, ...meta });
-    } else if (mag.d === 1n) {
-      emitNumber(mag, out, meta);
-      out.push({ k: 'op', t: '×', ...meta });
-      out.push({ k: 'var', t: term.varName, ...meta });
+      // bare ±x: the sign rides on the variable cube's dot
+      out.push({ k: 'var', t: term.varName, neg, inv: false, ...meta, atomRole: 'var' });
     } else {
-      // fraction coefficient on a variable renders parenthesized: (5/2 × y)
-      out.push({ k: 'op', t: '(', ...meta });
-      emitNumber(mag, out, meta);
-      out.push({ k: 'op', t: '×', ...meta });
-      out.push({ k: 'var', t: term.varName, ...meta });
-      out.push({ k: 'op', t: ')', ...meta });
+      emitNumber(mag, out, meta, neg); // coefficient carries the sign
+      // no × cube: a value touching a variable multiplies by adjacency (2x).
+      // Only value×value keeps an explicit ×, so 2 and 3 don't read as 23.
+      out.push({ k: 'var', t: term.varName, neg: false, inv: false, ...meta, atomRole: 'var' });
     }
   } else if (term.kind === 'group') {
     const c = mag; // group coeff magnitude
-    if (c.n !== 1n && c.d === 1n) { emitNumber(c, out, meta); out.push({ k: 'op', t: '×', ...meta }); }
-    else if (c.n !== 1n) { emitNumber(c, out, meta); out.push({ k: 'op', t: '×', ...meta }); }
-    out.push({ k: 'op', t: '(', ...meta });
+    // a value touching a paren multiplies by adjacency: n(…), no × cube
+    if (c.n !== 1n) emitDigits(c.n, out, meta, neg, false);
+    out.push({ k: 'op', t: '(', ...meta, atomRole: 'op' });
     term.terms.forEach((ch, i) => {
-      if (i > 0 || R.isNeg(ch.coeff)) out.push({ k: 'op', t: R.isNeg(ch.coeff) ? '−' : '+', ...meta });
+      if (i > 0) out.push({ k: 'op', t: '+', ...meta, atomRole: 'op' }); // + connector; sign is on the dot
       emitTerm(ch, out, meta);
     });
-    out.push({ k: 'op', t: ')', ...meta });
-    if (c.d !== 1n) { out.push({ k: 'op', t: '/', ...meta }); out.push({ k: 'num', t: String(c.d), ...meta }); }
+    out.push({ k: 'op', t: ')', ...meta, atomRole: 'op' });
+    // )[d⁻¹] — the reciprocal denominator multiplies the group by adjacency
+    // (a paren touching a value), so no × cube here either
+    if (c.d !== 1n) emitDigits(c.d, out, meta, false, true);
   }
 }
 
@@ -161,28 +183,32 @@ function splitSign(e) {
   return { neg: R.isNeg(evalExpr(e)), mag: e };
 }
 const isFrac = (e) => e.t === 'bin' && e.op === '/';
-function emitExpr(e, out, meta) {
-  if (e.t === 'int') { emitDigits(e.v, out, meta); return; }
-  emitExpr(e.a, out, meta);
-  out.push({ k: 'op', t: e.op === '*' ? '×' : e.op, ...meta });
+// render a lexical expr with dots: `neg` applies to the numerator; a / makes
+// the denominator digits inverse (no − or / cubes)
+function emitExpr(e, out, meta, neg = false) {
+  if (e.t === 'int') { emitDigits(e.v, out, meta, neg || e.v < 0n, false); return; }
+  // multiplying by 1 is identity: 1×k (or k×1) is just k, so 1·x renders as x
+  if (e.op === '*') {
+    if (e.a.t === 'int' && e.a.v === 1n) { emitExpr(e.b, out, meta, neg); return; }
+    if (e.b.t === 'int' && e.b.v === 1n) { emitExpr(e.a, out, meta, neg); return; }
+  }
+  if (e.op === '/' && e.a.t === 'int' && e.b.t === 'int') {
+    emitDigits(e.a.v, out, meta, neg || e.a.v < 0n, false);
+    emitDigits(e.b.v, out, meta, false, true);
+    return;
+  }
+  emitExpr(e.a, out, meta, neg);
+  out.push({ k: 'op', t: e.op === '*' ? '×' : e.op, ...meta, atomRole: 'op' });
   emitExpr(e.b, out, meta);
 }
 // a term carrying a transient lexical `display` expression
 function emitTermDisplay(term, out, meta) {
-  const { mag } = splitSign(term.display);
-  if (term.kind === 'const') { emitExpr(mag, out, meta); return; }
-  if (mag.t === 'int' && mag.v === 1n) { out.push({ k: 'var', t: term.varName, ...meta }); return; }
-  if (isFrac(mag)) {
-    out.push({ k: 'op', t: '(', ...meta });
-    emitExpr(mag, out, meta);
-    out.push({ k: 'op', t: '×', ...meta });
-    out.push({ k: 'var', t: term.varName, ...meta });
-    out.push({ k: 'op', t: ')', ...meta });
-  } else {
-    emitExpr(mag, out, meta);
-    out.push({ k: 'op', t: '×', ...meta });
-    out.push({ k: 'var', t: term.varName, ...meta });
-  }
+  const { neg, mag } = splitSign(term.display);
+  if (term.kind === 'const') { emitExpr(mag, out, meta, neg); return; }
+  if (mag.t === 'int' && mag.v === 1n) { out.push({ k: 'var', t: term.varName, neg, inv: false, ...meta, atomRole: 'var' }); return; }
+  emitExpr(mag, out, meta, neg); // may keep a value×value × internally (2×3)
+  // no × between the coefficient and the variable — adjacency multiplies
+  out.push({ k: 'var', t: term.varName, neg: false, inv: false, ...meta, atomRole: 'var' });
 }
 
 function tokens(eq) {
@@ -190,8 +216,9 @@ function tokens(eq) {
   const side = (arr, name) =>
     arr.forEach((term, i) => {
       if (term.kind === 'nan') { out.push({ k: 'nan', term: term.id, side: name }); return; }
-      const neg = term.display ? splitSign(term.display).neg : R.isNeg(term.coeff);
-      if (i > 0 || neg) out.push({ k: 'op', t: neg ? '−' : '+', term: term.id, side: name, role: 'sign' });
+      // + connector between terms only; a term's SIGN is shown by its dot,
+      // never by a − cube (subtracting = adding a left-dotted term)
+      if (i > 0) out.push({ k: 'op', t: '+', term: term.id, side: name, role: 'glue', atomRole: 'op' });
       if (term.display) emitTermDisplay(term, out, { term: term.id, side: name });
       else emitTerm(term, out, { term: term.id, side: name });
     });
@@ -222,7 +249,7 @@ function distributeUneval(eq) {
 
 // ---- audio ----
 let actx = null;
-const PITCH = { cross: 587, gather: 659, undo: 330, deny: 150, solved: 784, distribute: 698, simplify: 880, negate: 494 };
+const PITCH = { cross: 587, gather: 659, undo: 330, deny: 150, solved: 784, distribute: 698, simplify: 880, negate: 494, invert: 740 };
 function chime(kind) {
   try {
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
@@ -241,6 +268,40 @@ let terms = new Map(); // termId -> { cubes:[{g,ox}], cx, side }
 let equalsX = 0;
 let selectedEquation = false; // selected via clicking the = cube
 let animating = false; // true during the show-expanded → simplify beat
+
+// what's selected in the equation. role 'term' = the whole expression (you
+// clicked an operator); 'num'/'var' = just that atom (you clicked a value or a
+// variable). The flip buttons and a drag both act on this.
+let selection = null; // { termId, role }
+let selBoxEl = null;  // the drawn selection box, so a drag can carry it along
+let selectedToks = []; // the exact cubes inside the selection (the grab unit)
+let selDrag = null;   // dragging a COPY of the selection out into the editor
+// Which cubes fall inside the current selection. An operator owns the WHOLE
+// sub-expression it governs, never a stranded fragment:
+//   • a top-level glue +  → the entire side (a·b + c, tap + → all of it)
+//   • an in-term × / ( )  → just that term (the sub-tree it binds)
+//   • an atom (value/var) → only itself
+function inSelection(tok) {
+  if (!selection || tok.term == null) return false;
+  if (selection.kind === 'side') return tok.side === selection.side;
+  if (selection.kind === 'term') return tok.term === selection.termId;
+  return tok.term === selection.termId && tok.atomRole === selection.role; // atom
+}
+function selectionFor(tok) {
+  if (tok.role === 'glue') return { kind: 'side', side: tok.side };      // top-level + connective
+  if (tok.atomRole === 'op') return { kind: 'term', termId: tok.term };  // ×, ( ), group structure
+  return { kind: 'atom', termId: tok.term, role: tok.atomRole };         // a value or a variable
+}
+function sameSelection(a, b) {
+  return a.kind === b.kind && a.side === b.side && a.termId === b.termId && a.role === b.role;
+}
+function setSelection(tok) {
+  if (!tok.term || tok.k === 'eq' || tok.k === 'nan') { clearSelection(); return; }
+  const next = selectionFor(tok);
+  selection = (selection && sameSelection(selection, next)) ? null : next; // tap again = clear
+  render();
+}
+function clearSelection() { if (selection) { selection = null; render(); } }
 
 function render(flourish = false) { renderEq(session.current(), flourish); }
 
@@ -272,8 +333,25 @@ function renderEq(eq, flourish = false) {
   for (const info of terms.values()) {
     info.cx = info.cubes.reduce((a, c) => a + c.ox, 0) / info.cubes.length;
   }
+  // selection box: a gold frame around the selected atom / expression
+  selBoxEl = null; selectedToks = [];
+  if (selection) {
+    const sel = toks.filter(inSelection);
+    if (sel.length) {
+      selectedToks = sel; // the exact cubes to copy when the selection is dragged
+      const xs = sel.map((t) => t.cx - total / 2);
+      const minX = Math.min(...xs) - CUBE / 2, maxX = Math.max(...xs) + CUBE / 2;
+      selBoxEl = el('rect', {
+        x: minX - 8, y: -CUBE / 2 - 8, width: (maxX - minX) + 16, height: CUBE + 16, rx: 14,
+        fill: 'rgba(224,180,75,0.16)', stroke: '#e0b020', 'stroke-width': 3, 'pointer-events': 'none',
+      });
+      layer.insertBefore(selBoxEl, layer.firstChild); // behind the cubes
+    } else {
+      selection = null; // the selected term is gone (combined/crossed away)
+    }
+  }
   if (flourish) flourishIn(cubeEls);
-  if (isSolvedLeft(session.current(), TARGET)) {
+  if (isSolved(session.current(), TARGET)) {
     layer.appendChild(text('🎉', { x: 0, y: -56, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 34 }));
   }
   renderHistory();
@@ -336,14 +414,25 @@ function makeCube(tok, cx) {
     x: -CUBE / 2, y: -CUBE / 2, width: CUBE, height: CUBE, rx: 11,
     fill: c.fill, stroke: selRing ? '#e0b020' : 'rgba(0,0,0,0.25)', 'stroke-width': selRing ? 4 : 2,
   }));
-  inner.appendChild(text(displayGlyph(tok), {
+  const glyph = text(displayGlyph(tok), {
     x: 0, y: 1, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 32, 'font-weight': 700,
     fill: c.ink, 'font-family': 'system-ui', 'pointer-events': 'none',
-  }));
+  });
+  if (tok.neg || tok.inv) glyph.setAttribute('transform', `scale(${tok.neg ? -1 : 1},${tok.inv ? -1 : 1})`);
+  inner.appendChild(glyph);
+  if (tok.k === 'num' || tok.k === 'var') drawDot(inner, CUBE, tok.neg, tok.inv);
   g.appendChild(inner);
   if (tok.term) {
     g.style.cursor = 'grab';
-    g.addEventListener('pointerdown', (e) => startDrag(e, tok.term));
+    g.addEventListener('pointerdown', (e) => {
+      // if this cube is part of the current selection, dragging pulls a COPY of
+      // the whole selection out toward the editor; otherwise tap-select / move
+      if (selection && inSelection(tok)) startSelectionDrag(e);
+      else startDrag(e, tok);
+    });
+  } else if (tok.k === 'eq') {
+    g.style.cursor = 'pointer';
+    g.addEventListener('pointerdown', (e) => { e.stopPropagation(); clearSelection(); });
   }
   return g;
 }
@@ -355,11 +444,14 @@ function svgPt(evt) {
   p.x = evt.clientX; p.y = evt.clientY;
   return p.matrixTransform(stage.getScreenCTM().inverse());
 }
-function startDrag(evt, termId) {
+function startDrag(evt, tok) {
   if (animating) return;
+  const termId = tok.term;
   const info = terms.get(termId);
   if (!info) return;
-  drag = { termId, side: info.side, cubes: info.cubes, start: svgPt(evt), dx: 0, dy: 0 };
+  // carry the selection box along only if it frames the term being dragged
+  const box = (selection && selection.termId === termId) ? selBoxEl : null;
+  drag = { termId, tok, side: info.side, cubes: info.cubes, box, start: svgPt(evt), dx: 0, dy: 0 };
   for (const c of info.cubes) { c.g.style.transition = 'none'; c.g.style.cursor = 'grabbing'; c.g.style.opacity = '0.9'; }
   stage.setPointerCapture(evt.pointerId);
 }
@@ -374,6 +466,11 @@ stage.addEventListener('pointermove', (evt) => {
     copyDrag.ghost.setAttribute('transform', `translate(${p.x},${p.y})`);
     return;
   }
+  if (selDrag) {
+    const p = svgPt(evt);
+    selDrag.ghost.setAttribute('transform', `translate(${p.x},${p.y})`);
+    return;
+  }
   if (stageItemDrag) {
     const p = svgPt(evt);
     const c = stageItemDrag.cube;
@@ -384,6 +481,7 @@ stage.addEventListener('pointermove', (evt) => {
   const p = svgPt(evt);
   drag.dx = p.x - drag.start.x; drag.dy = p.y - drag.start.y;
   for (const c of drag.cubes) c.g.setAttribute('transform', `translate(${c.ox + drag.dx},${drag.dy})`);
+  if (drag.box) drag.box.setAttribute('transform', `translate(${drag.dx},${drag.dy})`);
 });
 stage.addEventListener('pointerup', (evt) => {
   if (palDrag) {
@@ -392,18 +490,30 @@ stage.addEventListener('pointerup', (evt) => {
     const dist = Math.hypot(p.x - pd.start.x, p.y - pd.start.y);
     // a grabbed cube goes into the editor (tap, or drop anywhere above the
     // equation); build an operation there, then drag THAT onto the equation
-    if (p.y < -90 || dist < 8) { staging.push(pd.token); renderStaging(); chime('gather'); }
+    if (p.y < -90 || dist < 8) { clearSelection(); stagingSel = null; staging.push(pd.token); renderStaging(); chime('gather'); }
     return;
   }
   if (copyDrag) {
     const p = svgPt(evt);
     const cd = copyDrag; copyDrag = null; cd.ghost.remove();
-    if (IN_STRIP(p.y)) { staging.push({ ...cd.tok }); renderStaging(); chime('gather'); } // dropped in the editor
+    if (IN_STRIP(p.y)) { clearSelection(); stagingSel = null; staging.push({ ...cd.tok }); renderStaging(); chime('gather'); } // dropped in the editor
+    return;
+  }
+  if (selDrag) {
+    const p = svgPt(evt);
+    const sd = selDrag; selDrag = null; sd.ghost.remove();
+    const dist = Math.hypot(p.x - sd.start.x, p.y - sd.start.y);
+    if (dist < 6) { clearSelection(); return; } // tapped the selection again → deselect
+    if (IN_STRIP(p.y)) { stagingSel = null; for (const tk of sd.toks) staging.push({ ...tk }); renderStaging(); chime('gather'); }
     return;
   }
   if (stageItemDrag) {
     const p = svgPt(evt);
     const sd = stageItemDrag; stageItemDrag = null;
+    // a tap (no real movement) SELECTS in the editor — same tree rules as the
+    // equation: a top-level + grabs the whole expression, an atom just itself
+    if (Math.hypot(p.x - sd.start.x, p.y - sd.start.y) < 6) { setStagingSelection(sd.i); return; }
+    stagingSel = null; // any real edit invalidates the index-based selection
     if (p.y > -90) { applyStagingOp(); return; } // pull down onto equation → apply to BOTH sides
     const inStrip = p.x >= -412 && p.x <= 412 && p.y >= -162 && p.y <= -100;
     if (!inStrip) { staging.splice(sd.i, 1); renderStaging(); chime('deny'); return; } // dragged off into space → delete
@@ -427,11 +537,19 @@ stage.addEventListener('pointerup', (evt) => {
         const toks = [];
         emitTerm(term, toks, {});
         for (const tk of toks) if (['num', 'var', 'op'].includes(tk.k)) staging.push({ k: tk.k, t: tk.t });
-        renderStaging(); chime('gather');
+        clearSelection(); renderStaging(); chime('gather');
       }
       snapBack(d0);
       return;
     }
+  }
+  // a tap (no real movement) SELECTS rather than moves: an atom cube selects
+  // just that value/variable, an operator cube selects the whole expression
+  if (Math.hypot(drag.dx, drag.dy) < 6) {
+    const d = drag; drag = null;
+    snapBack(d);
+    setSelection(d.tok);
+    return;
   }
   const eq = session.current();
   const info = terms.get(drag.termId);
@@ -455,7 +573,7 @@ stage.addEventListener('pointerup', (evt) => {
 });
 
 function solvedChime() {
-  if (isSolvedLeft(session.current(), TARGET)) chime('solved');
+  if (isSolved(session.current(), TARGET)) chime('solved');
 }
 
 // Runs after EVERY manipulation: the board tidies itself — combine all like
@@ -479,13 +597,17 @@ function settle() {
 // thing down onto a side of the equation ----
 const TRAY_CUBE = 44;
 // palette pool — a lively, ever-changing set of grabbable cubes. NEVER an =.
-const POOL = [
-  { k: 'var', t: 'x' }, { k: 'var', t: 'y' }, { k: 'var', t: 'x' }, { k: 'var', t: 'y' },
+// values cycle (the lively part); operators are TOOLS you always need, so they
+// don't belong in the lottery — they're pinned to fixed slots below.
+const VALUE_POOL = [
+  { k: 'var', t: 'x' }, { k: 'var', t: 'y' },
   { k: 'num', t: '0' }, { k: 'num', t: '1' }, { k: 'num', t: '2' }, { k: 'num', t: '3' }, { k: 'num', t: '4' },
   { k: 'num', t: '5' }, { k: 'num', t: '6' }, { k: 'num', t: '7' }, { k: 'num', t: '8' }, { k: 'num', t: '9' },
-  { k: 'op', t: '+' }, { k: 'op', t: '−' }, { k: 'op', t: '×' }, { k: 'op', t: '/' },
 ];
-const randomToken = () => ({ ...POOL[(Math.random() * POOL.length) | 0] });
+// pinned operators (never cycle away): × multiply, + add. No − cube — a − b is
+// just a + (−b), and the negate dot makes the −b, so subtraction needs no glyph.
+const PINNED = { 6: { k: 'op', t: '×' }, 7: { k: 'op', t: '+' } };
+const slotToken = (i) => (PINNED[i] ? { ...PINNED[i] } : { ...VALUE_POOL[(Math.random() * VALUE_POOL.length) | 0] });
 const PAL_X = [-524, -474];
 const PAL_Y = [-96, -40, 16, 72];
 const PAL_SLOTS = 8;
@@ -494,6 +616,7 @@ let paletteTokens = [];   // current token per slot
 let paletteEls = [];      // slot cube elements
 let staging = [];         // tokens being assembled
 let stageCubeEls = [];    // their rendered cubes
+let stagingSel = null;    // { idxs, key } — selected editor cubes (same tree rules)
 
 // a plain cube <g> at (cx,cy), any size; content in an inner <g> so it can
 // spin/scale (for the rotate-in) without losing its translate
@@ -506,10 +629,13 @@ function makeCubeShape(tok, cx, cy, size = CUBE) {
     x: -size / 2, y: -size / 2, width: size, height: size, rx: size * 0.18,
     fill: c.fill, stroke: 'rgba(0,0,0,0.2)', 'stroke-width': 2,
   }));
-  inner.appendChild(text(displayGlyph(tok), {
+  const glyph = text(displayGlyph(tok), {
     x: 0, y: 1, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 32 * (size / CUBE), 'font-weight': 700,
     fill: c.ink, 'font-family': 'system-ui', 'pointer-events': 'none',
-  }));
+  });
+  if (tok.neg || tok.inv) glyph.setAttribute('transform', `scale(${tok.neg ? -1 : 1},${tok.inv ? -1 : 1})`);
+  inner.appendChild(glyph);
+  if (tok.k === 'num' || tok.k === 'var') drawDot(inner, size, tok.neg, tok.inv);
   g.appendChild(inner);
   return g;
 }
@@ -519,7 +645,7 @@ function renderPalette() {
   trayLayer.appendChild(el('rect', { x: -556, y: -138, width: 116, height: 292, rx: 14, fill: 'rgba(0,0,0,0.04)', stroke: '#d8cfb8', 'stroke-width': 2 }));
   trayLayer.appendChild(text('grab a cube', { x: -499, y: -120, 'text-anchor': 'middle', 'font-size': 12, fill: '#8a7f66', 'font-family': 'system-ui' }));
   paletteTokens = []; paletteEls = [];
-  for (let i = 0; i < PAL_SLOTS; i++) { paletteTokens.push(randomToken()); paletteEls.push(null); refreshSlot(i, false); }
+  for (let i = 0; i < PAL_SLOTS; i++) { paletteTokens.push(slotToken(i)); paletteEls.push(null); refreshSlot(i, false); }
 }
 
 // (re)draw one palette slot; `animate` spins the fresh cube in
@@ -546,7 +672,7 @@ let palDrag = null;
 function startPaletteDrag(evt, i) {
   if (animating) return;
   const token = paletteTokens[i];
-  paletteTokens[i] = randomToken();
+  paletteTokens[i] = slotToken(i); // pinned slots dispense the same operator again
   refreshSlot(i, true);
   const ghost = makeCubeShape(token, 0, 0, TRAY_CUBE);
   ghost.style.pointerEvents = 'none'; ghost.style.opacity = '0.92';
@@ -570,19 +696,81 @@ function startCopyDrag(evt, tok) {
   stage.setPointerCapture(evt.pointerId);
 }
 
+// drag a COPY of the current selection (the grab unit — an atom or a whole
+// expression) out of the equation toward the editor. This is how you reuse a
+// value that the dock isn't currently offering: tap it, drag it into the tray.
+function startSelectionDrag(evt) {
+  if (animating || !selectedToks.length) return;
+  const size = TRAY_CUBE, gap = 6;
+  const w = selectedToks.length * size + (selectedToks.length - 1) * gap;
+  const ghost = el('g');
+  selectedToks.forEach((t, i) => ghost.appendChild(makeCubeShape(t, -w / 2 + size / 2 + i * (size + gap), 0, size)));
+  ghost.style.pointerEvents = 'none'; ghost.style.opacity = '0.92';
+  stage.appendChild(ghost);
+  const p = svgPt(evt);
+  ghost.setAttribute('transform', `translate(${p.x},${p.y})`);
+  selDrag = { ghost, start: p, toks: selectedToks.map((t) => ({ k: t.k, t: t.t, neg: !!t.neg, inv: !!t.inv })) };
+  stage.setPointerCapture(evt.pointerId);
+}
+
 // about once a second, a random slot cycles to a new cube
 setInterval(() => {
   if (document.hidden || !paletteEls.length) return;
-  const i = (Math.random() * PAL_SLOTS) | 0;
-  paletteTokens[i] = randomToken();
+  // cycle a VALUE slot only — pinned operators stay put
+  const valueSlots = [];
+  for (let i = 0; i < PAL_SLOTS; i++) if (!PINNED[i]) valueSlots.push(i);
+  const i = valueSlots[(Math.random() * valueSlots.length) | 0];
+  paletteTokens[i] = slotToken(i);
   refreshSlot(i, true);
 }, 950);
 
+// ---- editor selection: the SAME tree rules as the equation, applied to the
+// flat staging tokens. Tapping a top-level + selects the whole expression;
+// tapping a × / paren selects its additive term; a digit selects its whole
+// number; an atom selects itself. Parenthesis depth decides what "top-level"
+// means, so a + inside ( ) selects only its group, not everything.
+function stageDepths() {
+  const d = new Array(staging.length); let depth = 0;
+  for (let i = 0; i < staging.length; i++) {
+    d[i] = depth;
+    const t = staging[i];
+    if (t.k === 'op' && t.t === '(') depth++;
+    else if (t.k === 'op' && t.t === ')') depth = Math.max(0, depth - 1);
+  }
+  return d;
+}
+function numRunAt(i) { // the contiguous digit cubes forming one number
+  let a = i, b = i;
+  while (a > 0 && staging[a - 1].k === 'num') a--;
+  while (b < staging.length - 1 && staging[b + 1].k === 'num') b++;
+  const out = []; for (let j = a; j <= b; j++) out.push(j); return out;
+}
+function stageTermAt(i) { // the additive segment bounded by top-level +
+  const d = stageDepths();
+  let lo = 0, hi = staging.length;
+  for (let j = i - 1; j >= 0; j--) if (staging[j].k === 'op' && staging[j].t === '+' && d[j] === 0) { lo = j + 1; break; }
+  for (let j = i + 1; j < staging.length; j++) if (staging[j].k === 'op' && staging[j].t === '+' && d[j] === 0) { hi = j; break; }
+  const out = []; for (let j = lo; j < hi; j++) out.push(j); return out;
+}
+function stageSelIndices(i) {
+  const t = staging[i], d = stageDepths();
+  if (t.k === 'op' && t.t === '+' && d[i] === 0) return staging.map((_, j) => j); // whole expression
+  if (t.k === 'num') return numRunAt(i);
+  if (t.k === 'var' || t.k === 'eq') return [i];
+  return stageTermAt(i); // ×, /, −, ( ), or a nested + → its term
+}
+function setStagingSelection(i) {
+  const idxs = stageSelIndices(i), key = idxs.join(',');
+  stagingSel = (stagingSel && stagingSel.key === key) ? null : { idxs, key }; // tap again = clear
+  renderStaging();
+}
+
 function renderStaging() {
+  if (stagingSel && stagingSel.idxs.some((j) => j >= staging.length)) stagingSel = null; // stale
   while (stagingLayer.firstChild) stagingLayer.removeChild(stagingLayer.firstChild);
   stagingLayer.appendChild(el('rect', { x: -412, y: -158, width: 824, height: 54, rx: 12, fill: 'rgba(224,180,75,0.10)', stroke: '#d8cfb8', 'stroke-width': 2, 'stroke-dasharray': '6 4' }));
   if (!staging.length) {
-    stagingLayer.appendChild(text('build an operation here (start with ÷ × + −), then drag it onto the equation to apply to BOTH sides', { x: 0, y: -127, 'text-anchor': 'middle', 'font-size': 12.5, fill: '#a89a78', 'font-family': 'system-ui' }));
+    stagingLayer.appendChild(text('drag cubes here', { x: 0, y: -127, 'text-anchor': 'middle', 'font-size': 13, fill: '#c3b691', 'font-family': 'system-ui' }));
     return;
   }
   const size = 42, gap = 8;
@@ -596,6 +784,19 @@ function renderStaging() {
     stageCubeEls.push({ g, ox: x, oy: -131 });
     x += size + gap;
   });
+  // selection box (gold), same look as the equation's
+  if (stagingSel) {
+    const sel = stagingSel.idxs.filter((j) => j < stageCubeEls.length);
+    if (sel.length) {
+      const xs = sel.map((j) => stageCubeEls[j].ox);
+      const minX = Math.min(...xs) - size / 2, maxX = Math.max(...xs) + size / 2;
+      const box = el('rect', {
+        x: minX - 5, y: -131 - size / 2 - 5, width: (maxX - minX) + 10, height: size + 10, rx: 10,
+        fill: 'rgba(224,180,75,0.16)', stroke: '#e0b020', 'stroke-width': 2.5, 'pointer-events': 'none',
+      });
+      stagingLayer.insertBefore(box, stageCubeEls[sel[0]].g); // behind the cubes
+    }
+  }
 }
 
 const STAGE_SIZE = 42, STAGE_GAP = 8, STAGE_X0 = -392 + 42 / 2;
@@ -604,6 +805,7 @@ const STAGE_SIZE = 42, STAGE_GAP = 8, STAGE_X0 = -392 + 42 / 2;
 let stageItemDrag = null;
 function startStageItemDrag(evt, i) {
   if (animating) return;
+  clearSelection(); // working in the tray → equation loses button focus
   const cube = stageCubeEls[i];
   stageItemDrag = { i, cube, start: svgPt(evt) };
   cube.g.style.transition = 'none';
@@ -612,30 +814,75 @@ function startStageItemDrag(evt, i) {
   stage.setPointerCapture(evt.pointerId);
 }
 
+// Read a maximal run of number cubes as ONE value using the orientation rule:
+// same-orientation digits concatenate ([2][5] → 25), an orientation change
+// MULTIPLIES because an inverted digit is a reciprocal ([3][2⁻¹] → 3 × ½ = 3/2,
+// and the interleaved [2][3⁻¹][4] → 2 × ⅓ × 4 = 8/3). Any dotted (neg) digit
+// makes the whole number negative — an OR over digits, never a per-digit flip.
+// This is the single source of truth both parsers below share. Returns a Rational.
+function numberFromCubes(cubes) {
+  let value = R.rat(1), runStr = '', runInv = false, neg = false;
+  const flushRun = () => {
+    if (runStr === '') return;
+    const base = R.rat(BigInt(runStr));
+    value = R.mul(value, runInv ? R.recip(base) : base); // inverted run ⇒ reciprocal factor
+    runStr = '';
+  };
+  for (const c of cubes) {
+    if (c.neg) neg = true;
+    const inv = c.inv || false;
+    if (runStr !== '' && inv !== runInv) flushRun(); // orientation change ⇒ new factor
+    runInv = inv;
+    runStr += c.t;
+  }
+  flushRun();
+  return neg ? R.neg(value) : value;
+}
+
 // The staged expression is an OPERATION applied to BOTH sides. It must begin
 // with an operator (× ÷ + −); the rest is the number to operate by.
 //   ÷8 → divide both sides by 8    ×3 → multiply both sides by 3
 //   +5 → add 5 to both sides       −2 → subtract 2 from both sides
 function applyStagingOp() {
-  if (!staging.length || staging[0].k !== 'op') {
-    chime('deny'); status('the expression must begin with an operator (÷ × + −) to apply'); renderStaging(); return;
+  if (!staging.length) { chime('deny'); return; }
+  if (staging.some((t) => t.k === 'eq')) { chime('deny'); return; } // that's a statement to TEST, not an operation
+  // no leading operator → assume + (adding). A leading + − × / uses that.
+  let op, operand;
+  const lead = staging[0];
+  if (lead.k === 'op' && '+−×/'.includes(lead.t)) { op = lead.t; operand = staging.slice(1); }
+  else {
+    operand = staging;
+    // No leading operator: a bare whole number is an ADD (+n). But a fraction or
+    // reciprocal — a denominator, built with the inverse dot now that ÷ left the
+    // dock — is a SCALING factor, so multiply (×½ is how you divide by 2).
+    const isFraction = operand.some((t) => (t.k === 'num' && t.inv) || (t.k === 'op' && t.t === '/'));
+    op = isFraction ? '×' : '+';
   }
-  const op = staging[0].t;
-  const operand = staging.slice(1);
-  if (!operand.length) { chime('deny'); status('operate by what?'); renderStaging(); return; }
-  // fold the operand: adjacent digits concatenate positionally ([1][2] = 12);
-  // a single / splits numerator/denominator; each − flips the sign; parens are
-  // transparent; a variable makes it a term. So ×(−1) reads as −1 (a negate).
-  let numStr = '', denStr = '', inDen = false, varName = null, sign = 1n;
-  for (const t of operand) {
-    if (t.k === 'op' && t.t === '/') inDen = true;
-    else if (t.k === 'op' && t.t === '−') sign = -sign;
-    else if (t.k === 'num') { if (inDen) denStr += t.t; else numStr += t.t; }
-    else if (t.k === 'var') varName = t.t;
-    // '(' ')' and '×' are transparent for a single operand
-  }
-  let coeff;
-  try { coeff = R.rat(sign * (numStr ? BigInt(numStr) : 1n), denStr ? BigInt(denStr) : 1n); } catch { chime('deny'); return; }
+  if (!operand.length) { chime('deny'); return; }
+  // fold the operand into a coefficient. A maximal run of contiguous digit cubes
+  // is ONE number (numberFromCubes applies the orientation rule); a × or /
+  // operator starts a NEW factor (so [2][3] concatenates to 23, but [2]×[3]
+  // multiplies to 6); a variable makes it a term. Parens are transparent.
+  let coeff = R.rat(1), varName = null, cubes = [], divide = false;
+  const flushFactor = () => {
+    if (!cubes.length) return;
+    const n = numberFromCubes(cubes);
+    coeff = divide ? R.div(coeff, n) : R.mul(coeff, n);
+    cubes = []; divide = false;
+  };
+  try {
+    for (const t of operand) {
+      if (t.k === 'num') cubes.push(t);
+      else if (t.k === 'var') { flushFactor(); varName = t.t; if (t.neg) coeff = R.neg(coeff); }
+      else if (t.k === 'op') {
+        if (t.t === '/') { flushFactor(); divide = true; }        // legacy ÷ operator
+        else if (t.t === '×') flushFactor();                      // explicit multiply separator
+        else if (t.t === '−') { flushFactor(); coeff = R.neg(coeff); } // legacy − operator
+        // '(' ')' transparent
+      }
+    }
+    flushFactor();
+  } catch { chime('deny'); return; }
   try {
     if (op === '+' || op === '−') {
       // add or subtract a TERM (number OR variable, e.g. −y) from both sides
@@ -648,8 +895,8 @@ function applyStagingOp() {
     } else {
       // × and ÷ still take a NUMBER only (scaling both sides by a variable is
       // a different move we don't do yet)
-      if (varName) { chime('deny'); status('can’t × or ÷ both sides by a variable — only a number'); renderStaging(); return; }
-      if (R.isZero(coeff) && op !== '/') { chime('deny'); status('that would do nothing'); renderStaging(); return; }
+      if (varName) { chime('deny'); renderStaging(); return; } // × or ÷ by a variable: not yet
+      // ×0 is allowed: it collapses to 0 = 0 (destructive but legal)
       if (op === '×') session.apply((e) => wrapBoth(e, '*', coeff));
       else session.apply((e) => wrapBoth(e, '/', coeff));
     }
@@ -667,6 +914,12 @@ function snapBack(d) {
     c.g.setAttribute('transform', `translate(${c.ox},0)`);
     c.g.style.opacity = '1';
     c.g.style.cursor = 'grab';
+  }
+  // the selection box rode along during the drag — send it home too, or it's
+  // left stranded wherever the term was released
+  if (d.box) {
+    d.box.style.transition = 'transform 0.22s ease-out';
+    d.box.setAttribute('transform', 'translate(0,0)');
   }
 }
 
@@ -703,16 +956,30 @@ controlsLayer.appendChild(text('EQUATION', { x: EQX, y: -84, 'text-anchor': 'mid
 controlsLayer.appendChild(text('these act on both sides', { x: EQX, y: -68, 'text-anchor': 'middle', 'font-size': 11, fill: '#6b8bb0', 'font-family': 'system-ui' }));
 
 let simpTimer = null;
-svgButton('distribute', EQX, -38, 132, () => {
+// SIMPLIFY (equation): distribute parentheses, but show the UNEVALUATED form
+// first (3/2, −5/2·y — the pending divisions) as its OWN history row, then fold
+// to the real coefficients (another row), then combine like terms. Every stage
+// is written to history so the player can step back through the whole thing.
+svgButton('simplify', EQX, -38, 132, () => {
   if (animating) return;
-  if (!hasGroup(session.current())) { chime('deny'); status('nothing to distribute — apply × or ÷ first'); return; }
-  const uneval = distributeUneval(session.current());
-  session.apply((e) => distributeAll(e));
+  if (!hasGroup(session.current())) { chime('deny'); return; }
+  const groupForm = session.current();
+  const uneval = distributeUneval(groupForm);            // pending form (display only)
+  const distributed = distributeAll(groupForm).equation; // folded coefficients — capture NOW
+  // 1) push the intermediate, unevaluated row so it lands in history
+  session.apply(() => ({ equation: uneval, delta: { type: 'distributeUneval' } }));
   animating = true;
-  renderEq(uneval, true);
-  chime('distribute'); status('');
+  render(true);
+  chime('distribute');
   clearTimeout(simpTimer);
-  simpTimer = setTimeout(() => { animating = false; render(true); chime('simplify'); settle(); }, 950);
+  simpTimer = setTimeout(() => {
+    // 2) fold to the evaluated result (its own row), then 3) settle combines likes
+    session.apply(() => ({ equation: distributed, delta: { type: 'distributeAll' } }));
+    animating = false;
+    render(true);
+    chime('simplify');
+    settle();
+  }, 950);
 }, 'eq');
 svgButton('↺ undo', EQX, 16, 132, () => {
   if (session.canUndo()) { session.undo(); render(); chime('undo'); status(''); } else chime('deny');
@@ -721,25 +988,90 @@ svgButton('reset', EQX, 68, 132, () => {
   while (session.canUndo()) session.undo(); render(); status('');
 }, 'eq');
 
+// Flip the staged shape. These are the two involutions of the Klein four-group:
+//   neg  → mirror (horizontal): the operand's sign flips. ×(−1) on empty.
+//   inv  → upside-down (vertical): the operand becomes its reciprocal, which is
+//          inherently multiplicative, so we make sure the op is × (÷4 == ×¼).
+// The dot follows the flip; the flip follows the button. Same encoding the
+// equation already draws — now you PERFORM it instead of just reading it.
+function flipStaging(kind) {
+  const flag = kind === 'neg' ? 'neg' : 'inv';
+  if (!staging.length) {
+    if (kind === 'neg') { staging = [{ k: 'op', t: '×' }, { k: 'num', t: '1', neg: true }]; renderStaging(); chime('negate'); }
+    else chime('deny'); // nothing to invert
+    return;
+  }
+  // with a selection, flip ONLY the selected sub-expression's values — the tree
+  // rule: select the + in a+b and both flip (−a + −b); select just a and only a
+  // flips (−a + b). With no selection, flip the whole operand.
+  if (stagingSel) {
+    let changed = false;
+    for (const j of stagingSel.idxs) { const t = staging[j]; if (t.k === 'num' || t.k === 'var') { t[flag] = !t[flag]; changed = true; } }
+    if (!changed) { chime('deny'); return; }
+    renderStaging();
+    chime(kind === 'neg' ? 'negate' : 'invert');
+    return;
+  }
+  const hasLeadOp = staging[0].k === 'op' && '+−×/'.includes(staging[0].t);
+  if (kind === 'inv' && !hasLeadOp) staging.unshift({ k: 'op', t: '×' }); // reciprocal ⇒ multiply
+  for (const t of staging) if (t.k === 'num' || t.k === 'var') t[flag] = !t[flag];
+  renderStaging();
+  chime(kind === 'neg' ? 'negate' : 'invert');
+}
+
+// The flip buttons act on whatever is SELECTED in the equation; with nothing
+// selected they fall back to shaping the staged operand.
+function flipTarget(kind) {
+  if (selection) flipSelection(kind);
+  else flipStaging(kind);
+}
+
+function flipSelection(kind) {
+  if (animating) return;
+  if (selection.kind === 'side') { chime('deny'); return; } // whole-side flip isn't a single-term op
+  const term = getTerm(session.current(), selection.termId);
+  if (!term || term.kind === 'nan') { chime('deny'); return; }
+  try {
+    if (kind === 'neg') {
+      session.apply((e) => negateTermById(e, selection.termId));
+      chime('negate');
+    } else {
+      // invert = reciprocate the numeric part. A bare variable (x, coeff ±1)
+      // would need to become 1/x — a variable in the denominator, which this
+      // model can't hold — so refuse rather than silently do nothing.
+      if (selection.kind === 'atom' && selection.role === 'var' && R.isOne(R.abs(term.coeff))) { chime('deny'); return; }
+      if (R.isZero(term.coeff)) { chime('deny'); return; }
+      session.apply((e) => invertTermById(e, selection.termId));
+      chime('invert');
+    }
+    render();
+    settle();
+  } catch { chime('deny'); }
+}
+
 // ---- EDITOR action row (gold): these act on the expression you're building ----
-svgButton('apply → ⚖️', -248, -80, 128, () => { if (!animating) applyStagingOp(); }, 'editor');
-svgButton('( )', -156, -80, 50, () => { staging.push({ k: 'op', t: '(' }, { k: 'op', t: ')' }); renderStaging(); chime('gather'); }, 'editor');
-svgButton('=', -100, -80, 50, () => { staging.push({ k: 'eq', t: '=' }); renderStaging(); chime('gather'); }, 'editor');
-svgButton('simplify', -20, -80, 100, () => { if (!animating) simplifyStaging(); }, 'editor');
-svgButton('test 👍', 78, -80, 92, () => testStaging(), 'editor');
-svgButton('clear', 160, -80, 66, () => { staging = []; renderStaging(); }, 'editor');
+svgButton('apply → ⚖️', -286, -80, 104, () => { if (!animating) applyStagingOp(); }, 'editor');
+svgButton('( )', -208, -80, 44, () => { clearSelection(); stagingSel = null; staging.push({ k: 'op', t: '(' }, { k: 'op', t: ')' }); renderStaging(); chime('gather'); }, 'editor');
+svgButton('=', -158, -80, 44, () => { clearSelection(); stagingSel = null; staging.push({ k: 'eq', t: '=' }); renderStaging(); chime('gather'); }, 'editor');
+svgButton('×(−1)', -96, -80, 72, () => flipTarget('neg'), 'editor');
+svgButton('invert', -16, -80, 80, () => flipTarget('inv'), 'editor');
+svgButton('simplify', 70, -80, 84, () => { if (!animating) simplifyStaging(); }, 'editor');
+svgButton('test 👍', 162, -80, 92, () => testStaging(), 'editor');
+svgButton('clear', 250, -80, 76, () => { staging = []; stagingSel = null; renderStaging(); }, 'editor');
 
 // ---- the editor's own Simplify: evaluate the staged numeric expression and,
 // if it resolves to a WHOLE number, replace it with that number. 🌸🍕🌸 = 1÷1
 // = 1 → 🌸. Fractions and anything with a variable are left as they are. ----
 function evalExprTokens(toks) {
   if (toks.some((t) => t.k === 'var')) return null; // has a variable → won't resolve
-  let result = null, termVal = null, sign = 1, curNum = '', pendingOp = '×';
+  let result = null, termVal = null, sign = 1, pendingOp = '×', cubes = [];
+  // a maximal run of digit cubes is ONE number (shared orientation rule); × / are
+  // factor links within a term; + − split terms
   const flushNum = () => {
-    if (curNum === '') return;
-    const n = R.rat(BigInt(curNum));
+    if (!cubes.length) return;
+    const n = numberFromCubes(cubes);
     termVal = termVal === null ? n : (pendingOp === '/' ? R.div(termVal, n) : R.mul(termVal, n));
-    curNum = '';
+    cubes = [];
   };
   const flushTerm = () => {
     flushNum();
@@ -749,7 +1081,7 @@ function evalExprTokens(toks) {
     termVal = null; pendingOp = '×';
   };
   for (const t of toks) {
-    if (t.k === 'num') curNum += t.t;
+    if (t.k === 'num') cubes.push(t);
     else if (t.k === 'op') {
       if (t.t === '+' || t.t === '−') { flushTerm(); sign = t.t === '−' ? -1 : 1; }
       else if (t.t === '×') { flushNum(); pendingOp = '×'; }

@@ -216,6 +216,27 @@ export function negateBoth(eq) {
   };
 }
 
+// Flip the sign of ONE term — a free, truth-agnostic edit the selection UI
+// uses. Keeps the term's id so a renderer can animate the flip in place.
+export function negateTermById(eq, termId) {
+  const loc = locate(eq, termId);
+  const out = clone(eq);
+  out[loc.side] = out[loc.side].map((t) => (t.id === termId ? { ...t, coeff: R.neg(t.coeff) } : t));
+  return { equation: out, delta: { type: 'negateTerm', termId } };
+}
+
+// Reciprocate ONE term's coefficient (its numeric part): 5 → 1/5, 2x → (1/2)x,
+// 2(x+3) → (1/2)(x+3). A bare variable (coeff ±1) has no numeric part to flip —
+// turning x into 1/x (a variable in the denominator) is NOT modeled here, so
+// the caller guards that case. Keeps the id.
+export function invertTermById(eq, termId) {
+  const loc = locate(eq, termId);
+  if (R.isZero(loc.term.coeff)) throw new Error('invertTermById: cannot invert zero');
+  const out = clone(eq);
+  out[loc.side] = out[loc.side].map((t) => (t.id === termId ? { ...t, coeff: R.recip(t.coeff) } : t));
+  return { equation: out, delta: { type: 'invertTerm', termId } };
+}
+
 // Add a whole TERM (const or variable, e.g. −y or 2x) to both sides. The
 // template carries kind/varName/coeff; each side gets its own fresh id.
 let _addc = 0;
@@ -252,7 +273,8 @@ export function wrapBoth(eq, op, k) {
       delta: { type: 'nan' },
     };
   }
-  if (R.isZero(k)) throw new Error('wrap: k must be nonzero');
+  // ×0 is allowed (and destructive): it wraps each side with a 0 coefficient,
+  // which distributes to 0 = 0. Legal, unhelpful, honestly executed.
   const coeff = op === '/' ? R.recip(k) : k;
   const wrap = (side, tag) =>
     side.length ? [groupTerm(`w${++_grpc}${tag}`, side.map((t) => ({ ...t })), coeff)] : side;

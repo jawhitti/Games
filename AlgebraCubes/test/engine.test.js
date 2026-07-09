@@ -3,7 +3,7 @@ import * as R from '../src/rational.js';
 import {
   seedEquation, varTerm, constTerm,
   crossEquals, gather, scaleBoth, fan, isSolved, createSession,
-  applyOperator, groupTerms,
+  applyOperator, groupTerms, negateTermById, invertTermById,
 } from '../src/engine.js';
 
 // find a term's signed coeff as a string, for compact assertions
@@ -165,6 +165,28 @@ describe('select-a-range-and-operate', () => {
 
   it('requires a contiguous selection', () => {
     expect(() => applyOperator(eq(), ['a', 'c'], '+')).toThrow(/contiguous/);
+  });
+});
+
+describe('single-term flips (selection ops)', () => {
+  it('negateTermById flips just one term, keeps its id and side', () => {
+    const eq = seedEquation(); // 2x + 5 = 3y
+    const { equation, delta } = negateTermById(eq, 'x1');
+    expect(coeffStr(equation, 'x1')).toBe('-2'); // 2x -> -2x
+    expect(coeffStr(equation, 'c1')).toBe('5');   // 5 untouched
+    expect(equation.left.map((t) => t.id)).toEqual(['x1', 'c1']); // order/id kept
+    expect(delta).toEqual({ type: 'negateTerm', termId: 'x1' });
+  });
+
+  it('invertTermById reciprocates the coefficient (const and var)', () => {
+    const eq = seedEquation();
+    expect(coeffStr(invertTermById(eq, 'c1').equation, 'c1')).toBe('1/5'); // 5 -> 1/5
+    expect(coeffStr(invertTermById(eq, 'x1').equation, 'x1')).toBe('1/2'); // 2x -> (1/2)x
+  });
+
+  it('invertTermById refuses a zero coefficient', () => {
+    const eq = { left: [constTerm('z', R.rat(0))], right: [] };
+    expect(() => invertTermById(eq, 'z')).toThrow(/zero/);
   });
 });
 
