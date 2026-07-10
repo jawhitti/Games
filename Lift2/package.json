@@ -9,6 +9,9 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "dependencies": {
+    "three": "^0.177.0"
+  },
   "devDependencies": {
     "vite": "^6.3.5",
     "vitest": "^3.2.4"

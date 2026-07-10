@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lift2 — Kenney iso diorama</title>
+  <style>
+    html,body{margin:0;height:100%;background:#0e1116;overflow:hidden;font:13px system-ui,sans-serif;color:#cdd6e4}
+    #app{width:100vw;height:100vh;display:block}
+    #hud{position:fixed;left:12px;top:10px;pointer-events:none;text-shadow:0 1px 2px #000}
+    #hud b{color:#fff}
+    #tip{position:fixed;left:12px;bottom:10px;color:#8493a8;text-shadow:0 1px 2px #000}
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="hud"><b>Kenney City Kit (Industrial)</b> — rendered in-engine on the iso grid</div>
+  <div id="tip">drag to orbit · scroll to zoom · milestone 1: art path proof (no sim yet)</div>
+  <script type="module" src="/src/iso3d/main.js"></script>
+</body>
+</html>
