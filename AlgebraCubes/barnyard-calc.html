@@ -1,0 +1,166 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Barnyard Calculator</title>
+<style>
+  html,body{margin:0;min-height:100%;background:#e9e0c8;color:#40331d;
+    font:16px/1.4 system-ui,sans-serif;text-align:center}
+  #app{max-width:420px;margin:0 auto;padding:18px}
+  h1{font-size:22px;font-weight:800;margin:.3em 0 .1em}
+  .hint{color:#8a7a55;font-size:12.5px;margin:0 0 12px}
+
+  .calc{background:#cdbb91;border-radius:24px;padding:14px;box-shadow:0 8px 20px rgba(80,60,25,.3)}
+  .screen{background:repeating-linear-gradient(94deg,#7fa653 0 7px,#779c4b 7px 14px);
+    border-radius:14px;min-height:74px;padding:10px;margin-bottom:12px;
+    display:flex;align-items:center;flex-wrap:wrap;gap:0;box-shadow:inset 0 3px 8px rgba(0,0,0,.2);
+    justify-content:flex-start}
+  .cube{display:inline-flex;align-items:center;justify-content:center;
+    width:50px;height:50px;margin:3px;border-radius:12px;font-size:30px;line-height:1;
+    background:linear-gradient(160deg,#fffdf5,#efdfbb);
+    box-shadow:inset 0 2px 3px rgba(255,255,255,.85), inset 0 -3px 4px rgba(120,90,40,.18),0 2px 4px rgba(90,70,30,.25);
+    cursor:pointer;transition:transform .07s,opacity .12s}
+  .cube:hover{transform:translateY(-4px)}
+  .cube.rabbit{background:linear-gradient(160deg,#ffe7ef,#f3c3d5)}
+  .cube.moon{background:linear-gradient(160deg,#ece9f8,#c7c0e3)}
+  #status{min-height:20px;color:#7a3b1f;font-size:13px;font-weight:600;margin:2px 0 8px}
+
+  .pad{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .btn{border:0;border-radius:14px;padding:10px 4px 8px;cursor:pointer;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    box-shadow:0 3px 0 rgba(0,0,0,.18);transition:transform .05s,box-shadow .05s}
+  .btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+  .btn .face{font-size:26px;line-height:1}
+  .btn .sub{font-size:12px;font-weight:700;opacity:.75}
+  .btn.val{background:#fbf3dd} .btn.op{background:#e7ddf6} .btn.fn{background:#c8bda6}
+  .btn.pm{background:#bcd4e8} .btn.eq{background:#8fc06a;color:#22400f;font-size:22px}
+  .btn.wide2{grid-column:span 2}
+</style>
+<div id="app">
+  <h1>🦊 Barnyard Calculator 🍴</h1>
+  <p class="hint">Tap keys to build an expression. <b>=</b> simplifies · <b>±</b> ×(−1) ·
+    <b>🐭</b> = 🦢🐇🦊 (−x) · tap a tile on the screen to toss it.</p>
+
+  <div class="calc">
+    <div class="screen" id="screen"></div>
+    <div id="status"></div>
+    <div class="pad" id="pad"></div>
+  </div>
+</div>
+<script>
+  const m5 = (n) => ((n % 5) + 5) % 5;
+  const CRIT = { 0:'🥚', 1:'🦆', 2:'🐱', 3:'🐶', 4:'🦢' }; // 3=−2, 4=−1
+
+  let line = []; // tokens: {type:'val',kind:'c'|'x',c} | {type:'mul'} | {type:'open'} | {type:'close'}
+
+  // ---- keypad ----
+  const KEYS = [
+    { face:'AC', cls:'fn', act:'ac' },
+    { face:'±', sub:'×−1', cls:'pm', act:'neg' },
+    { face:'⌫', cls:'fn', act:'bs' },
+    { face:'=', cls:'eq', act:'eq' },
+
+    { face:'🦆', sub:'+1', cls:'val', push:{ type:'val', kind:'c', c:1 } },
+    { face:'🐱', sub:'+2', cls:'val', push:{ type:'val', kind:'c', c:2 } },
+    { face:'🦢', sub:'−1', cls:'val', push:{ type:'val', kind:'c', c:4 } },
+    { face:'🐶', sub:'−2', cls:'val', push:{ type:'val', kind:'c', c:3 } },
+
+    { face:'🦊', sub:'x',  cls:'val', push:{ type:'val', kind:'x', c:1 } },
+    { face:'🐭', sub:'−x', cls:'val', push:{ type:'val', kind:'x', c:4 }, tip:'🦢🐇🦊  (−1 × x)' },
+    { face:'🐇', sub:'×',  cls:'op',  push:{ type:'mul' } },
+    { face:'🥚', sub:'0',  cls:'val', push:{ type:'val', kind:'c', c:0 } },
+
+    { face:'🌜', sub:'(', cls:'op wide2', push:{ type:'open' } },
+    { face:'🌛', sub:')', cls:'op wide2', push:{ type:'close' } },
+  ];
+
+  function doAct(a) {
+    if (a === 'ac') { line = []; status(''); }
+    else if (a === 'bs') { line.pop(); status(''); }
+    else if (a === 'ce') {
+      if (line.length && line[line.length - 1].type === 'val') { while (line.length && line[line.length - 1].type === 'val') line.pop(); }
+      else line.pop();
+      status('');
+    }
+    else if (a === 'eq') collapse(false);
+    else if (a === 'neg') collapse(true);
+    render();
+  }
+
+  function buildPad() {
+    const pad = document.getElementById('pad');
+    for (const k of KEYS) {
+      const b = document.createElement('button');
+      b.className = 'btn ' + k.cls;
+      if (k.tip) b.title = k.tip;
+      b.innerHTML = `<span class="face">${k.face}</span>` + (k.sub ? `<span class="sub">${k.sub}</span>` : '');
+      b.onclick = () => { if (k.push) { line.push({ ...k.push }); status(''); render(); } else doAct(k.act); };
+      pad.appendChild(b);
+    }
+  }
+
+  // ---- parse the token line into a linear value {x, c} over GF(5) ----
+  // adjacency = add, 🐇 = multiply, 🌜 🌛 = group. Throws 'nonlinear' on x·x, 'bad' on syntax.
+  function parse(toks) {
+    let i = 0;
+    const peek = () => toks[i];
+    const add = (a, b) => ({ x: m5(a.x + b.x), c: m5(a.c + b.c) });
+    const mul = (a, b) => { if (a.x && b.x) throw 'nonlinear'; return { x: m5(a.x * b.c + b.x * a.c), c: m5(a.c * b.c) }; };
+    function atom() {
+      const t = peek();
+      if (!t) throw 'bad';
+      if (t.type === 'open') { i++; const e = expr(); if (!peek() || peek().type !== 'close') throw 'bad'; i++; return e; }
+      if (t.type === 'val') { i++; return t.kind === 'x' ? { x: t.c, c: 0 } : { x: 0, c: t.c }; }
+      throw 'bad';
+    }
+    function term() { let v = atom(); while (peek() && peek().type === 'mul') { i++; v = mul(v, atom()); } return v; }
+    function expr() { let v = term(); while (peek() && (peek().type === 'val' || peek().type === 'open')) v = add(v, term()); return v; }
+    const v = expr();
+    if (i !== toks.length) throw 'bad';
+    return v;
+  }
+
+  // linear value -> canonical token line (foxes/mice then a constant critter)
+  function toTokens(v) {
+    const out = [];
+    if (v.x) { const pos = v.x <= 2, n = pos ? v.x : 5 - v.x; for (let k = 0; k < n; k++) out.push({ type:'val', kind:'x', c: pos ? 1 : 4 }); }
+    if (v.c) out.push({ type:'val', kind:'c', c: v.c });
+    if (!out.length) out.push({ type:'val', kind:'c', c: 0 }); // goose egg
+    return out;
+  }
+
+  function collapse(negate) {
+    if (!line.length) { status('nothing to work with'); return; }
+    let v;
+    try { v = parse(line); }
+    catch (e) { status(e === 'nonlinear' ? '🦊🐇🦊 is x² — beyond the barnyard' : 'can’t read that (check 🌜 🌛 and 🐇)'); return; }
+    if (negate) v = { x: m5(-v.x), c: m5(-v.c) };
+    line = toTokens(v);
+    status('');
+  }
+
+  // ---- render ----
+  const status = (m) => { document.getElementById('status').textContent = m || ''; };
+  function tokGlyph(t) {
+    if (t.type === 'mul') return ['🐇', 'rabbit'];
+    if (t.type === 'open') return ['🌜', 'moon'];
+    if (t.type === 'close') return ['🌛', 'moon'];
+    return [t.kind === 'x' ? (t.c <= 2 ? '🦊' : '🐭') : CRIT[t.c], ''];
+  }
+  function render() {
+    const s = document.getElementById('screen'); s.innerHTML = '';
+    line.forEach((t, idx) => {
+      const [g, cls] = tokGlyph(t);
+      const c = document.createElement('span');
+      c.className = 'cube' + (cls ? ' ' + cls : '');
+      c.textContent = g; c.title = 'toss';
+      c.onclick = () => { line.splice(idx, 1); status(''); render(); };
+      s.appendChild(c);
+    });
+  }
+
+  buildPad();
+  if (location.hash === '#demo') line = [
+    { type:'val', kind:'c', c:2 }, { type:'mul' }, { type:'open' },
+    { type:'val', kind:'x', c:1 }, { type:'val', kind:'c', c:1 }, { type:'close' },
+  ]; // 🐱🐇🌜🦊🦆🌛  =  2(x+1)
+  render();
+</script>

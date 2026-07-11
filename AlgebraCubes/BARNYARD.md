@@ -113,6 +113,24 @@ distribute** — the busy state is the "before" of a dramatic simplification, no
 resting state. Everything is flat cubes on the grass; groups are marked *only* by moon
 tiles (no containers, ever).
 
+## Calculator (`barnyard-calc.html`)
+
+A second prototype: an **expression editor shaped like a calculator.** Keys are
+labeled both ways — a critter face *and* the numeral/symbol it means (`🦆 +1`,
+`🐶 −2`, `🦊 x`, `🐭 −x`, `🐇 ×`, `🌜 (`, `🌛 )`). You tap keys to build an expression
+of tiles on the green "screen," and:
+
+- **`=` simplifies** — parses the tile line (adjacency = add, 🐇 = multiply,
+  🌜🌛 = group) into a canonical linear form over GF(5) and shows the result. Five
+  ducks → 🥚; `🦊🐭` → 🥚; `🐱🐇🌜🦊🦆🌛` → `🦊🦊🐱`.
+- **`±`** multiplies the whole expression by −1.
+- **⌫ / AC** work like a calculator; **tap any tile on the screen to toss it.**
+- **🐭 −x** is on the pad as the derived special case: `🐭 = 🦢🐇🦊` (swan × fox = −1·x).
+
+Same boundaries as the solver: **linear only** (`🦊🐇🦊` = x² is politely refused),
+and multiplication is scalar × group (no group×group FOIL yet). Self-contained;
+open in a browser. `#demo` preloads `2(x+1)`.
+
 ## Status & next steps
 
 Playable prototype with five problems (cross / distribute / flip / swap → win).
