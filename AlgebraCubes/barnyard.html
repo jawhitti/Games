@@ -1,0 +1,179 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Barnyard — solve for the Fox</title>
+<style>
+  html,body{margin:0;min-height:100%;background:#f2e9d0;color:#40331d;
+    font:16px/1.5 system-ui,sans-serif;text-align:center}
+  #app{max-width:960px;margin:0 auto;padding:22px}
+  h1{font-weight:800;letter-spacing:.5px;margin:.2em 0}
+  .sub{color:#8a7a55;margin-top:0}
+  #board{display:flex;align-items:center;justify-content:center;
+    margin:34px 0;min-height:96px;flex-wrap:wrap}
+
+  /* a flat row of candy cubes — no containers */
+  .cube{display:inline-flex;align-items:center;justify-content:center;
+    width:56px;height:56px;margin:3px;border-radius:13px;font-size:34px;line-height:1;
+    background:linear-gradient(160deg,#fffdf5,#efdfbb);
+    box-shadow:inset 0 2px 3px rgba(255,255,255,.85), inset 0 -3px 4px rgba(120,90,40,.18),
+      0 3px 5px rgba(90,70,30,.25);
+    user-select:none;transition:transform .08s}
+  .cube.rabbit{background:linear-gradient(160deg,#ffe7ef,#f3c3d5)}
+  .cube.tree{background:linear-gradient(160deg,#e7f3d9,#c1dca8)}
+  .cube.moon{background:linear-gradient(160deg,#ece9f8,#c7c0e3)}
+
+  .term{display:inline-flex;align-items:center}
+  .term.loose{cursor:pointer}
+  .term.loose:hover .cube{transform:translateY(-6px)}
+  .group{display:inline-flex;align-items:center;cursor:pointer;transition:transform .08s}
+  .group:hover{transform:translateY(-5px)}
+
+  .seat{display:inline-flex;align-items:center;flex-wrap:wrap;padding:9px 11px;border-radius:20px;
+    min-height:66px;box-shadow:inset 0 2px 7px rgba(0,0,0,.16);
+    background:repeating-linear-gradient(94deg,#7fa653 0 7px,#779c4b 7px 14px)}
+  .table{font-size:40px;margin:0 12px;filter:drop-shadow(0 2px 0 #cbb98a)}
+  .sep{font-size:20px;opacity:.5;margin:0 1px;align-self:center}
+
+  #status{min-height:30px;font-size:18px;font-weight:600;margin:10px 0 2px}
+  #status.win{color:#3f7d2f;font-size:22px}
+  #status.hint{color:#b06a2a}
+  #controls{margin:14px 0}
+  button{background:#5a7d3a;color:#fff;border:0;border-radius:10px;padding:9px 16px;
+    font-size:15px;margin:0 5px;cursor:pointer}
+  button:hover{background:#4c6c31}
+  button.ghost{background:#c9b784;color:#40331d}
+  .help{color:#8a7a55;font-size:13.5px;max-width:720px;margin:14px auto 0}
+  .legend{color:#8a7a55;font-size:13px;margin-top:8px}
+  b{color:#40331d}
+</style>
+<div id="app">
+  <h1>🦊 Barnyard 🍴</h1>
+  <p class="sub">Seat the Fox at the table and he eats.</p>
+
+  <div id="board"></div>
+  <div id="status"></div>
+
+  <div id="controls">
+    <button id="flip">🔄 flip the board</button>
+    <button id="swap">↔ swap sides</button>
+    <button id="reset" class="ghost">↺ reset</button>
+    <button id="next" class="ghost">🎲 new problem</button>
+  </div>
+
+  <p class="help">
+    Cubes on the grass are <b>added</b>. Click a <b>loose cube</b> to send it across the table
+    (it flips to its opposite). Click a <b>group</b> (🐇 …🌜 🌛) to <b>distribute</b> — the rabbit
+    hops through, multiplying every cube inside and dissolving the moons. Matching cubes merge;
+    opposites lay a 🥚 and vanish. Win with the <b>Fox alone on the left</b>; a stranded 🐭 Mouse — <b>flip the board.</b>
+  </p>
+  <p class="legend">🥚 0 · 🦆 +1 🦢 −1 · 🐱 +2 🐶 −2 · 🦊 +x 🐭 −x · 🐇 × · 🌜 🌛 group
+    &nbsp;— GF(5), wearing fur</p>
+</div>
+<script>
+  const CRIT = { 0:'🥚', 1:'🦆', 2:'🐱', 3:'🐶', 4:'🦢' }; // 3 = −2, 4 = −1 (balanced)
+  const m5 = (n) => ((n % 5) + 5) % 5;
+  const neg = (c) => m5(-c);
+  let uid = 0;
+  const C = (c) => ({ t:'c', id:++uid, c:m5(c) });
+  const V = (c) => ({ t:'x', id:++uid, c:m5(c) });
+  const G = (m, kids) => ({ t:'g', id:++uid, m:m5(m), kids });
+
+  const PROBLEMS = [
+    () => ({ left:[V(1),C(2)], right:[C(1)] }),                               // x + 2 = 1
+    () => ({ left:[V(1),C(1)], right:[C(3)] }),                               // x + 1 = −2
+    () => ({ left:[V(4),C(2)], right:[C(1)] }),                               // −x + 2 = 1  (flip)
+    () => ({ left:[G(2,[V(1),C(1)])], right:[V(1),C(1)] }),                   // 2(x+1) = x+1     (rabbit)
+    () => ({ left:[G(2,[V(1), G(2,[V(1),C(1)])])], right:[C(1)] }),           // 2(x+2(x+1)) = 1  (nested)
+  ];
+  let pi = 0, eq;
+  function load(i) { uid = 0; pi = ((i % PROBLEMS.length) + PROBLEMS.length) % PROBLEMS.length; eq = PROBLEMS[pi](); render(); check(); }
+
+  function tidy(arr) {
+    let x = 0, k = 0, hasX = false, hasK = false; const groups = [];
+    for (const t of arr) {
+      if (t.t === 'g') groups.push(t);
+      else if (t.t === 'x') { x = m5(x + t.c); hasX = true; }
+      else { k = m5(k + t.c); hasK = true; }
+    }
+    const out = [];
+    if (hasX && x) out.push(V(x));
+    if (hasK && k) out.push(C(k));
+    out.push(...groups);
+    arr.length = 0; arr.push(...(out.length ? out : [C(0)]));
+  }
+
+  const mulTerm = (t, m) => t.t === 'g' ? G(t.m * m, t.kids) : (t.t === 'x' ? V(t.c * m) : C(t.c * m));
+  let TARGET = null;
+  function distIn(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      const t = arr[i];
+      if (t.t === 'g') {
+        if (t.id === TARGET) { const spill = t.m === 0 ? [C(0)] : t.kids.map((k) => mulTerm(k, t.m)); arr.splice(i, 1, ...spill); tidy(arr); return true; }
+        if (distIn(t.kids)) return true;
+      }
+    }
+    return false;
+  }
+  function distribute(id) { TARGET = id; if (distIn(eq.left) || distIn(eq.right)) { render(); check(); } }
+
+  const negTop = (t) => t.t === 'g' ? G(neg(t.m), t.kids) : (t.t === 'x' ? V(neg(t.c)) : C(neg(t.c)));
+  function crossTop(id) {
+    for (const s of ['left', 'right']) {
+      const i = eq[s].findIndex((t) => t.id === id);
+      if (i >= 0) { const t = eq[s].splice(i, 1)[0]; eq[s === 'left' ? 'right' : 'left'].push(negTop(t)); tidy(eq.left); tidy(eq.right); render(); check(); return; }
+    }
+  }
+
+  document.getElementById('flip').onclick = () => { eq.left = eq.left.map(negTop); eq.right = eq.right.map(negTop); tidy(eq.left); tidy(eq.right); render(); check(); };
+  document.getElementById('swap').onclick = () => { [eq.left, eq.right] = [eq.right, eq.left]; render(); check(); };
+  document.getElementById('reset').onclick = () => load(pi);
+  document.getElementById('next').onclick = () => load(pi + 1);
+
+  // ---- render: everything is a flat cube ----
+  const cube = (glyph, cls) => { const c = document.createElement('span'); c.className = 'cube' + (cls ? ' ' + cls : ''); c.textContent = glyph; return c; };
+  const ADD_MARK = '🕳'; // the between-added-cubes marker (swap to '❄' to taste)
+  const sep = () => { const s = document.createElement('span'); s.className = 'sep'; s.textContent = ADD_MARK; return s; };
+  function varGlyph(c, i) { const pos = c <= 2; return pos ? '🦊' : '🐭'; }
+
+  function renderTerm(t, depth, isTop) {
+    const wrap = document.createElement('span');
+    if (t.t !== 'g') {
+      wrap.className = 'term' + (isTop ? ' loose' : '');
+      if (t.t === 'c') wrap.appendChild(cube(CRIT[t.c]));
+      else { const mag = t.c <= 2 ? t.c : 5 - t.c, e = t.c <= 2 ? '🦊' : '🐭'; for (let i = 0; i < mag; i++) wrap.appendChild(cube(e)); if (mag === 0) wrap.appendChild(cube('🥚')); }
+      if (isTop) { wrap.title = 'send across the table'; wrap.onclick = (ev) => { ev.stopPropagation(); crossTop(t.id); }; }
+      return wrap;
+    }
+    wrap.className = 'group'; wrap.title = 'distribute — the rabbit hops through';
+    if (t.m === 0) { wrap.appendChild(cube('🥚')); }
+    else {
+      if (t.m !== 1) { wrap.appendChild(cube(CRIT[t.m])); wrap.appendChild(cube('🐇', 'rabbit')); }
+      wrap.appendChild(cube('🌜', 'moon'));
+      t.kids.forEach((k) => wrap.appendChild(renderTerm(k, depth + 1, false)));
+      wrap.appendChild(cube('🌛', 'moon'));
+    }
+    wrap.onclick = (ev) => { ev.stopPropagation(); distribute(t.id); };
+    return wrap;
+  }
+  function render() {
+    const b = document.getElementById('board'); b.innerHTML = '';
+    const seat = (side) => { const box = document.createElement('div'); box.className = 'seat'; eq[side].forEach((t) => box.appendChild(renderTerm(t, 0, true))); return box; };
+    b.appendChild(seat('left'));
+    const f = document.createElement('span'); f.className = 'table'; f.textContent = '🍴'; b.appendChild(f);
+    b.appendChild(seat('right'));
+  }
+
+  const set = (msg, cls) => { const s = document.getElementById('status'); s.textContent = msg; s.className = cls || ''; };
+  const anyVar = (arr) => arr.some((t) => t.t === 'x' || (t.t === 'g' && anyVar(t.kids)));
+  const plain = (t) => t.t === 'c' ? CRIT[t.c] : t.t === 'x' ? (t.c <= 2 ? '🦊' : '🐭').repeat(t.c <= 2 ? t.c : 5 - t.c) : '(group)';
+  function check() {
+    const L = eq.left, R = eq.right;
+    const solo = (arr) => (arr.length === 1 && arr[0].t === 'x') ? arr[0].c : null;
+    const lv = solo(L);
+    if (lv === 1 && !anyVar(R)) set('🍽️  Fox gets his dinner!   x = ' + R.map(plain).join(' '), 'win');
+    else if (lv === 4 && !anyVar(R)) set('🐭 a Mouse can’t dine — 🔄 flip the board to make him a Fox.', 'hint');
+    else if (solo(R) === 1 && !anyVar(L)) set('🦊 wrong seat — the 🦆 is eyeing him. ↔ swap sides.', 'hint');
+    else set('');
+  }
+
+  load(location.hash ? (parseInt(location.hash.slice(1), 10) || 0) : 0);
+</script>

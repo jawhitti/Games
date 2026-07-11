@@ -8,6 +8,11 @@ game hides the math behind emoji.
 Plain JavaScript, Vite + Vitest. Hard **engine / renderer split**: the engine is
 pure (exact math, zero DOM); the renderer does no math.
 
+> **Spin-off:** [`barnyard.html`](BARNYARD.md) reworks this idea as a *finite-field*
+> candy-crush — algebra over GF(5) disguised as a barnyard (fox = x, moons = parens,
+> rabbit = ×), with no digits, fractions, or minus signs. It grew out of Balance's
+> clumsiness with multi-digit constants. See [BARNYARD.md](BARNYARD.md).
+
 ## The idea
 
 - **Every token is its own cube** — numbers, variables, operators, and `=`.
